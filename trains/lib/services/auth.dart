@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:trains/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class AuthService{
+class AuthService {
   //_ before meanbs private
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   //ritorna lo user se loggato null se sloggato
-  User _userFromFirebaseUser(FirebaseUser user){
-    return user != null ? User(uid:user.uid) : null;
+  User _userFromFirebaseUser(FirebaseUser user) {
+    return user != null ? User(uid: user.uid) : null;
   }
 
   //auth change user stream, flusso da firebase che ci dice quando un utente si logga o slogga
@@ -22,23 +22,25 @@ class AuthService{
   }
 
   //sign in anon
-  Future signInAnon() async{
-    try{
+  Future signInAnon() async {
+    try {
       AuthResult result = await _auth.signInAnonymously();
       FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user);//success
-    } catch(e){
+      return _userFromFirebaseUser(user); //success
+    } catch (e) {
       print(e.toString());
-      return null;//failure
+      return null; //failure
     }
   }
+
   //sign in with google
   Future signInWithGoogle() async {
     try {
       print("ciao");
-      final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+      final GoogleSignInAccount googleSignInAccount =
+          await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+          await googleSignInAccount.authentication;
       print("ocio");
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleSignInAuthentication.accessToken,
@@ -55,20 +57,18 @@ class AuthService{
       assert(user.uid == currentUser.uid);
 
       return _userFromFirebaseUser(currentUser); //ritorna User obj
-    }
-    catch(e){
+    } catch (e) {
       print(e.toString());
-      return null;//failure
+      return null; //failure
     }
-
   }
   //register with email & password
 
   //sign out anon
   Future signOut() async {
-    try{
+    try {
       return await _auth.signOut();
-    } catch(e){
+    } catch (e) {
       print(e.toString());
       return null;
     }
