@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "833850390559",
+    "firebase_url": "https://trains-5f628.firebaseio.com",
+    "project_id": "trains-5f628",
+    "storage_bucket": "trains-5f628.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833850390559:android:383b557afe85d4de027d2a",
+        "android_client_info": {
+          "package_name": "it.peronmarchiori.trains"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833850390559-p715bti121gmjr9c5n0o1j0cc2c1vvnn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.peronmarchiori.trains",
+            "certificate_hash": "71e5e72f76087152899e6a57e49c2e7e4cabd2be"
+          }
+        },
+        {
+          "client_id": "833850390559-anlt5ce98rgh988vfsnf1hj82o8bvlmb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdg22NdfgCC245ByRA7TojlEA_bDPq3CA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833850390559-anlt5ce98rgh988vfsnf1hj82o8bvlmb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
