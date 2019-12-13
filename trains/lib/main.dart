@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trains/screens/home.dart';
-import 'package:trains/services/auth.dart';
-import './screens/trains.dart';
+import './screens/train_list.dart';
 
 void main() => runApp(MyApp());
 
