@@ -48,7 +48,7 @@ class Partenza {
 
   factory Partenza.fromJson(Map<String, dynamic> json) {
     return Partenza(
-        numeroTreno: json['numeroTreno'],
+        numeroTreno: json['numeroTreno'].toString(),
         codOrigine: json['codOrigine'],
         destinazione: json['destinazione'],
         compOrarioPartenza: json['compOrarioPartenza'],

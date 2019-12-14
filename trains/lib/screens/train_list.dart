@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:trains/models/viaggiatreno.dart';
+import 'package:trains/screens/json_list.dart';
 import 'package:trains/services/viaggiatreno.dart';
 
 class TrainList extends StatefulWidget {
@@ -9,12 +10,13 @@ class TrainList extends StatefulWidget {
 }
 
 class _TrainListState extends State<TrainList> {
-  Future<CercaStazioni> cercaStazioni;
+  Future<Partenze> partenze;
 
   @override
   void initState() {
     super.initState();
-    cercaStazioni = fetchCercaStazioni(toSearch: 'padova');
+    partenze = fetchPartenze(
+        toSearch: 'S02581/Sat%20dec%2014%202019%2020:58:00%20GMT+0100');
   }
 
   @override
@@ -29,11 +31,11 @@ class _TrainListState extends State<TrainList> {
           title: Text('Fetch Data Example'),
         ),
         body: Center(
-          child: FutureBuilder<CercaStazioni>(
-            future: cercaStazioni,
+          child: FutureBuilder<Partenze>(
+            future: partenze,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data.stazioni);
+                return JsonList(snapshot.data);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
