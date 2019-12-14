@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:trains/models/viaggiatreno.dart';
-import 'package:trains/screens/json_list.dart';
+import 'package:trains/screens/partenze_list.dart';
 import 'package:trains/services/viaggiatreno.dart';
 
-class TrainList extends StatefulWidget {
+class PartenzeLoad extends StatefulWidget {
   @override
-  _TrainListState createState() => _TrainListState();
+  _PartenzeLoadState createState() => _PartenzeLoadState();
 }
 
-class _TrainListState extends State<TrainList> {
+class _PartenzeLoadState extends State<PartenzeLoad> {
   Future<Partenze> partenze;
 
   @override
@@ -35,7 +35,7 @@ class _TrainListState extends State<TrainList> {
             future: partenze,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return JsonList(snapshot.data);
+                return PartenzeList(snapshot.data);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
