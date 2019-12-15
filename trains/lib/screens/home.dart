@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:trains/screens/destination.dart';
 
@@ -7,6 +9,7 @@ import 'package:trains/services/geolocation.dart';
 
 import 'package:geolocator/geolocator.dart';
 
+import 'package:trains/services/database.dart';
 
 class Home extends StatefulWidget {
 
@@ -18,24 +21,39 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _geolocationService = Geolocation();
   Position _position;
+  Map<String,dynamic> _nearestStation;
+  DatabaseService ds = DatabaseService();
 
   _HomeState() {
     _geolocationService.getCurrentPosition().then((val) => setState(() {
       _position = val;
+      if (_position != null){
+        ds.searchNearestStations(_position.latitude, _position.longitude).then((val) => setState(() {
+          _nearestStation = val;
+        }));
+      }
     }));
+
   }
 
+
   //----- per vedere mappa
-  Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
+  GoogleMapController _mapController;
+  static const LatLng _center = LatLng(0,0);
   void _onMapCreated(GoogleMapController controller){
-    _controller.complete(controller);
+    _mapController = controller;
+    refresh();
   }
   //-----
 
+  void refresh() async {
+    _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: _position == null ? LatLng(0, 0) : LatLng(_position.latitude, _position.longitude), zoom: 15.0)));
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -60,27 +78,36 @@ class _HomeState extends State<Home> {
               )
             ),
             Text(
-              _position.toString(),
+              //_position.toString(),
+              'La stazione più vicina è'
             ),
-            RaisedButton(
-              color: Color(0xff9b0014),
-              child: Text(
-                'Cerca destinazione',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Destination()),
-                );
-              },
-            ),
+              _station(),
+
           ],
       ),
       ),
     );
   }
+  Widget _station(){
+    if(_nearestStation != null){
+      print("scrivo: $_nearestStation['name']");
+      return RaisedButton(
+        color: Color(0xff9b0014),
+        child: Text(
+        _nearestStation['name'],
+        style: TextStyle(color: Colors.white),
+      ),
+      onPressed: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Destination()),
+        );
+      },
+      );
+    }
+    return  Text('');
 
+  }
 }
 
 /*
