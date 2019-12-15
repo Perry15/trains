@@ -1,40 +1,21 @@
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trains/models/viaggiatreno.dart';
-import 'package:trains/screens/partenze_list.dart';
+import 'package:trains/screens/treno_details.dart';
 import 'package:trains/services/viaggiatreno.dart';
 
-class PartenzeLoad extends StatefulWidget {
+class TrenoLoad extends StatefulWidget {
   @override
-  _PartenzeLoadState createState() => _PartenzeLoadState();
+  _TrenoLoadState createState() => _TrenoLoadState();
 }
 
-class _PartenzeLoadState extends State<PartenzeLoad> {
-  Future<Partenze> partenze;
+class _TrenoLoadState extends State<TrenoLoad> {
+  Future<Treno> treno;
 
   @override
   void initState() {
     super.initState();
-    partenze = fetchPartenze(
-        toSearch: 'S02581/' +
-            formatDate(DateTime.now(), [
-              D,
-              ' ',
-              M,
-              ' ',
-              d,
-              ' ',
-              yyyy,
-              ' ',
-              HH,
-              ':',
-              nn,
-              ':',
-              ss,
-              ' ',
-              z
-            ]));
+    treno = fetchTreno(toSearch: 'S02593/2738');
   }
 
   @override
@@ -49,11 +30,11 @@ class _PartenzeLoadState extends State<PartenzeLoad> {
           title: Text('Fetch Data Example'),
         ),
         body: Center(
-          child: FutureBuilder<Partenze>(
-            future: partenze,
+          child: FutureBuilder<Treno>(
+            future: treno,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return PartenzeList(snapshot.data);
+                return TrenoDetails(snapshot.data);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }

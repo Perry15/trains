@@ -75,19 +75,19 @@ class Partenze {
 class Fermata {
   final String stazione;
   final String id;
-  final String partenzaReale;
+  final int programmata;
 
   Fermata({
     this.stazione,
     this.id,
-    this.partenzaReale,
+    this.programmata,
   });
 
   factory Fermata.fromJson(Map<String, dynamic> json) {
     return Fermata(
       stazione: json['stazione'],
       id: json['id'],
-      partenzaReale: json['partenzaReale'],
+      programmata: json['programmata'],
     );
   }
 }
@@ -99,9 +99,9 @@ class Treno {
     this.fermate,
   });
 
-  factory Treno.fromJson(List<dynamic> json) {
-    List<Fermata> fermate = new List<Fermata>();
-    fermate = json.map((i) => Fermata.fromJson(i)).toList();
+  factory Treno.fromJson(Map<String, dynamic> json) {
+    var list = json['fermate'] as List;
+    List<Fermata> fermate = list.map((i) => Fermata.fromJson(i)).toList();
     return new Treno(
       fermate: fermate,
     );

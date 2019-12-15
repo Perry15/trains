@@ -25,7 +25,7 @@ Future<Partenze> fetchPartenze({toSearch}) async {
   if (response.statusCode == 200) {
     return Partenze.fromJson(json.decode(response.body));
   } else {
-    throw Exception('Failed to load post');
+    throw Exception('Failed to load stations');
   }
 }
 
@@ -37,6 +37,6 @@ Future<Treno> fetchTreno({toSearch}) async {
   if (response.statusCode == 200) {
     return Treno.fromJson(json.decode(response.body));
   } else {
-    throw Exception('Failed to load post');
+    throw Exception('Failed to load train details');
   }
 }

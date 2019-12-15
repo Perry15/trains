@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trains/services/auth.dart';
 import 'package:trains/screens/destination.dart';
+
 class Home extends StatelessWidget {
-
-  final AuthService _authService = AuthService();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,21 +11,21 @@ class Home extends StatelessWidget {
         backgroundColor: Color(0xff9b0014),
         elevation: 0.0,
       ),
-    body: Center(
-      child: RaisedButton (
-        color: Color(0xff9b0014),
-        child: Text(
-        'Cerca destinazione',
-        style: TextStyle(color: Colors.white),
+      body: Center(
+        child: RaisedButton(
+          color: Color(0xff9b0014),
+          child: Text(
+            'Cerca destinazione',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Destination()),
+            );
+          },
         ),
-        onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Destination()),
-          );
-        },
       ),
-    ),
     );
   }
 }
