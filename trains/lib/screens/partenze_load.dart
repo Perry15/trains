@@ -1,41 +1,12 @@
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trains/models/viaggiatreno.dart';
 import 'package:trains/screens/partenze_list.dart';
-import 'package:trains/services/viaggiatreno.dart';
 
-class PartenzeLoad extends StatefulWidget {
-  @override
-  _PartenzeLoadState createState() => _PartenzeLoadState();
-}
+class PartenzeLoad extends StatelessWidget {
+  final Future<Partenze> partenze;
 
-class _PartenzeLoadState extends State<PartenzeLoad> {
-  Future<Partenze> partenze;
-
-  @override
-  void initState() {
-    super.initState();
-    partenze = fetchPartenze(
-        toSearch: 'S02581/' +
-            formatDate(DateTime.now(), [
-              D,
-              ' ',
-              M,
-              ' ',
-              d,
-              ' ',
-              yyyy,
-              ' ',
-              HH,
-              ':',
-              nn,
-              ':',
-              ss,
-              ' ',
-              z
-            ]));
-  }
+  PartenzeLoad(this.partenze);
 
   @override
   Widget build(BuildContext context) {

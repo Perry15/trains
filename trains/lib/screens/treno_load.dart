@@ -2,21 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:trains/models/viaggiatreno.dart';
 import 'package:trains/screens/treno_details.dart';
-import 'package:trains/services/viaggiatreno.dart';
 
-class TrenoLoad extends StatefulWidget {
-  @override
-  _TrenoLoadState createState() => _TrenoLoadState();
-}
+class TrenoLoad extends StatelessWidget {
+  final Future<Treno> _treno;
 
-class _TrenoLoadState extends State<TrenoLoad> {
-  Future<Treno> treno;
-
-  @override
-  void initState() {
-    super.initState();
-    treno = fetchTreno(toSearch: 'S02593/2738');
-  }
+  TrenoLoad(this._treno);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +21,7 @@ class _TrenoLoadState extends State<TrenoLoad> {
         ),
         body: Center(
           child: FutureBuilder<Treno>(
-            future: treno,
+            future: _treno,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return TrenoDetails(snapshot.data);

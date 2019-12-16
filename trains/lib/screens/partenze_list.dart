@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:trains/screens/treno_load.dart';
 import 'package:trains/models/viaggiatreno.dart';
+import 'package:trains/services/viaggiatreno.dart';
 
 class PartenzeList extends StatelessWidget {
   final Partenze partenzeList;
@@ -22,7 +25,15 @@ class PartenzeList extends StatelessWidget {
             title: Text(partenza.destinazione),
             subtitle:
                 Text(partenza.compTipologiaTreno + ' ' + partenza.numeroTreno),
-            onTap: null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TrenoLoad(fetchTreno(
+                        toSearch:
+                            partenza.codOrigine + '/' + partenza.numeroTreno))),
+              );
+            },
             trailing: Icon(Icons.keyboard_arrow_right),
           );
         }).toList()
