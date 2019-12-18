@@ -28,7 +28,9 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             SizedBox(
-                width: MediaQuery.of(context).size.width, // or use fixed size like 200
+                width: MediaQuery.of(context)
+                    .size
+                    .width, // or use fixed size like 200
                 height: 300,
                 child: GoogleMap(
                   onMapCreated: _onMapCreated,
@@ -39,8 +41,16 @@ class _HomeState extends State<Home> {
                     zoom: 11.0,
                   ),
                 )),
-            Text('La stazione più vicina è'),
-            _station(),
+            SizedBox(height: 20),
+            Text(
+                'La stazione più vicina è',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  //fontWeight: FontWeight.w500,
+                )
+            ),
+            SizedBox(height: 20),
+            _getStation(),
           ],
         ),
       ),
@@ -49,7 +59,6 @@ class _HomeState extends State<Home> {
 
   void refresh() async {
     final center = await getUserLocation();
-    ;
     _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: center == null ? LatLng(0, 0) : center, zoom: 15.0)));
   }
@@ -59,6 +68,7 @@ class _HomeState extends State<Home> {
     refresh();
   }
 
+  /// returns the position of the user and search the nearest station setting it
   Future<LatLng> getUserLocation() async {
     LocationManager.LocationData currentLocation;
     final location = LocationManager.Location();
@@ -77,22 +87,31 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Widget _station() {
+  /// returns a RaisedButton with the nearest station if it has been found
+  /// otherwise returns a CircularProgressIndicator widget
+  Widget _getStation() {
     if (_nearestStation != null) {
       print("scrivo: $_nearestStation['name']");
-      return RaisedButton(
-        color: Color(0xff9b0014),
-        child: Text(
-          _nearestStation['name'],
-          style: TextStyle(color: Colors.white),
-        ),
-        onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Destination()),
-          );
-        },
-      );
+      return
+        ButtonTheme(
+            minWidth: MediaQuery.of(context)
+                .size
+                .width-100,
+            height: 50.0,
+            child: RaisedButton(
+              color: Color(0xff9b0014),
+              child: Text(
+                _nearestStation['name'],
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Destination()),
+                );
+              },
+            ),
+        );
     }
     return Center(child: CircularProgressIndicator(value: null));
   }
