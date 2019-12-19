@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trains/screens/destination.dart';
+
 import 'package:trains/services/database.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,6 +16,7 @@ class _HomeState extends State<Home> {
   DatabaseService ds = DatabaseService();
   GoogleMapController _mapController;
 
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
