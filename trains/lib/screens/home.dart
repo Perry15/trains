@@ -108,6 +108,7 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Destination()),
+                  //TODO _nearestStation['']
                 );
               },
             ),
