@@ -1,10 +1,13 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:trains/screens/destination.dart';
+import 'package:trains/screens/partenze_load.dart';
 
 import 'package:trains/services/database.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as LocationManager;
+import 'package:trains/services/viaggiatreno.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,7 +19,6 @@ class _HomeState extends State<Home> {
   DatabaseService ds = DatabaseService();
   GoogleMapController _mapController;
 
-class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +55,17 @@ class Home extends StatelessWidget {
             ),
             SizedBox(height: 20),
             _getStation(),
+            SizedBox(height: 20),
+            Text(
+                'Dove vuoi andare?',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  //fontWeight: FontWeight.w500,
+                )
+            ),
+
+            //lista partenze stazione più vicina
+            _getPartenze(),
           ],
         ),
       ),
@@ -94,8 +107,14 @@ class Home extends StatelessWidget {
   Widget _getStation() {
     if (_nearestStation != null) {
       print("scrivo: $_nearestStation['name']");
-      return
-        ButtonTheme(
+      return Text(
+        _nearestStation['name'],
+          style: TextStyle(
+            fontSize: 20.0,
+            //fontWeight: FontWeight.w500,
+          )
+      );
+        /*ButtonTheme(
             minWidth: MediaQuery.of(context)
                 .size
                 .width-100,
@@ -109,12 +128,77 @@ class Home extends StatelessWidget {
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Destination()),
-                  //TODO _nearestStation['']
+                  MaterialPageRoute(builder: (context) => PartenzeLoad(
+                    fetchPartenze(
+                      toSearch: _nearestStation['id']+'/'+formatDate(DateTime.now(),
+                      [
+                        D,
+                        ' ',
+                        M,
+                        ' ',
+                        d,
+                        ' ',
+                        yyyy,
+                        ' ',
+                        HH,
+                        ':',
+                        nn,
+                        ':',
+                        ss,
+                        ' ',
+                        z
+                      ])
+                    )
+                  )),
                 );
               },
             ),
-        );
+        );*/
+    }
+    return Center(child: CircularProgressIndicator(value: null));
+  }
+  Widget _getPartenze() {
+    if (_nearestStation != null) {
+      print(formatDate(DateTime.now(),
+          [
+            D,
+            ' ',
+            M,
+            ' ',
+            d,
+            ' ',
+            yyyy,
+            ' ',
+            HH,
+            ':',
+            nn,
+            ':',
+            ss,
+            ' ',
+            z
+          ]));
+      return PartenzeLoad(
+                    fetchPartenze(
+                      toSearch: _nearestStation['id']+'/'+formatDate(DateTime.now(),
+                      [
+                        D,
+                        ' ',
+                        M,
+                        ' ',
+                        d,
+                        ' ',
+                        yyyy,
+                        ' ',
+                        HH,
+                        ':',
+                        nn,
+                        ':',
+                        ss,
+                        ' ',
+                        z
+                      ])
+                    )
+                  );
     }
     return Center(child: CircularProgressIndicator(value: null));
   }

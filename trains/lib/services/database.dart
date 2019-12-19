@@ -41,7 +41,7 @@ class DatabaseService{
   Future getStationById(String docId) async {
     DocumentReference docRef = db.collection("stations").document(docId);
     DocumentSnapshot doc = await docRef.get();
-    //TODO aggiungere docId
+    doc.data.putIfAbsent('id', () => docId);
     return doc.data;
   }
   Future delete(String docId, Map<String, dynamic> data) async {
