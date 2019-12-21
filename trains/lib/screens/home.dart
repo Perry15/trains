@@ -114,46 +114,6 @@ class _HomeState extends State<Home> {
             //fontWeight: FontWeight.w500,
           )
       );
-        /*ButtonTheme(
-            minWidth: MediaQuery.of(context)
-                .size
-                .width-100,
-            height: 50.0,
-            child: RaisedButton(
-              color: Color(0xff9b0014),
-              child: Text(
-                _nearestStation['name'],
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PartenzeLoad(
-                    fetchPartenze(
-                      toSearch: _nearestStation['id']+'/'+formatDate(DateTime.now(),
-                      [
-                        D,
-                        ' ',
-                        M,
-                        ' ',
-                        d,
-                        ' ',
-                        yyyy,
-                        ' ',
-                        HH,
-                        ':',
-                        nn,
-                        ':',
-                        ss,
-                        ' ',
-                        z
-                      ])
-                    )
-                  )),
-                );
-              },
-            ),
-        );*/
     }
     return Center(child: CircularProgressIndicator(value: null));
   }

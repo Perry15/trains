@@ -34,6 +34,7 @@ dependencies:
   google_maps_flutter: ^0.4.0
   location: ^2.3.5
   latlong: ^0.6.1
+  percent_indicator: "^2.1.1"
 dev_dependencies:
   flutter_test:
     sdk: flutter

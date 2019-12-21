@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:trains/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:trains/services/database.dart';
 
 class AuthService {
   //_ before meanbs private
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+  final DatabaseService _dbService = DatabaseService();
   //ritorna lo user se loggato null se sloggato
   User _userFromFirebaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid) : null;
@@ -36,12 +37,10 @@ class AuthService {
   //sign in with google
   Future signInWithGoogle() async {
     try {
-      print("ciao");
       final GoogleSignInAccount googleSignInAccount =
           await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
-      print("ocio");
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
@@ -55,7 +54,8 @@ class AuthService {
 
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
-
+      await _dbService.insertUser(currentUser);// insert the user in the db if it is not already in
+      
       return _userFromFirebaseUser(currentUser); //ritorna User obj
     } catch (e) {
       print(e.toString());
