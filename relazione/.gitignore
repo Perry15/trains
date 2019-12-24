@@ -275,5 +275,6 @@ TSWLatexianTemp*
 # Makeindex log files
 *.lpz
 
+relazione.pdf
 relazione-frn.pdf
 relazione-frn.tex
