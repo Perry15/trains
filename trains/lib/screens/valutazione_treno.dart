@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:showcaseview/showcaseview.dart';
+
 import 'package:trains/screens/table_valutazione.dart';
 
 class ValutazioneTreno extends StatelessWidget {
   final String treno;
 
-  ValutazioneTreno(this.treno);
+  const ValutazioneTreno(this.treno);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,8 @@ class ValutazioneTreno extends StatelessWidget {
             children: [
               Text("Vota il treno " + treno),
               SizedBox(height: 20),
-              TableValutazione()
+              ShowCaseWidget(
+                  builder: Builder(builder: (context) => TableValutazione()))
             ]));
   }
 }
