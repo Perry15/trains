@@ -15,18 +15,18 @@ class _ProfileSate extends State<Profile>{
 
   void _select(String choice) {
      switch(choice){
-       case "Modifica profilo":{
-        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Settings()));
+       case "settings":{
+        Navigator.push(context,MaterialPageRoute(builder: (context) => Settings()));
        }
        break;
-       /*case "Nickname":{
+       /*
+       case "Nickname":{
         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Settings(s:"nickname")));
        }
-       break;*/
+       break;
+       */
      }
      
 
@@ -53,7 +53,13 @@ class _ProfileSate extends State<Profile>{
           backgroundColor: Color(0xff9b0014),
           elevation: 0.0,
           actions: <Widget>[
-            PopupMenuButton<String>(
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                _select("settings");
+              },
+            ),
+            /*PopupMenuButton<String>(
                 onSelected: _select,
                 itemBuilder: (BuildContext context) {
                   return choices.map((String choice) {
@@ -64,11 +70,10 @@ class _ProfileSate extends State<Profile>{
                   }
                 ).toList();
               },
-            ),
+            ),*/
           ],
         ),
         body: Center(
-          //padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0), //4 side symmetric padding
           child: Column(
             children: <Widget>[
               SizedBox(height:20),
@@ -101,7 +106,7 @@ class _ProfileSate extends State<Profile>{
   }
 }
 
-const List<String> choices = const <String>[
-  'Modifica profilo',
+/*const List<String> choices = const <String>[
+  "settings",
   //'Nickname',
-];
+];*/
