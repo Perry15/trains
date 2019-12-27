@@ -73,7 +73,7 @@ class DatabaseService{
     return await _getStationById(minId);
   }
 
-  Future updateUserPoints(uid, valutationsPoints, locationsPoints, trainsPoints) async{
+  Future updateUserPoints(uid, valutationsPoints, trainsPoints, locationsPoints) async{
     var x = valutationsPoints+locationsPoints+trainsPoints;
     return await db.collection('users').document(uid).updateData({
       'valutationsPoints': valutationsPoints,

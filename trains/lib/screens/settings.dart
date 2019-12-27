@@ -20,7 +20,7 @@ Future checkImage(BuildContext context) async {
   final user = Provider.of<User>(context);
     try{
       final String url = await FirebaseStorage.instance.ref().child('profileImages/${user.uid}').getDownloadURL();
-      print("url $url");
+      //print("url $url");
       setState(() {
         _image = Image.network(url, fit: BoxFit.cover,);
       });
@@ -43,7 +43,7 @@ Future checkImage(BuildContext context) async {
     final user = Provider.of<User>(context);
     StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child('profileImages/${user.uid}');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
-    StorageTaskSnapshot taskSnapshot=await uploadTask.onComplete;
+    await uploadTask.onComplete;
     setState(() {
       _image = Image.file(image);
     });
@@ -89,12 +89,12 @@ Future checkImage(BuildContext context) async {
                         child: new SizedBox(
                           width: 180.0,
                           height: 180.0,
-                          child: _image,
-                          /*child: (_image!=null)?Image.file(
-                            _image,
-                            fit: BoxFit.cover,
-                          ):
-                          Image(image: AssetImage("assets/MOB-TRAIN-BY-PININFARINA.png"), fit: BoxFit.cover,),*/
+                          child: (_image!=null)?_image:
+                            CircularProgressIndicator(
+                              strokeWidth: 7, 
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+
                         ),
                       ),
             ),

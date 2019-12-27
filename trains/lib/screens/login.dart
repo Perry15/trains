@@ -7,28 +7,31 @@ import 'package:trains/screens/profile.dart';
 class Login extends StatelessWidget {
 
   final AuthService _authService = AuthService();
-
+  //Widget _button, _logout;
+  bool _logged=false;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    Widget _button, _logout;
-    _logout =
+    
+   /* _logout =
         FlatButton.icon(
           icon: Icon(Icons.person),
           label: Text('logout'),
           onPressed: () {
             _authService.signOut();
           },
-        );
+        );*/
     if (user == null) {
-      print("user ${user}");
-      _button = _signInButtons(context);
+      //print("user ${user}");
+      _logged=false;
+      //_button = _signInButtons(context);
     }
     else{
-      print("user ${user}");
-      _button = _goToGameButton(context);
+      //print("user ${user}");
+      _logged=true;
+      //_button = _goToGameButton(context);
     }
-    print("button: $_button logout: $_logout");
+    //print("button: $_button logout: $_logout");
     return Scaffold(
         backgroundColor: Colors.brown[50],
         appBar: AppBar(
@@ -36,7 +39,14 @@ class Login extends StatelessWidget {
           backgroundColor: Color(0xff9b0014),
           elevation: 0.0,
           actions: <Widget>[
-            _logout
+            (_logged==true)?
+            FlatButton.icon(
+              icon: Icon(Icons.person),
+              label: Text('logout'),
+              onPressed: () {
+                _authService.signOut();
+              },
+            ):SizedBox()
           ],
         ),
         body: Center(
@@ -52,7 +62,7 @@ class Login extends StatelessWidget {
                 )
               ),
               SizedBox(height:550),
-              _button,
+              (_logged==true)?_goToGameButton(context):_signInButtons(context)
             ]
           ),
         ),
@@ -73,10 +83,8 @@ class Login extends StatelessWidget {
             fontSize: 20.0,
           ),
         ),
-        onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Profile()));
+        onPressed: () {
+          Navigator.push(context,MaterialPageRoute(builder: (context) => Profile()));
         },
       ),
       );
