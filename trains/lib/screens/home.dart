@@ -1,6 +1,5 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:trains/screens/destination.dart';
 import 'package:trains/screens/partenze_load.dart';
 
 import 'package:trains/services/database.dart';
@@ -46,23 +45,19 @@ class _HomeState extends State<Home> {
                   ),
                 )),
             SizedBox(height: 20),
-            Text(
-                'La stazione più vicina è',
+            Text('La stazione più vicina è',
                 style: TextStyle(
                   fontSize: 20.0,
                   //fontWeight: FontWeight.w500,
-                )
-            ),
+                )),
             SizedBox(height: 20),
             _getStation(),
             SizedBox(height: 20),
-            Text(
-                'Dove vuoi andare?',
+            Text('Dove vuoi andare?',
                 style: TextStyle(
                   fontSize: 20.0,
                   //fontWeight: FontWeight.w500,
-                )
-            ),
+                )),
 
             //lista partenze stazione più vicina
             _getPartenze(),
@@ -107,14 +102,12 @@ class _HomeState extends State<Home> {
   Widget _getStation() {
     if (_nearestStation != null) {
       print("scrivo: $_nearestStation['name']");
-      return Text(
-        _nearestStation['name'],
+      return Text(_nearestStation['name'],
           style: TextStyle(
             fontSize: 20.0,
             //fontWeight: FontWeight.w500,
-          )
-      );
-        /*ButtonTheme(
+          ));
+      /*ButtonTheme(
             minWidth: MediaQuery.of(context)
                 .size
                 .width-100,
@@ -157,48 +150,31 @@ class _HomeState extends State<Home> {
     }
     return Center(child: CircularProgressIndicator(value: null));
   }
+
   Widget _getPartenze() {
     if (_nearestStation != null) {
       print(formatDate(DateTime.now(),
-          [
-            D,
-            ' ',
-            M,
-            ' ',
-            d,
-            ' ',
-            yyyy,
-            ' ',
-            HH,
-            ':',
-            nn,
-            ':',
-            ss,
-            ' ',
-            z
-          ]));
-      return PartenzeLoad(
-                    fetchPartenze(
-                      toSearch: _nearestStation['id']+'/'+formatDate(DateTime.now(),
-                      [
-                        D,
-                        ' ',
-                        M,
-                        ' ',
-                        d,
-                        ' ',
-                        yyyy,
-                        ' ',
-                        HH,
-                        ':',
-                        nn,
-                        ':',
-                        ss,
-                        ' ',
-                        z
-                      ])
-                    )
-                  );
+          [D, ' ', M, ' ', d, ' ', yyyy, ' ', HH, ':', nn, ':', ss, ' ', z]));
+      return PartenzeLoad(fetchPartenze(
+          toSearch: _nearestStation['id'] +
+              '/' +
+              formatDate(DateTime.now(), [
+                D,
+                ' ',
+                M,
+                ' ',
+                d,
+                ' ',
+                yyyy,
+                ' ',
+                HH,
+                ':',
+                nn,
+                ':',
+                ss,
+                ' ',
+                z
+              ])));
     }
     return Center(child: CircularProgressIndicator(value: null));
   }
