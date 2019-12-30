@@ -99,7 +99,7 @@ class DatabaseService{
     }
   }
 
-  Future getUserById(uid) async{
+  Future <Map<String,dynamic>> getUserById(uid) async{
     DocumentReference docRef = db.collection("users").document(uid);
     DocumentSnapshot doc = await docRef.get();
     doc.data.putIfAbsent('id', () => uid);
