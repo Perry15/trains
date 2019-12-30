@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:trains/screens/partenze_load.dart';
 
 import 'package:trains/services/database.dart';
-import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart' as LocationManager;
+import 'package:location/location.dart';
 import 'package:trains/services/viaggiatreno.dart';
 
 class Home extends StatefulWidget {
@@ -15,7 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Map<String, dynamic> _nearestStation;
-  DatabaseService ds = DatabaseService();
+  DatabaseService _ds = DatabaseService();
   GoogleMapController _mapController;
 
   @override
@@ -67,34 +66,31 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void refresh() async {
-    final center = await getUserLocation();
-    _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: center == null ? LatLng(0, 0) : center, zoom: 15.0)));
+  void refresh() {
+    LocationData currentLocation;
+    final location = Location();
+    FutureBuilder(
+        future: location.getLocation(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final lat = currentLocation.latitude;
+            final lng = currentLocation.longitude;
+            final center = LatLng(lat, lng);
+            _ds.searchNearestStations(lat, lng).then((val) => setState(() {
+                  _nearestStation = val;
+                }));
+            _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(target: center, zoom: 15.0)));
+          }
+          return null;
+        });
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
+    setState(() {
+      _mapController = controller;
+    });
     refresh();
-  }
-
-  /// returns the position of the user and search the nearest station setting it
-  Future<LatLng> getUserLocation() async {
-    LocationManager.LocationData currentLocation;
-    final location = LocationManager.Location();
-    try {
-      currentLocation = await location.getLocation();
-      final lat = currentLocation.latitude;
-      final lng = currentLocation.longitude;
-      final center = LatLng(lat, lng);
-      ds.searchNearestStations(lat, lng).then((val) => setState(() {
-            _nearestStation = val;
-          }));
-      return center;
-    } on Exception {
-      currentLocation = null;
-      return null;
-    }
   }
 
   /// returns a RaisedButton with the nearest station if it has been found
@@ -107,46 +103,6 @@ class _HomeState extends State<Home> {
             fontSize: 20.0,
             //fontWeight: FontWeight.w500,
           ));
-      /*ButtonTheme(
-            minWidth: MediaQuery.of(context)
-                .size
-                .width-100,
-            height: 50.0,
-            child: RaisedButton(
-              color: Color(0xff9b0014),
-              child: Text(
-                _nearestStation['name'],
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PartenzeLoad(
-                    fetchPartenze(
-                      toSearch: _nearestStation['id']+'/'+formatDate(DateTime.now(),
-                      [
-                        D,
-                        ' ',
-                        M,
-                        ' ',
-                        d,
-                        ' ',
-                        yyyy,
-                        ' ',
-                        HH,
-                        ':',
-                        nn,
-                        ':',
-                        ss,
-                        ' ',
-                        z
-                      ])
-                    )
-                  )),
-                );
-              },
-            ),
-        );*/
     }
     return Center(child: CircularProgressIndicator(value: null));
   }
