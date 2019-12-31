@@ -5,31 +5,29 @@ import 'package:trains/models/user.dart';
 import 'package:trains/screens/profile.dart';
 
 class Login extends StatelessWidget {
-
+  final bool _didHeVote;// boolean value per sapere se arriva da una votazione o no
   final AuthService _authService = AuthService();
-  //Widget _button, _logout;
+
+  Login(this._didHeVote);
+
   bool _logged=false;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    
-   /* _logout =
-        FlatButton.icon(
-          icon: Icon(Icons.person),
-          label: Text('logout'),
-          onPressed: () {
-            _authService.signOut();
-          },
-        );*/
+
     if (user == null) {
       //print("user ${user}");
       _logged=false;
-      //_button = _signInButtons(context);
+      if(_didHeVote){
+        //TODO aggiornare Voto in Locale
+      }
     }
     else{
       //print("user ${user}");
       _logged=true;
-      //_button = _goToGameButton(context);
+      if(_didHeVote){
+        //TODO aggiornare Voto sul DB prendendo i dati locali?
+      }
     }
     //print("button: $_button logout: $_logout");
     return Scaffold(
@@ -54,13 +52,13 @@ class Login extends StatelessWidget {
           child: Column(
             children: <Widget>[
               SizedBox(height:20),
-              Text(
+              (_didHeVote)?Text(
                 'Congratulazioni hai valutato il treno!!!',
                 style: TextStyle(
                   fontSize: 20.0,
                   //fontWeight: FontWeight.w500,
                 )
-              ),
+              ):SizedBox(),//SizedBox vuota per mettere un Widget vuoto
               SizedBox(height:550),
               (_logged==true)?_goToGameButton(context):_signInButtons(context)
             ]

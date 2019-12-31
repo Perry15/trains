@@ -45,22 +45,12 @@ class _ProfileSate extends State<Profile> {
 
   Future<Map<String, dynamic>> getUserData(BuildContext context) async {
     final user = Provider.of<User>(context);
-    //_dbService.updateUserPoints(user.uid,20,10,20).then((val) => {print("update $val")});
-    /*_dbService.getUserById(user.uid).then((val) => setState(() {
-            user.displayName = val['displayName'];
-            user.email = val['email'];
-            user.valutationsPoints = val['valutationsPoints'];
-            user.locationsPoints = val['locationsPoints'];
-            user.trainsPoints = val['trainsPoints'];
-            user.level = val['level'];
-            //print("user $user");
-    }));*/
+    //_dbService.updateUserPoints(user.uid,20,10,20);
     return await _dbService.getUserById(user.uid);
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     getUserData(context);
     checkImage(context);
 
@@ -121,7 +111,6 @@ class _ProfileSate extends State<Profile> {
                     } else if (snapshot.hasError) {
                       return Text("ERROR: ${snapshot.error}");
                     } else {
-                      //return CircularProgressIndicator();
                       return Positioned(
                         top: 15,
                         child: CircleAvatar(
@@ -252,7 +241,6 @@ class _ProfileSate extends State<Profile> {
                     } else if (snapshot.hasError) {
                       return Text("ERROR: ${snapshot.error}");
                     } else {
-                      //return CircularProgressIndicator();
                       return Positioned(
                         top: 15,
                         child: SizedBox(

@@ -4,10 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/table_valutazione.dart';
 
 class ValutazioneTreno extends StatefulWidget {
-  final String treno;
+  final String trainCode;
   final Future<SharedPreferences> sharedPrefs;
 
-  ValutazioneTreno(this.treno, this.sharedPrefs);
+  ValutazioneTreno(this.trainCode, this.sharedPrefs);
 
   @override
   _ValutazioneTrenoState createState() => _ValutazioneTrenoState();
@@ -29,7 +29,7 @@ class _ValutazioneTrenoState extends State<ValutazioneTreno> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Vota il treno " + widget.treno),
+              Text("Vota il treno " + widget.trainCode),
               SizedBox(height: 20),
               FutureBuilder(
                   future: widget.sharedPrefs,
@@ -42,9 +42,9 @@ class _ValutazioneTrenoState extends State<ValutazioneTreno> {
                         prefs.setInt('tutorial', _tutorial);
                         return ShowCaseWidget(
                             builder: Builder(
-                                builder: (context) => TableValutazione(true)));
+                                builder: (context) => TableValutazione(true,widget.trainCode)));
                       }
-                      return TableValutazione(false);
+                      return TableValutazione(false,widget.trainCode);
                     } else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     }

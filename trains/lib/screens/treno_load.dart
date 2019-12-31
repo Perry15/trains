@@ -5,8 +5,8 @@ import 'package:trains/screens/treno_details.dart';
 
 class TrenoLoad extends StatelessWidget {
   final Future<Treno> _treno;
-  final String _codOrigineNumTreno;
-  TrenoLoad(this._treno, this._codOrigineNumTreno);
+  final String _codTreno;
+  TrenoLoad(this._treno, this._codTreno);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class TrenoLoad extends StatelessWidget {
             future: _treno,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return TrenoDetails(snapshot.data,_codOrigineNumTreno);
+                return TrenoDetails(snapshot.data,_codTreno);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }

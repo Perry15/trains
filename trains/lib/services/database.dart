@@ -73,7 +73,17 @@ class DatabaseService{
     return await _getStationById(minId);
   }
 
-  Future updateUserPoints(uid, valutationsPoints, trainsPoints, locationsPoints) async{
+  //inserisce una nuova valutazione
+  void insertEvaluation(String vote, String _trainCode) async{
+    return await db.collection('evaluations').document().setData({
+      'vote': vote,
+      'traincode': _trainCode,
+      'timestamp': Timestamp.now(),
+    });
+  }
+  
+  //probabilmente da rivedere per poter fare update da dati locali
+  void updateUserPoints(uid, valutationsPoints, trainsPoints, locationsPoints) async{
     var x = valutationsPoints+locationsPoints+trainsPoints;
     return await db.collection('users').document(uid).updateData({
       'valutationsPoints': valutationsPoints,
@@ -83,8 +93,9 @@ class DatabaseService{
     });
   }
 
+  //inserisce un utente nel db se questto non è ancora presente
+  //"S02570/11121","S02581/5820"
   Future insertUser(user) async{
-    //TODO if it is not already
     DocumentReference docRef = db.collection("users").document(user.uid);
     DocumentSnapshot doc = await docRef.get();
     if(!doc.exists){
@@ -94,7 +105,9 @@ class DatabaseService{
         'valutationsPoints': 0,
         'locationsPoints' : 0,
         'trainsPoints' : 0,
-        'level': 0
+        'level': 0,
+        'trainsEvaluated': [],
+        'locationsEvaluated': [],
       });
     }
   }

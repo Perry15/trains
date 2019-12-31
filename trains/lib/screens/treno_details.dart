@@ -6,8 +6,8 @@ import 'package:trains/screens/valutazione_treno.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class TrenoDetails extends StatelessWidget {
   final Treno treno;
-  final String cod;
-  TrenoDetails(this.treno, this.cod);
+  final String codTreno;
+  TrenoDetails(this.treno, this.codTreno);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class TrenoDetails extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno(cod,SharedPreferences.getInstance())));
+          Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno(codTreno,SharedPreferences.getInstance())));
         },
       ),
       Expanded(

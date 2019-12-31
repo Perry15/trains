@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:trains/screens/valutatore.dart';
+import 'package:trains/services/database.dart';
+import 'package:trains/screens/login.dart';
 
 class TableValutazione extends StatefulWidget {
   final bool _tutorial;
-
-  TableValutazione(this._tutorial);
+  final String _trainCode;
+  TableValutazione(this._tutorial,this._trainCode);
 
   @override
   _TableValutazioneState createState() => _TableValutazioneState();
@@ -16,6 +18,7 @@ class _TableValutazioneState extends State<TableValutazione> {
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
   GlobalKey _four = GlobalKey();
+  final DatabaseService _dbService = DatabaseService();
 
   @override
   void initState() {
@@ -60,7 +63,16 @@ class _TableValutazioneState extends State<TableValutazione> {
           }, onWillAccept: (data) {
             return true;
           }, onAccept: (data) {
-            print(data.toString());
+            //Penso che qui vada salvata la votazione e inviato l'utente alla pagina di login
+            //intanto faccio così poi si vedrà anche discorso Home
+
+            //print("voto "+data.toString());
+            _dbService.insertEvaluation(data.toString(), widget._trainCode);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => Login(true)),
+              (Route<dynamic> route) => false,
+            );
           })),
           TableCell(
               child: _getTutorial(
