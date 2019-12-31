@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
 import 'package:trains/models/viaggiatreno.dart';
-
+import 'package:trains/screens/valutazione_treno.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class TrenoDetails extends StatelessWidget {
   final Treno treno;
-
-  TrenoDetails(this.treno);
+  final String cod;
+  TrenoDetails(this.treno, this.cod);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,22 @@ class TrenoDetails extends StatelessWidget {
       CircleAvatar(
         radius: 150,
         backgroundColor: Colors.green,
-        child: Text('TRENO LIBERO'),
+        child: Text('TRENO LIBERO'),//qui bisognerà interrogare db
+      ),
+      //bottone valutazione
+      //Text(cod.toString()),
+      RaisedButton (
+        color: Color(0xff9b0014),
+        child: Text(
+          'Valuta il treno',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno(cod,SharedPreferences.getInstance())));
+        },
       ),
       Expanded(
           child: ListView(

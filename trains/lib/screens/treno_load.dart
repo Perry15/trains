@@ -5,8 +5,8 @@ import 'package:trains/screens/treno_details.dart';
 
 class TrenoLoad extends StatelessWidget {
   final Future<Treno> _treno;
-
-  TrenoLoad(this._treno);
+  final String _codOrigineNumTreno;
+  TrenoLoad(this._treno, this._codOrigineNumTreno);
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +16,17 @@ class TrenoLoad extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
+        backgroundColor: Colors.brown[50],
         appBar: AppBar(
           title: Text('Fetch Data Example'),
+          backgroundColor: Color(0xff9b0014),
         ),
         body: Center(
           child: FutureBuilder<Treno>(
             future: _treno,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return TrenoDetails(snapshot.data);
+                return TrenoDetails(snapshot.data,_codOrigineNumTreno);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }

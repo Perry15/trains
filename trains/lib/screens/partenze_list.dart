@@ -31,7 +31,7 @@ class PartenzeList extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (context) => TrenoLoad(fetchTreno(
                         toSearch:
-                            partenza.codOrigine + '/' + partenza.numeroTreno))),
+                            partenza.codOrigine + '/' + partenza.numeroTreno),partenza.codOrigine + '/' + partenza.numeroTreno)),
               );
             },
             trailing: Icon(Icons.keyboard_arrow_right),
