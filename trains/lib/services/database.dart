@@ -73,16 +73,35 @@ class DatabaseService{
     return await _getStationById(minId);
   }
 
-  //inserisce una nuova valutazione
-  void insertEvaluation(String vote, String _trainCode) async{
+  ///inserisce una nuova valutazione
+  void insertEvaluation(String vote, String trainCode) async{
     return await db.collection('evaluations').document().setData({
       'vote': vote,
-      'traincode': _trainCode,
+      'traincode': trainCode,
       'timestamp': Timestamp.now(),
     });
   }
+
+  ///calcola la valutazione di un treno
+  Future<int> getTrainEvaluation(String trainCode) async{
+    QuerySnapshot querySnapshot  = await db.collection("evaluations").getDocuments();
+    List<int> counters = new List<int>.filled(4, 0);
+    //List<String> results = ["Vuoto","Quasi vuoto","Quasi pieno","Pieno"];//to return String
+    for (DocumentSnapshot doc in querySnapshot.documents) {
+        if(doc.data['traincode']==trainCode){
+          switch(doc.data['vote']){
+            case "Vuoto":{counters[0]++;}break;
+            case "Quasi vuoto":{counters[1]++;}break;
+            case "Quasi pieno":{counters[2]++;}break;
+            case "Pieno":{counters[3]++;}break;
+          }
+        }
+    }
+    //return results[counters.indexOf(counters.reduce(max))];//to return String
+    return counters.indexOf(counters.reduce(max));
+  }
   
-  //probabilmente da rivedere per poter fare update da dati locali
+  ///probabilmente da rivedere per poter fare update da dati locali
   void updateUserPoints(uid, valutationsPoints, trainsPoints, locationsPoints) async{
     var x = valutationsPoints+locationsPoints+trainsPoints;
     return await db.collection('users').document(uid).updateData({
@@ -93,8 +112,7 @@ class DatabaseService{
     });
   }
 
-  //inserisce un utente nel db se questto non è ancora presente
-  //"S02570/11121","S02581/5820"
+  ///inserisce un utente nel db se questto non è ancora presente
   Future insertUser(user) async{
     DocumentReference docRef = db.collection("users").document(user.uid);
     DocumentSnapshot doc = await docRef.get();
@@ -112,6 +130,8 @@ class DatabaseService{
     }
   }
 
+  ///Ottiene i dati di un utente tramite l'id
+  ///
   Future <Map<String,dynamic>> getUserById(uid) async{
     DocumentReference docRef = db.collection("users").document(uid);
     DocumentSnapshot doc = await docRef.get();

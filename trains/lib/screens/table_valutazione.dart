@@ -38,8 +38,11 @@ class _TableValutazioneState extends State<TableValutazione> {
         TableRow(children: [
           SizedBox.shrink(),
           TableCell(
-            child: _getTutorial('Vuoto', Colors.green, _one,
-                'Trascinalo al centro se il treno è vuoto...'),
+            child: _getTutorial(
+              'Vuoto', 
+              Colors.green,
+              _one,
+              'Trascinalo al centro se il treno è vuoto...'),
           ),
           SizedBox.shrink(),
         ]),
