@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:trains/screens/home.dart';
-import 'package:trains/screens/login.dart';
 import 'package:trains/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'models/user.dart';
@@ -16,8 +15,7 @@ void main() {
   //feature/profilo ma non ricordo se serve
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details);
-    if (kReleaseMode)
-      exit(1);
+    if (kReleaseMode) exit(1);
   };
   //questo va per forza
   runApp(MyApp());
@@ -32,10 +30,14 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         home:
+<<<<<<< HEAD
+            Home(), //ottiene info sullo user se loggato mostra home altrimenti authenticate
+        //Login(),//bisognerà arrivare a Login() dopo valutazione,
+=======
             //Home(), //ottiene info sullo user se loggato mostra home altrimenti authenticate
             Login(true),//bisognerà arrivare a Login() dopo valutazione,
+>>>>>>> 2c744d2a6dbeb7eac9f857b5592176d7e8d2c917
       ),
     );
   }
 }
-

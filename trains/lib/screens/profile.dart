@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trains/screens/ranking.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/models/user.dart';
 import 'package:provider/provider.dart';
@@ -8,23 +9,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class Profile extends StatefulWidget {
   @override
-  _ProfileSate createState() => _ProfileSate();
+  _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileSate extends State<Profile> {
+class _ProfileState extends State<Profile> {
   final DatabaseService _dbService = DatabaseService();
-
-  Future<Image> checkImage(BuildContext context) async {
-    final user = Provider.of<User>(context);
-    final String url = await FirebaseStorage.instance
-        .ref()
-        .child('profileImages/${user.uid}')
-        .getDownloadURL();
-    return Image.network(
-      url,
-      fit: BoxFit.cover,
-    );
-  }
 
   void _select(String choice) {
     switch (choice) {
@@ -51,13 +40,14 @@ class _ProfileSate extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    getUserData(context);
-    checkImage(context);
-
+    final user = Provider.of<User>(context);
+    //getUserData(context);
+    //checkImage(context);
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         backgroundColor: Color(0xff9b0014),
+        title: Text('Il tuo profilo'),
         elevation: 0.0,
         actions: <Widget>[
           IconButton(
@@ -80,18 +70,25 @@ class _ProfileSate extends State<Profile> {
             ),*/
         ],
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 6,
-        decoration: BoxDecoration(
-          color: Color(0xff9b0014),
-        ),
+      body: Center(
         child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             overflow: Overflow.visible,
             children: <Widget>[
+              Positioned(
+                top:0,
+                child:SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 6,
+                  child:const DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Color(0xff9b0014),
+                    ),
+                  ),
+                ),
+              ),
               FutureBuilder<Image>(
-                  future: checkImage(context),
+                  future: _dbService.checkUserImageById(user.uid),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Positioned(
@@ -236,6 +233,22 @@ class _ProfileSate extends State<Profile> {
                               progressColor: Colors.red,
                             ),
                           ),
+                          Positioned(
+                            top:540,
+                            child: RaisedButton (
+                              color: Color(0xff9b0014),
+                              child: Text(
+                                'Classifica utenti',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Ranking()));
+                              },
+                            ),
+                          ),
                         ],
                       );
                     } else if (snapshot.hasError) {
@@ -250,8 +263,9 @@ class _ProfileSate extends State<Profile> {
                         ),
                       );
                     }
-                  })
-            ]),
+                  }),
+                ]
+              ),
       ),
     );
   }
