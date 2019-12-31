@@ -4,7 +4,7 @@ import 'package:trains/screens/partenze_load.dart';
 
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' /*as LocationManager*/;
 import 'package:trains/services/viaggiatreno.dart';
 
 class Home extends StatefulWidget {
@@ -66,15 +66,16 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void refresh() {
-    LocationData currentLocation;
+  /*void refresh() {
     final location = Location();
     FutureBuilder(
         future: location.getLocation(),
         builder: (context, snapshot) {
+          print("cazzoDDD");
           if (snapshot.hasData) {
-            final lat = currentLocation.latitude;
-            final lng = currentLocation.longitude;
+            print("data: ${snapshot.data}");
+            final lat = snapshot.data.latitude;
+            final lng = snapshot.data.longitude;
             final center = LatLng(lat, lng);
             _ds.searchNearestStations(lat, lng).then((val) => setState(() {
                   _nearestStation = val;
@@ -82,8 +83,22 @@ class _HomeState extends State<Home> {
             _mapController.animateCamera(CameraUpdate.newCameraPosition(
                 CameraPosition(target: center, zoom: 15.0)));
           }
-          return null;
+          return SizedBox();
         });
+  }*/
+  void refresh() async {
+    LocationData currentLocation;
+    final location = Location();
+    
+    currentLocation = await location.getLocation();
+    final lat = currentLocation.latitude;
+    final lng = currentLocation.longitude;
+    final center = LatLng(lat, lng);
+    _ds.searchNearestStations(lat, lng).then((val) => setState(() {
+          _nearestStation = val;
+        }));
+    _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: center == null ? LatLng(0, 0) : center, zoom: 15.0)));
   }
 
   void _onMapCreated(GoogleMapController controller) {
