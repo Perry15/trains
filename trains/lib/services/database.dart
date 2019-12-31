@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:trains/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
@@ -38,7 +40,7 @@ class DatabaseService{
   Future loadData(String docId, Map<String, dynamic> data) async {
     db.collection("stations").document(docId).setData(data);
   }
-  Future getStationById(String docId) async {
+  Future _getStationById(String docId) async {
     DocumentReference docRef = db.collection("stations").document(docId);
     DocumentSnapshot doc = await docRef.get();
     doc.data.putIfAbsent('id', () => docId);
@@ -68,22 +70,41 @@ class DatabaseService{
         minId=doc.documentID;
       }
     }
-    return await getStationById(minId);
+    return await _getStationById(minId);
   }
-  /*
-  //calculate distance
 
-      //transform lat in degrees to lat in radians
-      var dLat = ((lat2-lat)*pi)/180;
-      var dLon = ((long2-long)*pi)/180;
-      lat = (lat*pi)/180;
-      lat2 = (lat2*pi)/180;
+  Future updateUserPoints(uid, valutationsPoints, trainsPoints, locationsPoints) async{
+    var x = valutationsPoints+locationsPoints+trainsPoints;
+    return await db.collection('users').document(uid).updateData({
+      'valutationsPoints': valutationsPoints,
+      'locationsPoints': locationsPoints,
+      'trainsPoints': trainsPoints,
+      'level': 2+sqrt(((x-40)/5))//level function
+    });
+  }
 
-      var a = sin(dLat/2) * sin(dLat/2) +
-          sin(dLon/2) * sin(dLon/2) * cos(lat) * cos(lat2);
-      var c = 2 * atan2(sqrt(a), sqrt(1-a));
-      var distance = earthRadiusKm * c;
-  }*/
+  Future insertUser(user) async{
+    //TODO if it is not already
+    DocumentReference docRef = db.collection("users").document(user.uid);
+    DocumentSnapshot doc = await docRef.get();
+    if(!doc.exists){
+      return await db.collection('users').document(user.uid).setData({
+        'displayName': user.displayName,
+        'email': user.email,
+        'valutationsPoints': 0,
+        'locationsPoints' : 0,
+        'trainsPoints' : 0,
+        'level': 0
+      });
+    }
+  }
+
+  Future <Map<String,dynamic>> getUserById(uid) async{
+    DocumentReference docRef = db.collection("users").document(uid);
+    DocumentSnapshot doc = await docRef.get();
+    doc.data.putIfAbsent('id', () => uid);
+    return doc.data;
+  }
 
 
 
