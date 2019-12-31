@@ -112,7 +112,7 @@ class _HomeState extends State<Home> {
   /// otherwise returns a CircularProgressIndicator widget
   Widget _getStation() {
     if (_nearestStation != null) {
-      print("scrivo: $_nearestStation['name']");
+      //print("scrivo: $_nearestStation['name']");
       return Text(
         _nearestStation['name'],
         style: TextStyle(

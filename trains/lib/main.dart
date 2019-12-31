@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         home:
-            Home(), //ottiene info sullo user se loggato mostra home altrimenti authenticate
-            //Login(),//bisognerà arrivare a Login() dopo valutazione,
+            //Home(), //ottiene info sullo user se loggato mostra home altrimenti authenticate
+            Login(true),//bisognerà arrivare a Login() dopo valutazione,
       ),
     );
   }

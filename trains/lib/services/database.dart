@@ -1,9 +1,10 @@
 import 'dart:math';
-import 'package:trains/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import "package:latlong/latlong.dart";
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 class DatabaseService{
 
   //collection reference
@@ -100,6 +101,23 @@ class DatabaseService{
     //return results[counters.indexOf(counters.reduce(max))];//to return String
     return counters.indexOf(counters.reduce(max));
   }
+
+  ///calcola la valutazione di un treno
+  Future <List<Map<String,dynamic>>> getLevelRankingList() async{
+    QuerySnapshot querySnapshot  = await db.collection("users").getDocuments();
+    List<Map<String,dynamic>> rankingData = [];
+    
+    for (DocumentSnapshot doc in querySnapshot.documents) {
+        //print("data: ${doc.documentID} ${doc.data['displayName']}");
+        rankingData.add({
+          "uid":doc.documentID,
+          "level":doc.data['level'],
+          "displayName":doc.data['displayName']
+        });
+    }
+
+    return rankingData;
+  }
   
   ///probabilmente da rivedere per poter fare update da dati locali
   void updateUserPoints(uid, valutationsPoints, trainsPoints, locationsPoints) async{
@@ -139,7 +157,17 @@ class DatabaseService{
     return doc.data;
   }
 
-
+  ///returns the profile Image of a User
+  Future<Image> checkUserImageById(String uid) async {
+    final String url = await FirebaseStorage.instance
+        .ref()
+        .child('profileImages/${uid}')
+        .getDownloadURL();
+    return Image.network(
+      url,
+      fit: BoxFit.cover,
+    );
+  }
 
 
 
