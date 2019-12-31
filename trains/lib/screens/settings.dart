@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:trains/models/user.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
-import 'package:path/path.dart';
 import 'package:simple_image_crop/simple_image_crop.dart';
 
 class Settings extends StatefulWidget {
@@ -14,40 +13,51 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   Image _image;
-  
+
 // no need of the file extension, the name will do fine.
-Future checkImage(BuildContext context) async {
-  final user = Provider.of<User>(context);
-    try{
-      final String url = await FirebaseStorage.instance.ref().child('profileImages/${user.uid}').getDownloadURL();
+  Future checkImage(BuildContext context) async {
+    final user = Provider.of<User>(context);
+    try {
+      final String url = await FirebaseStorage.instance
+          .ref()
+          .child('profileImages/${user.uid}')
+          .getDownloadURL();
       //print("url $url");
       setState(() {
-        _image = Image.network(url, fit: BoxFit.cover,);
+        _image = Image.network(
+          url,
+          fit: BoxFit.cover,
+        );
       });
-    }
-    catch(e){
+    } catch (e) {
       print("errore ${e.toString()}");
-      if (this.mounted){
+      if (this.mounted) {
         setState(() {
-          _image = Image(image: AssetImage("assets/MOB-TRAIN-BY-PININFARINA.png"), fit: BoxFit.cover,);
+          _image = Image(
+            image: AssetImage("assets/MOB-TRAIN-BY-PININFARINA.png"),
+            fit: BoxFit.cover,
+          );
         });
       }
     }
-    
+
     /*var url = await ref.getDownloadURL();
     print(url);*/
-}
+  }
+
   Future getImage(BuildContext context) async {
     File image = await FilePicker.getFile(type: FileType.IMAGE);
     //upload
     final user = Provider.of<User>(context);
-    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child('profileImages/${user.uid}');
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('profileImages/${user.uid}');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
     await uploadTask.onComplete;
     setState(() {
       _image = Image.file(image);
     });
   }
+
   /*Future uploadPic(BuildContext context) async{
     final user = Provider.of<User>(context);
     StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child('profileImages/${user.uid}');
@@ -59,8 +69,8 @@ Future checkImage(BuildContext context) async {
   }*/
   final imgCropKey = GlobalKey<ImgCropState>();
   @override
-  Widget build(BuildContext context) {  
-    checkImage(context);  
+  Widget build(BuildContext context) {
+    checkImage(context);
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -81,35 +91,36 @@ Future checkImage(BuildContext context) async {
               image: Image.file(_image),
             ),*/
             Positioned(
-              top:20,
-            child:CircleAvatar(
-                      radius: 100,
-                      backgroundColor: Color(0xff9b0014),
-                      child: ClipOval(
-                        child: new SizedBox(
-                          width: 180.0,
-                          height: 180.0,
-                          child: (_image!=null)?_image:
-                            CircularProgressIndicator(
-                              strokeWidth: 7, 
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-
-                        ),
-                      ),
-            ),
+              top: 20,
+              child: CircleAvatar(
+                radius: 100,
+                backgroundColor: Color(0xff9b0014),
+                child: ClipOval(
+                  child: new SizedBox(
+                    width: 180.0,
+                    height: 180.0,
+                    child: (_image != null)
+                        ? _image
+                        : CircularProgressIndicator(
+                            strokeWidth: 7,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                  ),
+                ),
+              ),
             ),
             Positioned(
               top: 180,
-              left:230,
-              child:FloatingActionButton(
+              left: 230,
+              child: FloatingActionButton(
                 backgroundColor: Colors.black,
                 onPressed: () {
                   getImage(context);
                 },
                 tooltip: 'Modifica immagine',
                 child: Icon(Icons.add_a_photo),
-              ), 
+              ),
             ),
           ],
         ),
