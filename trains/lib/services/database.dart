@@ -5,10 +5,15 @@ import 'dart:convert';
 import "package:latlong/latlong.dart";
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:trains/models/evaluation.dart';
+import 'package:trains/models/location.dart';
+import 'package:trains/models/train.dart';
+import 'package:trains/services/local_database.dart';
 
 class DatabaseService {
   //collection reference
   final db = Firestore.instance;
+  final LocalDatabaseService _localDbService = LocalDatabaseService();
 
   Future load() async {
     String jsonString = await _loadA();
@@ -85,6 +90,18 @@ class DatabaseService {
     });
   }
 
+  void insertUserTrain(uid, String trainCode) async {
+    await db.collection('users').document(uid).updateData({
+      'trainsEvaluated': [trainCode] //level function
+    });
+  }
+
+  void insertUserLocation(uid, String locationCode) async {
+    await db.collection('users').document(uid).updateData({
+      'locationsEvaluated': [locationCode] //level function
+    });
+  }
+
   ///calcola la valutazione di un treno
   Future<int> getTrainEvaluation(String trainCode) async {
     QuerySnapshot querySnapshot =
@@ -142,12 +159,24 @@ class DatabaseService {
   void updateUserPoints(
       uid, valutationsPoints, trainsPoints, locationsPoints) async {
     var x = valutationsPoints + locationsPoints + trainsPoints;
-    return await db.collection('users').document(uid).updateData({
+    await db.collection('users').document(uid).updateData({
       'valutationsPoints': valutationsPoints,
       'locationsPoints': locationsPoints,
       'trainsPoints': trainsPoints,
       'level': 2 + sqrt(((x - 40) / 5)) //level function
     });
+  }
+
+  void updateUserFromLocal(uid) async {
+    for (Train train in await _localDbService.getTrains()) {
+      insertUserTrain(uid, train.code);
+    }
+    for (Location location in await _localDbService.getLocations()) {
+      insertUserLocation(uid, location.code);
+    }
+    for (Evaluation evaluation in await _localDbService.getEvaluations()) {
+      insertEvaluation(evaluation.vote, evaluation.traincode);
+    }
   }
 
   //inserisce un utente nel db se questto non è ancora presente

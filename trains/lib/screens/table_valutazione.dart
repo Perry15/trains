@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:trains/models/evaluation.dart';
+import 'package:trains/models/location.dart';
+import 'package:trains/models/train.dart';
 import 'package:trains/screens/valutatore.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/screens/login.dart';
@@ -74,6 +75,17 @@ class _TableValutazioneState extends State<TableValutazione> {
             Map<String, dynamic> evaluation = new Map();
             evaluation.putIfAbsent('traincode', () => widget._trainCode);
             evaluation.putIfAbsent('vote', () => data.toString());
+            widget._localDbService
+                .insertEvaluation(Evaluation.fromMap(evaluation));
+            Map<String, dynamic> train = new Map();
+            train.putIfAbsent('code', () => widget._trainCode);
+            widget._localDbService.insertTrain(Train.fromMap(train));
+            Map<String, dynamic> location = new Map();
+            location.putIfAbsent(
+                'code',
+                () => widget._trainCode
+                    .substring(0, widget._trainCode.indexOf("/")));
+            widget._localDbService.insertLocation(Location.fromMap(location));
             widget._localDbService
                 .insertEvaluation(Evaluation.fromMap(evaluation));
             widget._dbService

@@ -3,11 +3,14 @@ import 'package:trains/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
 import 'package:trains/screens/profile.dart';
+import 'package:trains/services/database.dart';
 
 class Login extends StatefulWidget {
   final bool
       _didHeVote; // boolean value per sapere se arriva da una votazione o no
   final AuthService _authService = AuthService();
+  final DatabaseService _dbService = DatabaseService();
+
   Login(this._didHeVote);
 
   @override
@@ -26,9 +29,6 @@ class _LoginState extends State<Login> {
       setState(() {
         _logged = false;
       });
-      if (widget._didHeVote) {
-        //TODO aggiornare Voto in Locale
-      }
     } else {
       //print("user ${user}");
       setState(() {
@@ -36,6 +36,7 @@ class _LoginState extends State<Login> {
       });
       if (widget._didHeVote) {
         //TODO aggiornare Voto sul DB prendendo i dati locali?
+        widget._dbService.updateUserFromLocal(user.uid);
       }
     }
     //print("button: $_button logout: $_logout");
