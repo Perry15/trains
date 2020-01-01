@@ -9,6 +9,8 @@ import 'package:trains/services/viaggiatreno.dart';
 import 'package:location/location.dart';
 
 class Home extends StatefulWidget {
+  final Location provider = new Location();
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -21,13 +23,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    widget.provider.changeSettings(accuracy: LocationAccuracy.BALANCED);
     _location = _getCurrentLocation();
   }
 
   Future<LocationData> _getCurrentLocation() async {
-    var location = new Location();
     try {
-      return await location.getLocation();
+      return await widget.provider.getLocation();
     } on PlatformException catch (e) {
       if (e.code == "PERMISSION_DENIED") {
         return _getCurrentLocation();
