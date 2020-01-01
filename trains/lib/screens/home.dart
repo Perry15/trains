@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:trains/screens/partenze_load.dart';
-
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,8 +15,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Map<String, dynamic> _nearestStation;
   DatabaseService _ds = DatabaseService();
-  //GoogleMapController _mapController;
-  Completer<GoogleMapController> controller;
   Future<Position> _position;
 
   @override
@@ -46,7 +43,7 @@ class _HomeState extends State<Home> {
                 width: MediaQuery.of(context)
                     .size
                     .width, // or use fixed size like 200
-                height: 300,
+                height: 150,
                 child: FutureBuilder(
                     future: _position,
                     builder: (context, snapshot) {
@@ -70,7 +67,7 @@ class _HomeState extends State<Home> {
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
                       } else {
-                        return CircularProgressIndicator();
+                        return Container();
                       }
                     })),
             SizedBox(height: 20),
@@ -95,28 +92,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  /*void refresh() async {
-    LocationData currentLocation;
-    final location = Location();
-
-    currentLocation = await location.getLocation();
-    final lat = currentLocation.latitude;
-    final lng = currentLocation.longitude;
-    final center = LatLng(lat, lng);
-    _ds.searchNearestStations(lat, lng).then((val) => setState(() {
-          _nearestStation = val;
-        }));
-    _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: center == null ? LatLng(0, 0) : center, zoom: 15.0)));
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    setState(() {
-      _mapController = controller;
-    });
-    refresh();
-  }*/
 
   /// returns a RaisedButton with the nearest station if it has been found
   /// otherwise returns a CircularProgressIndicator widget
