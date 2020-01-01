@@ -1,13 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:trains/models/evaluation.dart';
 import 'package:trains/screens/valutatore.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/screens/login.dart';
+import 'package:trains/services/local_database.dart';
 
 class TableValutazione extends StatefulWidget {
   final bool _tutorial;
   final String _trainCode;
-  TableValutazione(this._tutorial,this._trainCode);
+  final DatabaseService _dbService = DatabaseService();
+  final LocalDatabaseService _localDbService = LocalDatabaseService();
+  TableValutazione(this._tutorial, this._trainCode);
 
   @override
   _TableValutazioneState createState() => _TableValutazioneState();
@@ -18,7 +23,6 @@ class _TableValutazioneState extends State<TableValutazione> {
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
   GlobalKey _four = GlobalKey();
-  final DatabaseService _dbService = DatabaseService();
 
   @override
   void initState() {
@@ -38,11 +42,8 @@ class _TableValutazioneState extends State<TableValutazione> {
         TableRow(children: [
           SizedBox.shrink(),
           TableCell(
-            child: _getTutorial(
-              'Vuoto', 
-              Colors.green,
-              _one,
-              'Trascinalo al centro se il treno è vuoto...'),
+            child: _getTutorial('Vuoto', Colors.green, _one,
+                'Trascinalo al centro se il treno è vuoto...'),
           ),
           SizedBox.shrink(),
         ]),
@@ -70,7 +71,13 @@ class _TableValutazioneState extends State<TableValutazione> {
             //intanto faccio così poi si vedrà anche discorso Home
 
             //print("voto "+data.toString());
-            _dbService.insertEvaluation(data.toString(), widget._trainCode);
+            Map<String, dynamic> evaluation = new Map();
+            evaluation.putIfAbsent('traincode', () => widget._trainCode);
+            evaluation.putIfAbsent('vote', () => data.toString());
+            widget._localDbService
+                .insertEvaluation(Evaluation.fromMap(evaluation));
+            widget._dbService
+                .insertEvaluation(data.toString(), widget._trainCode);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => Login(true)),

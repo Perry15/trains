@@ -68,7 +68,7 @@ class _LoginState extends State<Login> {
                     //fontWeight: FontWeight.w500,
                   ))
               : SizedBox(), //SizedBox vuota per mettere un Widget vuoto
-          SizedBox(height: 550),
+          SizedBox(height: 350),
           _logged ? _goToGameButton(context) : _signInButtons(context)
         ]),
       ),
@@ -138,7 +138,7 @@ class _LoginState extends State<Login> {
           child: Text('sign in anon'),
           onPressed: () async {
             dynamic result = await _authService.signInAnon();
-            if(result == null){
+            if(result == null){lk
               print('error signing in');
             } else {
               print('signed in');

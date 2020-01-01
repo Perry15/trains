@@ -5,7 +5,6 @@ import 'package:trains/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:trains/screens/settings.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -76,11 +75,11 @@ class _ProfileState extends State<Profile> {
             overflow: Overflow.visible,
             children: <Widget>[
               Positioned(
-                top:0,
-                child:SizedBox(
+                top: 0,
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 6,
-                  child:const DecoratedBox(
+                  child: const DecoratedBox(
                     decoration: const BoxDecoration(
                       color: Color(0xff9b0014),
                     ),
@@ -234,8 +233,8 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           Positioned(
-                            top:540,
-                            child: RaisedButton (
+                            top: 540,
+                            child: RaisedButton(
                               color: Color(0xff9b0014),
                               child: Text(
                                 'Classifica utenti',
@@ -245,7 +244,10 @@ class _ProfileState extends State<Profile> {
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Ranking()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Ranking()));
                               },
                             ),
                           ),
@@ -264,8 +266,7 @@ class _ProfileState extends State<Profile> {
                       );
                     }
                   }),
-                ]
-              ),
+            ]),
       ),
     );
   }
