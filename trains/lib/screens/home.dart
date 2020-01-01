@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trains/screens/partenze_load.dart';
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:trains/services/viaggiatreno.dart';
+import 'package:location/location.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,16 +16,23 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Map<String, dynamic> _nearestStation;
   DatabaseService _ds = DatabaseService();
-  Future<Position> _position;
+  Future<LocationData> _location;
 
   @override
   void initState() {
     super.initState();
-    _position = _getCurrentLocation();
+    _location = _getCurrentLocation();
   }
 
-  Future<Position> _getCurrentLocation() async {
-    return await Geolocator().getCurrentPosition();
+  Future<LocationData> _getCurrentLocation() async {
+    var location = new Location();
+    try {
+      return await location.getLocation();
+    } on PlatformException catch (e) {
+      if (e.code == "PERMISSION_DENIED") {
+        return _getCurrentLocation();
+      }
+    }
   }
 
   @override
@@ -45,7 +53,7 @@ class _HomeState extends State<Home> {
                     .width, // or use fixed size like 200
                 height: 150,
                 child: FutureBuilder(
-                    future: _position,
+                    future: _location,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         _ds
