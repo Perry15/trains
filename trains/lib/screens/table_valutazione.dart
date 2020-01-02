@@ -68,28 +68,7 @@ class _TableValutazioneState extends State<TableValutazione> {
           }, onWillAccept: (data) {
             return true;
           }, onAccept: (data) {
-            //Penso che qui vada salvata la votazione e inviato l'utente alla pagina di login
-            //intanto faccio così poi si vedrà anche discorso Home
-
-            //print("voto "+data.toString());
-            Map<String, dynamic> evaluation = new Map();
-            evaluation.putIfAbsent('traincode', () => widget._trainCode);
-            evaluation.putIfAbsent('vote', () => data.toString());
-            widget._localDbService
-                .insertEvaluation(Evaluation.fromMap(evaluation));
-            Map<String, dynamic> train = new Map();
-            train.putIfAbsent('code', () => widget._trainCode);
-            widget._localDbService.insertTrain(Train.fromMap(train));
-            Map<String, dynamic> location = new Map();
-            location.putIfAbsent(
-                'code',
-                () => widget._trainCode
-                    .substring(0, widget._trainCode.indexOf("/")));
-            widget._localDbService.insertLocation(Location.fromMap(location));
-            widget._localDbService
-                .insertEvaluation(Evaluation.fromMap(evaluation));
-            widget._dbService
-                .insertEvaluation(data.toString(), widget._trainCode);
+            save(data);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => Login(true)),
@@ -117,6 +96,23 @@ class _TableValutazioneState extends State<TableValutazione> {
         ])
       ],
     );
+  }
+
+  void save(data) async {
+    Map<String, dynamic> evaluation = new Map();
+    evaluation['id'] = (await widget._dbService
+            .insertEvaluation(data.toString(), widget._trainCode))
+        .documentID;
+    evaluation['traincode'] = widget._trainCode;
+    evaluation['vote'] = data.toString();
+    widget._localDbService.insertEvaluation(Evaluation.fromMap(evaluation));
+    Map<String, dynamic> train = new Map();
+    train['code'] = widget._trainCode;
+    widget._localDbService.insertTrain(Train.fromMap(train));
+    Map<String, dynamic> location = new Map();
+    location['code'] =
+        widget._trainCode.substring(0, widget._trainCode.indexOf("/"));
+    widget._localDbService.insertLocation(Location.fromMap(location));
   }
 
   Widget _getTutorial(

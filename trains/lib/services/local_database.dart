@@ -21,33 +21,36 @@ class LocalDatabaseService {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE evaluations (id INTEGER PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, traincode STRING, vote STRING)');
-    await db.execute('CREATE TABLE locations (id STRING PRIMARY KEY)');
-    await db.execute('CREATE TABLE trains (id STRING PRIMARY KEY)');
+        'CREATE TABLE evaluations (id STRING PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, traincode STRING, vote STRING)');
+    await db.execute('CREATE TABLE locations (code STRING PRIMARY KEY)');
+    await db.execute('CREATE TABLE trains (code STRING PRIMARY KEY)');
   }
 
   Future<Evaluation> insertEvaluation(Evaluation evaluation) async {
     var dbClient = await db;
-    evaluation.id = await dbClient.insert('evaluations', evaluation.toMap());
+    var id = await dbClient.update('evaluations', evaluation.toMap());
+    if (id == 0) await dbClient.insert('evaluations', evaluation.toMap());
     return evaluation;
   }
 
   Future<Location> insertLocation(Location location) async {
     var dbClient = await db;
-    location.id = await dbClient.insert('locations', location.toMap());
+    var id = await dbClient.update('locations', location.toMap());
+    if (id == 0) await dbClient.insert('locations', location.toMap());
     return location;
   }
 
   Future<Train> insertTrain(Train train) async {
     var dbClient = await db;
-    train.id = await dbClient.insert('trains', train.toMap());
+    var id = await dbClient.update('trains', train.toMap());
+    if (id == 0) await dbClient.insert('trains', train.toMap());
     return train;
   }
 
   Future<List<Evaluation>> getEvaluations() async {
     var dbClient = await db;
-    List<Map> maps = await dbClient.query('evaluations',
-        columns: ['id', 'timestamp', 'traincode', 'vote']);
+    List<Map> maps = await dbClient
+        .query('evaluations', columns: ['id', 'traincode', 'vote']);
     List<Evaluation> evaluations = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
@@ -59,7 +62,7 @@ class LocalDatabaseService {
 
   Future<List<Location>> getLocations() async {
     var dbClient = await db;
-    List<Map> maps = await dbClient.query('locations', columns: ['id']);
+    List<Map> maps = await dbClient.query('locations', columns: ['code']);
     List<Location> locations = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
@@ -71,7 +74,7 @@ class LocalDatabaseService {
 
   Future<List<Train>> getTrains() async {
     var dbClient = await db;
-    List<Map> maps = await dbClient.query('trains', columns: ['id']);
+    List<Map> maps = await dbClient.query('trains', columns: ['code']);
     List<Train> trains = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
@@ -105,16 +108,6 @@ class LocalDatabaseService {
       'trains',
       where: 'id = ?',
       whereArgs: [id],
-    );
-  }
-
-  Future<int> updateEvaluation(Evaluation evaluation) async {
-    var dbClient = await db;
-    return await dbClient.update(
-      'evaluations',
-      evaluation.toMap(),
-      where: 'id = ?',
-      whereArgs: [evaluation.id],
     );
   }
 

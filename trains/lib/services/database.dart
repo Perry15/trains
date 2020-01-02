@@ -56,7 +56,7 @@ class DatabaseService {
   }
 
   Future<Map<String, dynamic>> searchNearestStations(lat, long) async {
-    print("Arrivati lat: $lat long: $long ");
+    //print("Arrivati lat: $lat long: $long ");
     QuerySnapshot querySnapshot =
         await db.collection("stations").getDocuments();
     var minDistance = 13000000.0;
@@ -81,24 +81,31 @@ class DatabaseService {
     return await _getStationById(minId);
   }
 
-  ///inserisce una nuova valutazione
-  void insertEvaluation(String vote, String trainCode) async {
-    return await db.collection('evaluations').document().setData({
+  Future<DocumentReference> insertEvaluation(
+      String vote, String trainCode) async {
+    return await db.collection('evaluations').add({
       'vote': vote,
       'traincode': trainCode,
       'timestamp': Timestamp.now(),
     });
   }
 
+  void insertUserEvaluation(uid, evaluationId) async {
+    await db.collection('users').document(uid).updateData({
+      'evaluations': FieldValue.arrayUnion([evaluationId])
+    });
+  }
+
   void insertUserTrain(uid, String trainCode) async {
     await db.collection('users').document(uid).updateData({
-      'trainsEvaluated': [trainCode] //level function
+      'trainsEvaluated': FieldValue.arrayUnion([trainCode])
     });
   }
 
   void insertUserLocation(uid, String locationCode) async {
     await db.collection('users').document(uid).updateData({
-      'locationsEvaluated': [locationCode] //level function
+      'locationsEvaluated':
+          FieldValue.arrayUnion([locationCode]) //level function
     });
   }
 
@@ -175,7 +182,7 @@ class DatabaseService {
       insertUserLocation(uid, location.code);
     }
     for (Evaluation evaluation in await _localDbService.getEvaluations()) {
-      insertEvaluation(evaluation.vote, evaluation.traincode);
+      insertUserEvaluation(uid, evaluation.id);
     }
   }
 
@@ -194,6 +201,7 @@ class DatabaseService {
         'level': 0,
         'trainsEvaluated': [],
         'locationsEvaluated': [],
+        'evaluations': []
       });
     }
   }
