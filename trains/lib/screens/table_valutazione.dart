@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:trains/models/evaluation.dart';
+import 'package:trains/models/location.dart';
+import 'package:trains/models/train.dart';
 import 'package:trains/screens/valutatore.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/screens/login.dart';
+import 'package:trains/services/local_database.dart';
 
 class TableValutazione extends StatefulWidget {
   final bool _tutorial;
   final String _trainCode;
-  TableValutazione(this._tutorial,this._trainCode);
+  final DatabaseService _dbService = DatabaseService();
+  final LocalDatabaseService _localDbService = LocalDatabaseService();
+  TableValutazione(this._tutorial, this._trainCode);
 
   @override
   _TableValutazioneState createState() => _TableValutazioneState();
@@ -18,7 +24,6 @@ class _TableValutazioneState extends State<TableValutazione> {
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
   GlobalKey _four = GlobalKey();
-  final DatabaseService _dbService = DatabaseService();
 
   @override
   void initState() {
@@ -38,11 +43,8 @@ class _TableValutazioneState extends State<TableValutazione> {
         TableRow(children: [
           SizedBox.shrink(),
           TableCell(
-            child: _getTutorial(
-              'Vuoto', 
-              Colors.green,
-              _one,
-              'Trascinalo al centro se il treno è vuoto...'),
+            child: _getTutorial('Vuoto', Colors.green, _one,
+                'Trascinalo al centro se il treno è vuoto...'),
           ),
           SizedBox.shrink(),
         ]),
@@ -66,11 +68,7 @@ class _TableValutazioneState extends State<TableValutazione> {
           }, onWillAccept: (data) {
             return true;
           }, onAccept: (data) {
-            //Penso che qui vada salvata la votazione e inviato l'utente alla pagina di login
-            //intanto faccio così poi si vedrà anche discorso Home
-
-            //print("voto "+data.toString());
-            _dbService.insertEvaluation(data.toString(), widget._trainCode);
+            save(data);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => Login(true)),
@@ -98,6 +96,23 @@ class _TableValutazioneState extends State<TableValutazione> {
         ])
       ],
     );
+  }
+
+  void save(data) async {
+    Map<String, dynamic> evaluation = new Map();
+    evaluation['id'] = (await widget._dbService
+            .insertEvaluation(data.toString(), widget._trainCode))
+        .documentID;
+    evaluation['traincode'] = widget._trainCode;
+    evaluation['vote'] = data.toString();
+    widget._localDbService.insertEvaluation(Evaluation.fromMap(evaluation));
+    Map<String, dynamic> train = new Map();
+    train['code'] = widget._trainCode;
+    widget._localDbService.insertTrain(Train.fromMap(train));
+    Map<String, dynamic> location = new Map();
+    location['code'] =
+        widget._trainCode.substring(0, widget._trainCode.indexOf("/"));
+    widget._localDbService.insertLocation(Location.fromMap(location));
   }
 
   Widget _getTutorial(
