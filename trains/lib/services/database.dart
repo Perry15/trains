@@ -5,6 +5,7 @@ import 'dart:convert';
 import "package:latlong/latlong.dart";
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/models/evaluation.dart';
 import 'package:trains/models/location.dart';
 import 'package:trains/models/train.dart';
@@ -14,6 +15,7 @@ class DatabaseService {
   //collection reference
   final db = Firestore.instance;
   final LocalDatabaseService _localDbService = LocalDatabaseService();
+
   ///old funtion to load the stations in the db
   Future load() async {
     String jsonString = await _loadA();
@@ -35,10 +37,12 @@ class DatabaseService {
     //db.collection("stations").document("S00001").setData(jsonResponse["S00001"]);
     return jsonResponse;
   }
+
   ///old funtion to load the stations in the db
   Future<String> _loadA() async {
     return await rootBundle.loadString('assets/stations.json');
   }
+
   ///old funtion to load the stations in the db
   Future loadData(String docId, Map<String, dynamic> data) async {
     db.collection("stations").document(docId).setData(data);
@@ -54,9 +58,11 @@ class DatabaseService {
   Future delete(String docId, Map<String, dynamic> data) async {
     db.collection("stations").document(docId).delete();
   }
+
   ///deletes all documents within evaluations collection
-  Future deleteAllEvaluations() async{
-    QuerySnapshot querySnapshot = await db.collection("evaluations").getDocuments();
+  Future deleteAllEvaluations() async {
+    QuerySnapshot querySnapshot =
+        await db.collection("evaluations").getDocuments();
     for (DocumentSnapshot doc in querySnapshot.documents) {
       db.collection("evaluations").document(doc.documentID).delete();
     }
@@ -89,10 +95,11 @@ class DatabaseService {
   }
 
   Future<DocumentReference> insertEvaluation(
-      String vote, String trainCode) async {
+      String vote, String trainCode, String location) async {
     return await db.collection('evaluations').add({
       'vote': vote,
       'traincode': trainCode,
+      'location': location,
       'timestamp': Timestamp.now(),
     });
   }
@@ -169,24 +176,6 @@ class DatabaseService {
     return rankingData;
   }
 
-  ///probabilmente da rivedere per poter fare update da dati locali
-  void updateUserPoints(uid, evaluationPoints, trainsPoints, locationsPoints) async {
-    //gets the already exsiting points in db
-    DocumentSnapshot doc = await db.collection('users').document(uid).get();
-    print("C'era: ${doc.data}");
-    evaluationPoints += doc.data['evaluationsPoints'];
-    trainsPoints += doc.data['trainsPoints'];
-    locationsPoints += doc.data['locationsPoints'];
-
-    var x = evaluationPoints + locationsPoints + trainsPoints;
-    await db.collection('users').document(uid).updateData({
-      'evaluationsPoints': evaluationPoints,
-      'locationsPoints': locationsPoints,
-      'trainsPoints': trainsPoints,
-      'level': 2 + sqrt(((x - 40) / 5)) //level function
-    });
-  }
-
   void updateUserFromLocal(uid) async {
     for (Train train in await _localDbService.getTrains()) {
       insertUserTrain(uid, train.code);
@@ -194,31 +183,20 @@ class DatabaseService {
     for (Location location in await _localDbService.getLocations()) {
       insertUserLocation(uid, location.code);
     }
-    //await calculatePoints(uid);// per aggiornare i punteggi
     for (Evaluation evaluation in await _localDbService.getEvaluations()) {
       insertUserEvaluation(uid, evaluation.id);
     }
-    
-  }
-
-   void calculatePoints (uid) async{
-    //train e locations devono già essere state aggiunte nel db
-    List<Train> trains = await _localDbService.getTrains();
-    List<Location> locations = await _localDbService.getLocations();
-    int evaluationPoints=0,trainsPoints=0,locationsPoints=0;
-    List<Evaluation> evaluations = await _localDbService.getEvaluations();
-    print("LOCALDB evaluations: ${evaluations.map((f)=>{f.id+' '+f.traincode+' '+f.vote+'\n'})}");  
-    print("LOCALDB locations: ${locations.map((f)=>{f.code+'\n'})}");  
-    print("LOCALDB trains: ${trains.map((f)=>{f.code+'\n'})}"); 
-    for (Evaluation evaluation in await _localDbService.getEvaluations()) {
-      evaluationPoints+=10;
-      print("trains.contains(evaluation.traincode): ${trains.contains(evaluation.traincode)}");
-      if(!trains.contains(evaluation.traincode))//se il treno è nuovo allora bonus
-        trainsPoints+=10;
-      if(!locations.contains(evaluation.location))
-        locationsPoints+=20;
-    }
-    await updateUserPoints(uid, evaluationPoints, trainsPoints, locationsPoints);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int evaluationsPoints = prefs.getInt('evaluationPoints') ?? 0;
+    int locationsPoints = prefs.getInt('locationsPoints') ?? 0;
+    int trainsPoints = prefs.getInt('trainsPoints') ?? 0;
+    double level = prefs.getDouble('level') ?? 0;
+    await db.collection('users').document(uid).updateData({
+      'evaluationsPoints': evaluationsPoints,
+      'locationsPoints': locationsPoints,
+      'trainsPoints': trainsPoints,
+      'level': level
+    });
   }
 
   //inserisce un utente nel db se questto non è ancora presente
@@ -238,7 +216,7 @@ class DatabaseService {
         'locationsEvaluated': [],
         'evaluations': []
       });
-    }//se esiste ma certi campi non esistono
+    } //se esiste ma certi campi non esistono
     /*else{
         db.collection('users').document(user.uid).get()
     }*/
@@ -249,7 +227,7 @@ class DatabaseService {
   Future<Map<String, dynamic>> getUserById(uid) async {
     DocumentReference docRef = db.collection("users").document(uid);
     DocumentSnapshot doc = await docRef.get();
-    doc.data.putIfAbsent('id', () => uid);
+    doc.data['id'] = uid;
     return doc.data;
   }
 

@@ -1,9 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Evaluation {
-  String id;
-  String traincode, vote, location;
+  String id, traincode, vote, location;
+  Timestamp timestamp;
 
   Map<String, dynamic> toMap() {
-    var map = <String, dynamic>{'id': id, 'traincode': traincode, 'vote': vote, 'location':location};
+    var map = <String, dynamic>{
+      'id': id,
+      'traincode': traincode,
+      'vote': vote,
+      'location': location,
+      'timestamp': timestamp
+    };
     return map;
   }
 

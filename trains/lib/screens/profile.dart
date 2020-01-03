@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/ranking.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/models/user.dart';
@@ -31,11 +32,11 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  Future<Map<String, dynamic>> getUserData(BuildContext context) async {
+  /*Future<Map<String, dynamic>> getUserData(BuildContext context) async {
     final user = Provider.of<User>(context);
     //_dbService.updateUserPoints(user.uid,20,10,20);
     return await _dbService.getUserById(user.uid);
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +128,8 @@ class _ProfileState extends State<Profile> {
                       );
                     }
                   }),
-              FutureBuilder<Map<String, dynamic>>(
-                  future: getUserData(context),
+              FutureBuilder<SharedPreferences>(
+                  future: SharedPreferences.getInstance(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       var data = snapshot.data;
@@ -138,7 +139,7 @@ class _ProfileState extends State<Profile> {
                         children: <Widget>[
                           Positioned(
                             top: 195,
-                            child: Text('${data['displayName']}',
+                            child: Text('Utente locale',
                                 style: TextStyle(
                                   fontSize: 25.0,
                                   fontWeight: FontWeight.w600,
@@ -158,7 +159,8 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,
-                                  child: Text('${data['valutationsPoints']}',
+                                  child: Text(
+                                      '${data.getInt('evaluationsPoints')}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -181,7 +183,7 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,
-                                  child: Text('${data['trainsPoints']}',
+                                  child: Text('${data.getInt('trainsPoints')}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -204,7 +206,8 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,
-                                  child: Text('${data['locationsPoints']}',
+                                  child: Text(
+                                      '${data.getInt('locationsPoints')}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -220,9 +223,10 @@ class _ProfileState extends State<Profile> {
                               animation: true,
                               animationDuration: 1200,
                               lineWidth: 13.0,
-                              percent: data['level'] - data['level'].toDouble(),
+                              percent: data.getDouble('level') -
+                                  data.getDouble('level').toInt(),
                               center: new Text(
-                                "Livello ${data['level'].toInt()}",
+                                "Livello ${data.getDouble('level').toInt()}",
                                 style: new TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20.0),

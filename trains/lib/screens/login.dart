@@ -25,7 +25,6 @@ class _LoginState extends State<Login> {
     final user = Provider.of<User>(context);
 
     if (user == null) {
-      //print("user ${user}");
       setState(() {
         _logged = false;
       });
@@ -35,7 +34,6 @@ class _LoginState extends State<Login> {
         _logged = true;
       });
       if (widget._didHeVote) {
-        //TODO aggiornare Voto sul DB prendendo i dati locali?
         widget._dbService.updateUserFromLocal(user.uid);
       }
     }

@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:trains/models/evaluation.dart';
@@ -21,19 +24,26 @@ class LocalDatabaseService {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE evaluations (id STRING PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, traincode STRING, vote STRING)');
+        'CREATE TABLE evaluations (id STRING PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, traincode STRING, vote STRING, location STRING)');
     await db.execute('CREATE TABLE locations (code STRING PRIMARY KEY)');
     await db.execute('CREATE TABLE trains (code STRING PRIMARY KEY)');
   }
 
   Future<Evaluation> insertEvaluation(Evaluation evaluation) async {
     var dbClient = await db;
-    var id = await dbClient.update('evaluations', evaluation.toMap());
-    if (id == 0) await dbClient.insert('evaluations', evaluation.toMap());
+    await dbClient.insert('evaluations', evaluation.toMap());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int evaluationsPoints = prefs.getInt('evaluationPoints') ?? 0;
+    prefs.setInt('evaluationsPoints', evaluationsPoints + 10);
     return evaluation;
   }
 
   Future<Location> insertLocation(Location location) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int locationsPoints = prefs.getInt('locationsPoints') ?? 0;
+    List<Location> locations = await getLocations();
+    if (!locations.contains(location.code))
+      prefs.setInt('locationsPoints', locationsPoints + 20);
     var dbClient = await db;
     var id = await dbClient.update('locations', location.toMap());
     if (id == 0) await dbClient.insert('locations', location.toMap());
@@ -41,6 +51,11 @@ class LocalDatabaseService {
   }
 
   Future<Train> insertTrain(Train train) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int trainsPoints = prefs.getInt('trainsPoints') ?? 0;
+    List<Train> trains = await getTrains();
+    if (!trains.contains(train.code))
+      prefs.setInt('trainsPoints', trainsPoints + 10);
     var dbClient = await db;
     var id = await dbClient.update('trains', train.toMap());
     if (id == 0) await dbClient.insert('trains', train.toMap());
@@ -109,6 +124,17 @@ class LocalDatabaseService {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<double> updateLevel() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int locationsPoints = prefs.getInt('locationsPoints') ?? 0;
+    int trainsPoints = prefs.getInt('locationsPoints') ?? 0;
+    int evaluationsPoints = prefs.getInt('locationsPoints') ?? 0;
+    int x = locationsPoints + trainsPoints + evaluationsPoints;
+    double level = 2 + sqrt(((x - 40) / 5));
+    prefs.setDouble('level', level);
+    return level;
   }
 
   Future close() async {

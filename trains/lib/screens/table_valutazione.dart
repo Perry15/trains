@@ -102,10 +102,9 @@ class _TableValutazioneState extends State<TableValutazione> {
   }
 
   void save(data) async {
-    print("votazione data: $data");
     Map<String, dynamic> evaluation = new Map();
-    evaluation['id'] = (await widget._dbService
-            .insertEvaluation(data.toString(), widget._trainCode))
+    evaluation['id'] = (await widget._dbService.insertEvaluation(
+            data.toString(), widget._trainCode, widget._leavingStationCode))
         .documentID;
     evaluation['traincode'] = widget._trainCode;
     evaluation['location'] = widget._leavingStationCode;
@@ -115,17 +114,21 @@ class _TableValutazioneState extends State<TableValutazione> {
     train['code'] = widget._trainCode;
     widget._localDbService.insertTrain(Train.fromMap(train));
     Map<String, dynamic> location = new Map();
-    //location['code'] = widget._trainCode.substring(0, widget._trainCode.indexOf("/"));//qui bisogna cambiare codice a locations['code'] bisogna mettere il codice della staz da cui valuta
     location['code'] = widget._leavingStationCode;
     widget._localDbService.insertLocation(Location.fromMap(location));
+    widget._localDbService.updateLevel();
   }
-  void printLocalDb() async{
-    List<Evaluation> evaluations = await widget._localDbService.getEvaluations();
-    print("LOCALDB evaluations: ${evaluations.map((f)=>{f.id+' '+f.traincode+' '+f.vote+'\n'})}");  
+
+  void printLocalDb() async {
+    List<Evaluation> evaluations =
+        await widget._localDbService.getEvaluations();
+    print("LOCALDB evaluations: ${evaluations.map((f) => {
+          f.id + ' ' + f.traincode + ' ' + f.vote + '\n'
+        })}");
     List<Location> locations = await widget._localDbService.getLocations();
-    print("LOCALDB locations: ${locations.map((f)=>{f.code+'\n'})}");  
+    print("LOCALDB locations: ${locations.map((f) => {f.code + '\n'})}");
     List<Train> trains = await widget._localDbService.getTrains();
-    print("LOCALDB trains: ${trains.map((f)=>{f.code+'\n'})}"); 
+    print("LOCALDB trains: ${trains.map((f) => {f.code + '\n'})}");
   }
 
   Widget _getTutorial(
