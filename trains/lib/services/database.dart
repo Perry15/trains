@@ -14,7 +14,7 @@ class DatabaseService {
   //collection reference
   final db = Firestore.instance;
   final LocalDatabaseService _localDbService = LocalDatabaseService();
-
+  ///old funtion to load the stations in the db
   Future load() async {
     String jsonString = await _loadA();
     final jsonResponse = json.decode(jsonString);
@@ -35,11 +35,11 @@ class DatabaseService {
     //db.collection("stations").document("S00001").setData(jsonResponse["S00001"]);
     return jsonResponse;
   }
-
+  ///old funtion to load the stations in the db
   Future<String> _loadA() async {
     return await rootBundle.loadString('assets/stations.json');
   }
-
+  ///old funtion to load the stations in the db
   Future loadData(String docId, Map<String, dynamic> data) async {
     db.collection("stations").document(docId).setData(data);
   }
@@ -53,6 +53,13 @@ class DatabaseService {
 
   Future delete(String docId, Map<String, dynamic> data) async {
     db.collection("stations").document(docId).delete();
+  }
+  ///deletes all documents within evaluations collection
+  Future deleteAllEvaluations() async{
+    QuerySnapshot querySnapshot = await db.collection("evaluations").getDocuments();
+    for (DocumentSnapshot doc in querySnapshot.documents) {
+      db.collection("evaluations").document(doc.documentID).delete();
+    }
   }
 
   Future<Map<String, dynamic>> searchNearestStations(lat, long) async {
@@ -163,11 +170,17 @@ class DatabaseService {
   }
 
   ///probabilmente da rivedere per poter fare update da dati locali
-  void updateUserPoints(
-      uid, valutationsPoints, trainsPoints, locationsPoints) async {
-    var x = valutationsPoints + locationsPoints + trainsPoints;
+  void updateUserPoints(uid, evaluationPoints, trainsPoints, locationsPoints) async {
+    //gets the already exsiting points in db
+    DocumentSnapshot doc = await db.collection('users').document(uid).get();
+    print("C'era: ${doc.data}");
+    evaluationPoints += doc.data['evaluationsPoints'];
+    trainsPoints += doc.data['trainsPoints'];
+    locationsPoints += doc.data['locationsPoints'];
+
+    var x = evaluationPoints + locationsPoints + trainsPoints;
     await db.collection('users').document(uid).updateData({
-      'valutationsPoints': valutationsPoints,
+      'evaluationsPoints': evaluationPoints,
       'locationsPoints': locationsPoints,
       'trainsPoints': trainsPoints,
       'level': 2 + sqrt(((x - 40) / 5)) //level function
@@ -181,9 +194,31 @@ class DatabaseService {
     for (Location location in await _localDbService.getLocations()) {
       insertUserLocation(uid, location.code);
     }
+    //await calculatePoints(uid);// per aggiornare i punteggi
     for (Evaluation evaluation in await _localDbService.getEvaluations()) {
       insertUserEvaluation(uid, evaluation.id);
     }
+    
+  }
+
+   void calculatePoints (uid) async{
+    //train e locations devono già essere state aggiunte nel db
+    List<Train> trains = await _localDbService.getTrains();
+    List<Location> locations = await _localDbService.getLocations();
+    int evaluationPoints=0,trainsPoints=0,locationsPoints=0;
+    List<Evaluation> evaluations = await _localDbService.getEvaluations();
+    print("LOCALDB evaluations: ${evaluations.map((f)=>{f.id+' '+f.traincode+' '+f.vote+'\n'})}");  
+    print("LOCALDB locations: ${locations.map((f)=>{f.code+'\n'})}");  
+    print("LOCALDB trains: ${trains.map((f)=>{f.code+'\n'})}"); 
+    for (Evaluation evaluation in await _localDbService.getEvaluations()) {
+      evaluationPoints+=10;
+      print("trains.contains(evaluation.traincode): ${trains.contains(evaluation.traincode)}");
+      if(!trains.contains(evaluation.traincode))//se il treno è nuovo allora bonus
+        trainsPoints+=10;
+      if(!locations.contains(evaluation.location))
+        locationsPoints+=20;
+    }
+    await updateUserPoints(uid, evaluationPoints, trainsPoints, locationsPoints);
   }
 
   //inserisce un utente nel db se questto non è ancora presente
@@ -195,7 +230,7 @@ class DatabaseService {
       return await db.collection('users').document(user.uid).setData({
         'displayName': user.displayName,
         'email': user.email,
-        'valutationsPoints': 0,
+        'evaluationsPoints': 0,
         'locationsPoints': 0,
         'trainsPoints': 0,
         'level': 0,
@@ -203,7 +238,10 @@ class DatabaseService {
         'locationsEvaluated': [],
         'evaluations': []
       });
-    }
+    }//se esiste ma certi campi non esistono
+    /*else{
+        db.collection('users').document(user.uid).get()
+    }*/
   }
 
   ///Ottiene i dati di un utente tramite l'id

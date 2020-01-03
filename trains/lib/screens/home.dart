@@ -39,6 +39,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    //_ds.deleteAllEvaluations();//to delete all evaluations
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -54,8 +55,8 @@ class _HomeState extends State<Home> {
                     .size
                     .width, // or use fixed size like 200
                 height: 150,
-                child: FutureBuilder(
-                    future: _location,
+                child: FutureBuilder<LocationData> (
+                    future: _getCurrentLocation(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         _ds
@@ -140,7 +141,7 @@ class _HomeState extends State<Home> {
                 ss,
                 ' ',
                 z
-              ])));
+              ])),_nearestStation['id']);
     }
     return Center(child: CircularProgressIndicator(value: null));
   }

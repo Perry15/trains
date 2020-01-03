@@ -1,9 +1,9 @@
 class Evaluation {
   String id;
-  String traincode, vote;
+  String traincode, vote, location;
 
   Map<String, dynamic> toMap() {
-    var map = <String, dynamic>{'id': id, 'traincode': traincode, 'vote': vote};
+    var map = <String, dynamic>{'id': id, 'traincode': traincode, 'vote': vote, 'location':location};
     return map;
   }
 
@@ -11,5 +11,6 @@ class Evaluation {
     id = map['id'];
     traincode = map['traincode'];
     vote = map['vote'];
+    location = map['location'];
   }
 }

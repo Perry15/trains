@@ -50,7 +50,7 @@ class LocalDatabaseService {
   Future<List<Evaluation>> getEvaluations() async {
     var dbClient = await db;
     List<Map> maps = await dbClient
-        .query('evaluations', columns: ['id', 'traincode', 'vote']);
+        .query('evaluations', columns: ['id', 'traincode', 'vote', 'location']);
     List<Evaluation> evaluations = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {

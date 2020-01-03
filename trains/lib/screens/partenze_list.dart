@@ -6,8 +6,8 @@ import 'package:trains/services/viaggiatreno.dart';
 
 class PartenzeList extends StatelessWidget {
   final Partenze partenzeList;
-
-  PartenzeList(this.partenzeList);
+  final String stazPartenza;
+  PartenzeList(this.partenzeList,this.stazPartenza);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class PartenzeList extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (context) => TrenoLoad(fetchTreno(
                         toSearch:
-                            partenza.codOrigine + '/' + partenza.numeroTreno),partenza.codOrigine + '/' + partenza.numeroTreno)),
+                            partenza.codOrigine + '/' + partenza.numeroTreno),partenza.codOrigine + '/' + partenza.numeroTreno, stazPartenza)),
               );
             },
             trailing: Icon(Icons.keyboard_arrow_right),

@@ -220,7 +220,7 @@ class _ProfileState extends State<Profile> {
                               animation: true,
                               animationDuration: 1200,
                               lineWidth: 13.0,
-                              percent: data['level'] - data['level'].toInt(),
+                              percent: data['level'] - data['level'].toDouble(),
                               center: new Text(
                                 "Livello ${data['level'].toInt()}",
                                 style: new TextStyle(

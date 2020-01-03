@@ -5,8 +5,8 @@ import 'package:trains/screens/partenze_list.dart';
 
 class PartenzeLoad extends StatelessWidget {
   final Future<Partenze> partenze;
-
-  PartenzeLoad(this.partenze);
+  final String stazPartenza;
+  PartenzeLoad(this.partenze, this.stazPartenza);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class PartenzeLoad extends StatelessWidget {
             future: partenze,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return PartenzeList(snapshot.data);
+                return PartenzeList(snapshot.data,stazPartenza);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }

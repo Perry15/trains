@@ -9,7 +9,8 @@ import 'package:trains/services/database.dart';
 class TrenoDetails extends StatelessWidget {
   final Treno treno;
   final String codTreno;
-  TrenoDetails(this.treno, this.codTreno);
+  final String stazPartenza;
+  TrenoDetails(this.treno, this.codTreno, this.stazPartenza);
 
   final DatabaseService _dbService = DatabaseService();
 
@@ -39,7 +40,7 @@ class TrenoDetails extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno(codTreno,SharedPreferences.getInstance())));
+              Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno(stazPartenza,codTreno,SharedPreferences.getInstance())));
             },
           ),
           Expanded(

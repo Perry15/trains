@@ -5,9 +5,10 @@ import 'package:trains/screens/table_valutazione.dart';
 
 class ValutazioneTreno extends StatefulWidget {
   final String trainCode;
+  final String leavingStationCode;
   final Future<SharedPreferences> sharedPrefs;
 
-  ValutazioneTreno(this.trainCode, this.sharedPrefs);
+  ValutazioneTreno(this.leavingStationCode,this.trainCode, this.sharedPrefs);
 
   @override
   _ValutazioneTrenoState createState() => _ValutazioneTrenoState();
@@ -42,9 +43,9 @@ class _ValutazioneTrenoState extends State<ValutazioneTreno> {
                         prefs.setInt('tutorial', _tutorial);
                         return ShowCaseWidget(
                             builder: Builder(
-                                builder: (context) => TableValutazione(true,widget.trainCode)));
+                                builder: (context) => TableValutazione(true,widget.trainCode,widget.leavingStationCode)));
                       }
-                      return TableValutazione(false,widget.trainCode);
+                      return TableValutazione(false,widget.trainCode,widget.leavingStationCode);
                     } else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     }
