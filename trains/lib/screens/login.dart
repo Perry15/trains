@@ -29,13 +29,9 @@ class _LoginState extends State<Login> {
         _logged = false;
       });
     } else {
-      //print("user ${user}");
       setState(() {
         _logged = true;
       });
-      if (widget._didHeVote) {
-        widget._dbService.updateUserFromLocal(user.uid);
-      }
     }
     //print("button: $_button logout: $_logout");
     return Scaffold(
@@ -104,6 +100,7 @@ class _LoginState extends State<Login> {
           if (result == null) {
             print('Errore di accesso');
           } else {
+            widget._dbService.updateUserFromLocal(result.uid);
             print('Accesso effettuato');
             print(result.uid);
           }

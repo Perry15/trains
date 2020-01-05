@@ -37,25 +37,25 @@ class AuthService {
   //sign in with google
   Future signInWithGoogle() async {
     try {
-      final GoogleSignInAccount googleSignInAccount =
-          await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
+      GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+      GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
+      AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
-      final AuthResult result = await _auth.signInWithCredential(credential);
-      final FirebaseUser user = result.user;
+      AuthResult result = await _auth.signInWithCredential(credential);
+      FirebaseUser user = result.user;
       print("FirebaseUser $user");
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
 
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
-      await _dbService.insertUser(currentUser);// insert the user in the db if it is not already in
-      
+      await _dbService.insertUser(
+          currentUser); // insert the user in the db if it is not already in
+
       return _userFromFirebaseUser(currentUser); //ritorna User obj
     } catch (e) {
       print(e.toString());

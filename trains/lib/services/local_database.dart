@@ -33,7 +33,7 @@ class LocalDatabaseService {
     var dbClient = await db;
     await dbClient.insert('evaluations', evaluation.toMap());
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int evaluationsPoints = prefs.getInt('evaluationPoints') ?? 0;
+    int evaluationsPoints = prefs.getInt('evaluationsPoints') ?? 0;
     prefs.setInt('evaluationsPoints', evaluationsPoints + 10);
     return evaluation;
   }
@@ -129,10 +129,14 @@ class LocalDatabaseService {
   Future<double> updateLevel() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int locationsPoints = prefs.getInt('locationsPoints') ?? 0;
-    int trainsPoints = prefs.getInt('locationsPoints') ?? 0;
-    int evaluationsPoints = prefs.getInt('locationsPoints') ?? 0;
+    int trainsPoints = prefs.getInt('trainsPoints') ?? 0;
+    int evaluationsPoints = prefs.getInt('evaluationsPoints') ?? 0;
     int x = locationsPoints + trainsPoints + evaluationsPoints;
-    double level = 2 + sqrt(((x - 40) / 5));
+    double level = prefs.getDouble('level') ?? 0;
+    if (level < 2)
+      level = level + 1;
+    else
+      level = 2 + sqrt(((x - 40) / 5));
     prefs.setDouble('level', level);
     return level;
   }

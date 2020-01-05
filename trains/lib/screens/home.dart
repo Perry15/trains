@@ -24,7 +24,9 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     widget.provider.changeSettings(accuracy: LocationAccuracy.BALANCED);
-    _location = _getCurrentLocation();
+    setState(() {
+      _location = _getCurrentLocation();
+    });
   }
 
   Future<LocationData> _getCurrentLocation() async {
@@ -55,8 +57,8 @@ class _HomeState extends State<Home> {
                     .size
                     .width, // or use fixed size like 200
                 height: 150,
-                child: FutureBuilder<LocationData> (
-                    future: _getCurrentLocation(),
+                child: FutureBuilder<LocationData>(
+                    future: _location,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         _ds
@@ -122,26 +124,28 @@ class _HomeState extends State<Home> {
     if (_nearestStation != null) {
       print(formatDate(DateTime.now(),
           [D, ' ', M, ' ', d, ' ', yyyy, ' ', HH, ':', nn, ':', ss, ' ', z]));
-      return PartenzeLoad(fetchPartenze(
-          toSearch: _nearestStation['id'] +
-              '/' +
-              formatDate(DateTime.now(), [
-                D,
-                ' ',
-                M,
-                ' ',
-                d,
-                ' ',
-                yyyy,
-                ' ',
-                HH,
-                ':',
-                nn,
-                ':',
-                ss,
-                ' ',
-                z
-              ])),_nearestStation['id']);
+      return PartenzeLoad(
+          fetchPartenze(
+              toSearch: "S01700" + //_nearestStation['id'] +
+                  '/' +
+                  formatDate(DateTime.now(), [
+                    D,
+                    ' ',
+                    M,
+                    ' ',
+                    d,
+                    ' ',
+                    yyyy,
+                    ' ',
+                    HH,
+                    ':',
+                    nn,
+                    ':',
+                    ss,
+                    ' ',
+                    z
+                  ])),
+          _nearestStation['id']);
     }
     return Center(child: CircularProgressIndicator(value: null));
   }

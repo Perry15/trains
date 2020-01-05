@@ -187,7 +187,7 @@ class DatabaseService {
       insertUserEvaluation(uid, evaluation.id);
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int evaluationsPoints = prefs.getInt('evaluationPoints') ?? 0;
+    int evaluationsPoints = prefs.getInt('evaluationsPoints') ?? 0;
     int locationsPoints = prefs.getInt('locationsPoints') ?? 0;
     int trainsPoints = prefs.getInt('trainsPoints') ?? 0;
     double level = prefs.getDouble('level') ?? 0;
@@ -199,7 +199,7 @@ class DatabaseService {
     });
   }
 
-  //inserisce un utente nel db se questto non è ancora presente
+  //inserisce un utente nel db se questo non è ancora presente
   //"S02570/11121","S02581/5820"
   Future insertUser(user) async {
     DocumentReference docRef = db.collection("users").document(user.uid);
