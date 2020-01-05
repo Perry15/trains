@@ -191,6 +191,20 @@ class DatabaseService {
     int locationsPoints = prefs.getInt('locationsPoints') ?? 0;
     int trainsPoints = prefs.getInt('trainsPoints') ?? 0;
     double level = prefs.getDouble('level') ?? 0;
+    if (prefs.getBool('firstLogin')) {
+      Map<String, dynamic> user = await getUserById(uid);
+      evaluationsPoints += user['evaluationsPoints'];
+      locationsPoints += user['locationsPoints'];
+      trainsPoints += user['trainsPoints'];
+      prefs.setDouble('level', user['level'].toDouble());
+      print(user['level']);
+      prefs.setInt('evaluationsPoints', evaluationsPoints);
+      prefs.setInt('locationsPoints', locationsPoints);
+      prefs.setInt('trainsPoints', trainsPoints);
+      _localDbService.updateLevel();
+      prefs.setBool('firstLogin', false);
+    }
+
     await db.collection('users').document(uid).updateData({
       'evaluationsPoints': evaluationsPoints,
       'locationsPoints': locationsPoints,

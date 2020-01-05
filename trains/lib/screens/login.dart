@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
@@ -100,6 +101,9 @@ class _LoginState extends State<Login> {
           if (result == null) {
             print('Errore di accesso');
           } else {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('uid', result.uid);
+            prefs.setBool('firstLogin', true);
             widget._dbService.updateUserFromLocal(result.uid);
             print('Accesso effettuato');
             print(result.uid);

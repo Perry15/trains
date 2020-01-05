@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:trains/models/evaluation.dart';
 import 'package:trains/models/location.dart';
@@ -117,6 +118,11 @@ class _TableValutazioneState extends State<TableValutazione> {
     location['code'] = widget._leavingStationCode;
     widget._localDbService.insertLocation(Location.fromMap(location));
     widget._localDbService.updateLevel();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString('uid') ?? "";
+    if (uid != "") {
+      widget._dbService.updateUserFromLocal(uid);
+    }
   }
 
   void printLocalDb() async {
