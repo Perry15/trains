@@ -197,11 +197,10 @@ class DatabaseService {
       locationsPoints += user['locationsPoints'];
       trainsPoints += user['trainsPoints'];
       prefs.setDouble('level', user['level'].toDouble());
-      print(user['level']);
       prefs.setInt('evaluationsPoints', evaluationsPoints);
       prefs.setInt('locationsPoints', locationsPoints);
       prefs.setInt('trainsPoints', trainsPoints);
-      _localDbService.updateLevel();
+      level = await _localDbService.updateLevel();
       prefs.setBool('firstLogin', false);
     }
 
