@@ -126,7 +126,7 @@ class _HomeState extends State<Home> {
           [D, ' ', M, ' ', d, ' ', yyyy, ' ', HH, ':', nn, ':', ss, ' ', z]));
       return PartenzeLoad(
           fetchPartenze(
-              toSearch: "S01700" + //_nearestStation['id'] +
+              toSearch: _nearestStation['id'] +
                   '/' +
                   formatDate(DateTime.now(), [
                     D,

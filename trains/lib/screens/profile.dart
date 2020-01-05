@@ -32,11 +32,20 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  /*Future<Map<String, dynamic>> getUserData(BuildContext context) async {
-    final user = Provider.of<User>(context);
-    //_dbService.updateUserPoints(user.uid,20,10,20);
-    return await _dbService.getUserById(user.uid);
-  }*/
+  Future<Map<String, dynamic>> getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString('uid') ?? "";
+    if (uid != "")
+      //_dbService.updateUserPoints(user.uid,20,10,20);
+      return await _dbService.getUserById(uid);
+    Map<String, dynamic> user = new Map();
+    user['evaluationsPoints'] = prefs.getInt('evaluationsPoints');
+    user['trainsPoints'] = prefs.getInt('trainsPoints');
+    user['locationsPoints'] = prefs.getInt('locationsPoints');
+    user['level'] = prefs.getDouble('level');
+    user['displayName'] = 'Utente locale';
+    return user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,8 +137,8 @@ class _ProfileState extends State<Profile> {
                       );
                     }
                   }),
-              FutureBuilder<SharedPreferences>(
-                  future: SharedPreferences.getInstance(),
+              FutureBuilder<Map<String, dynamic>>(
+                  future: getUserData(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       var data = snapshot.data;
@@ -139,7 +148,7 @@ class _ProfileState extends State<Profile> {
                         children: <Widget>[
                           Positioned(
                             top: 195,
-                            child: Text('Utente locale',
+                            child: Text(data['displayName'],
                                 style: TextStyle(
                                   fontSize: 25.0,
                                   fontWeight: FontWeight.w600,
@@ -159,8 +168,7 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,
-                                  child: Text(
-                                      '${data.getInt('evaluationsPoints')}',
+                                  child: Text('${data['evaluationsPoints']}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -183,7 +191,7 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,
-                                  child: Text('${data.getInt('trainsPoints')}',
+                                  child: Text('${data['trainsPoints']}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -206,8 +214,7 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,
-                                  child: Text(
-                                      '${data.getInt('locationsPoints')}',
+                                  child: Text('${data['locationsPoints']}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -223,10 +230,9 @@ class _ProfileState extends State<Profile> {
                               animation: true,
                               animationDuration: 1200,
                               lineWidth: 13.0,
-                              percent: data.getDouble('level') -
-                                  data.getDouble('level').toInt(),
+                              percent: data['level'] - data['level'].toInt(),
                               center: new Text(
-                                "Livello ${data.getDouble('level').toInt()}",
+                                "Livello ${data['level'].toInt()}",
                                 style: new TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20.0),
