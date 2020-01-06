@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -218,6 +219,7 @@ class DatabaseService {
     DocumentReference docRef = db.collection("users").document(user.uid);
     DocumentSnapshot doc = await docRef.get();
     if (!doc.exists) {
+      //every user has his own profile image
       return await db.collection('users').document(user.uid).setData({
         'displayName': user.displayName,
         'email': user.email,
@@ -246,13 +248,19 @@ class DatabaseService {
 
   ///returns the profile Image of a User
   Future<Image> checkUserImageById(String uid) async {
-    final String url = await FirebaseStorage.instance
+    /*final String url = await FirebaseStorage.instance
         .ref()
         .child('profileImages/$uid')
         .getDownloadURL();
     return Image.network(
-      url,
-      fit: BoxFit.cover,
-    );
+        url,
+        fit: BoxFit.cover,
+      );*/
+      return Image(
+        image:AssetImage("assets/default.png"),
+        fit: BoxFit.cover,
+      );
   }
+    
+    
 }

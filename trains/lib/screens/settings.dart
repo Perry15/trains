@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
       if (this.mounted) {
         setState(() {
           _image = Image(
-            image: AssetImage("assets/MOB-TRAIN-BY-PININFARINA.png"),
+            image: AssetImage("assets/default.png"),
             fit: BoxFit.cover,
           );
         });
@@ -47,6 +47,7 @@ class _SettingsState extends State<Settings> {
 
   Future getImage(BuildContext context) async {
     File image = await FilePicker.getFile(type: FileType.IMAGE);
+    
     //upload
     final user = Provider.of<User>(context);
     StorageReference firebaseStorageRef =

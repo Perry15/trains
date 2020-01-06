@@ -3,6 +3,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trains/screens/partenze_load.dart';
+import 'package:trains/screens/login.dart';
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trains/services/viaggiatreno.dart';
@@ -14,6 +15,11 @@ class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
+
+const List<String> choices = const <String>[
+  "profile",
+  "tutorial",
+];
 
 class _HomeState extends State<Home> {
   Map<String, dynamic> _nearestStation;
@@ -39,6 +45,22 @@ class _HomeState extends State<Home> {
     }
   }
 
+  void _select(String choice) {
+    switch (choice) {
+      case "profile":
+        {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Login(false)));
+        }
+        break;
+       case "tutorial":{
+         print("tutorial");
+        //Navigator.push(context,MaterialPageRoute(builder: (context) => Settings(s:"nickname")));
+       }
+       break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //_ds.deleteAllEvaluations();//to delete all evaluations
@@ -48,6 +70,21 @@ class _HomeState extends State<Home> {
         title: Text('Home'),
         backgroundColor: Color(0xff9b0014),
         elevation: 0.0,
+        actions: <Widget>[
+          PopupMenuButton<String>(
+                icon: Icon(Icons.menu),
+                onSelected: _select,
+                itemBuilder: (BuildContext context) {
+                  return choices.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }
+                ).toList();
+              },
+            ),
+        ],
       ),
       body: Center(
         child: Column(
