@@ -6,7 +6,7 @@ import 'package:trains/models/user.dart';
 import 'package:trains/screens/profile.dart';
 import 'package:trains/services/database.dart';
 
-class Login extends StatefulWidget {
+class Login extends StatelessWidget {
   final bool
       _didHeVote; // boolean value per sapere se arriva da una votazione o no
   final AuthService _authService = AuthService();
@@ -15,25 +15,9 @@ class Login extends StatefulWidget {
   Login(this._didHeVote);
 
   @override
-  _LoginState createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  bool _logged = false;
-
-  @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
-    if (user == null) {
-      setState(() {
-        _logged = false;
-      });
-    } else {
-      setState(() {
-        _logged = true;
-      });
-    }
     //print("button: $_button logout: $_logout");
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -42,12 +26,12 @@ class _LoginState extends State<Login> {
         backgroundColor: Color(0xff9b0014),
         elevation: 0.0,
         actions: <Widget>[
-          _logged
+          user != null
               ? FlatButton.icon(
                   icon: Icon(Icons.person),
                   label: Text('logout'),
                   onPressed: () {
-                    widget._authService.signOut();
+                    _authService.signOut();
                   },
                 )
               : SizedBox()
@@ -57,7 +41,7 @@ class _LoginState extends State<Login> {
         //padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0), //4 side symmetric padding
         child: Column(children: <Widget>[
           SizedBox(height: 20),
-          (widget._didHeVote)
+          (_didHeVote)
               ? Text('Congratulazioni hai valutato il treno!!!',
                   style: TextStyle(
                     fontSize: 20.0,
@@ -65,7 +49,7 @@ class _LoginState extends State<Login> {
                   ))
               : SizedBox(), //SizedBox vuota per mettere un Widget vuoto
           SizedBox(height: 350),
-          _logged ? _goToGameButton(context) : _signInButtons(context)
+          user != null ? _goToGameButton(context) : _signInButtons(context)
         ]),
       ),
     );
@@ -97,14 +81,14 @@ class _LoginState extends State<Login> {
       OutlineButton(
         splashColor: Colors.grey,
         onPressed: () async {
-          dynamic result = await widget._authService.signInWithGoogle();
+          dynamic result = await _authService.signInWithGoogle();
           if (result == null) {
             print('Errore di accesso');
           } else {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('uid', result.uid);
             prefs.setBool('firstLogin', true);
-            widget._dbService.updateUserFromLocal(result.uid);
+            _dbService.updateUserFromLocal(result.uid);
             print('Accesso effettuato');
             print(result.uid);
           }
@@ -133,19 +117,6 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
-      /*SizedBox(height:20),
-        RaisedButton(
-          child: Text('sign in anon'),
-          onPressed: () async {
-            dynamic result = await _authService.signInAnon();
-            if(result == null){lk
-              print('error signing in');
-            } else {
-              print('signed in');
-              print(result);
-            }
-          },
-        ),*/
     ]);
   }
 }

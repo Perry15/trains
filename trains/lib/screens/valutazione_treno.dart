@@ -3,19 +3,12 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/table_valutazione.dart';
 
-class ValutazioneTreno extends StatefulWidget {
+class ValutazioneTreno extends StatelessWidget {
   final String trainCode;
   final String leavingStationCode;
   final Future<SharedPreferences> sharedPrefs;
 
-  ValutazioneTreno(this.leavingStationCode,this.trainCode, this.sharedPrefs);
-
-  @override
-  _ValutazioneTrenoState createState() => _ValutazioneTrenoState();
-}
-
-class _ValutazioneTrenoState extends State<ValutazioneTreno> {
-  int _tutorial;
+  ValutazioneTreno(this.leavingStationCode, this.trainCode, this.sharedPrefs);
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +23,24 @@ class _ValutazioneTrenoState extends State<ValutazioneTreno> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Vota il treno " + widget.trainCode),
+              Text("Vota il treno " + trainCode),
               SizedBox(height: 20),
               FutureBuilder(
-                  future: widget.sharedPrefs,
+                  future: sharedPrefs,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       SharedPreferences prefs = snapshot.data;
-                      _tutorial = prefs.getInt('tutorial') ?? 0;
-                      if (_tutorial < 3) {
-                        _tutorial = _tutorial + 1;
-                        prefs.setInt('tutorial', _tutorial);
+                      int tutorial = prefs.getInt('tutorial') ?? 0;
+                      if (tutorial < 3) {
+                        tutorial = tutorial + 1;
+                        prefs.setInt('tutorial', tutorial);
                         return ShowCaseWidget(
                             builder: Builder(
-                                builder: (context) => TableValutazione(true,widget.trainCode,widget.leavingStationCode)));
+                                builder: (context) => TableValutazione(
+                                    true, trainCode, leavingStationCode)));
                       }
-                      return TableValutazione(false,widget.trainCode,widget.leavingStationCode);
+                      return TableValutazione(
+                          false, trainCode, leavingStationCode);
                     } else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     }

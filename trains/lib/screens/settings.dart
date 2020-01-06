@@ -13,8 +13,6 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   Image _image;
-
-// no need of the file extension, the name will do fine.
   Future checkImage(BuildContext context) async {
     final user = Provider.of<User>(context);
     try {
@@ -40,9 +38,6 @@ class _SettingsState extends State<Settings> {
         });
       }
     }
-
-    /*var url = await ref.getDownloadURL();
-    print(url);*/
   }
 
   Future getImage(BuildContext context) async {

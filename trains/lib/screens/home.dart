@@ -1,43 +1,17 @@
 import 'dart:async';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:trains/screens/partenze_load.dart';
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:trains/services/location_provider.dart';
 import 'package:trains/services/viaggiatreno.dart';
 import 'package:location/location.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   final Location provider = new Location();
-
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  Map<String, dynamic> _nearestStation;
-  DatabaseService _ds = DatabaseService();
-  Future<LocationData> _location;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.provider.changeSettings(accuracy: LocationAccuracy.BALANCED);
-    setState(() {
-      _location = _getCurrentLocation();
-    });
-  }
-
-  Future<LocationData> _getCurrentLocation() async {
-    try {
-      return await widget.provider.getLocation();
-    } on PlatformException catch (e) {
-      if (e.code == "PERMISSION_DENIED") {
-        return _getCurrentLocation();
-      }
-    }
-  }
+  final DatabaseService _ds = DatabaseService();
+  final Future<LocationData> _location = LocationProvider().fetchLocation();
 
   @override
   Widget build(BuildContext context) {
@@ -59,28 +33,22 @@ class _HomeState extends State<Home> {
                 height: 150,
                 child: FutureBuilder<LocationData>(
                     future: _location,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        _ds
-                            .searchNearestStations(
-                                snapshot.data.latitude, snapshot.data.longitude)
-                            .then((val) => setState(() {
-                                  _nearestStation = val;
-                                }));
+                    builder: (context, location) {
+                      if (location.hasData) {
                         return GoogleMap(
                           myLocationEnabled: true,
                           mapType: MapType.normal,
                           initialCameraPosition: CameraPosition(
-                              target: LatLng(snapshot.data.latitude,
-                                  snapshot.data.longitude),
+                              target: LatLng(location.data.latitude,
+                                  location.data.longitude),
                               zoom: 12.0),
                           zoomGesturesEnabled: true,
                           compassEnabled: true,
                         );
-                      } else if (snapshot.hasError) {
-                        return Text("${snapshot.error}");
+                      } else if (location.hasError) {
+                        return Text("${location.error}");
                       } else {
-                        return Container();
+                        return Center(child: CircularProgressIndicator());
                       }
                     })),
             SizedBox(height: 20),
@@ -90,7 +58,32 @@ class _HomeState extends State<Home> {
                   //fontWeight: FontWeight.w500,
                 )),
             SizedBox(height: 20),
-            _getStation(),
+            FutureBuilder<LocationData>(
+                future: _location,
+                builder: (context, location) {
+                  if (location.hasData) {
+                    return FutureBuilder<Map<String, dynamic>>(
+                        future: _ds.searchNearestStations(
+                            location.data.latitude, location.data.longitude),
+                        builder: (context2, station) {
+                          if (station.hasData) {
+                            return Text(station.data['name'],
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  //fontWeight: FontWeight.w500,
+                                ));
+                          } else if (station.hasError) {
+                            return Text("${station.error}");
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        });
+                  } else if (location.hasError) {
+                    return Text("${location.error}");
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
             SizedBox(height: 20),
             Text('Dove vuoi andare?',
                 style: TextStyle(
@@ -99,54 +92,52 @@ class _HomeState extends State<Home> {
                 )),
             SizedBox(height: 20),
             //lista partenze stazione più vicina
-            _getPartenze(),
+            FutureBuilder<LocationData>(
+                future: _location,
+                builder: (context, location) {
+                  if (location.hasData) {
+                    return FutureBuilder<Map<String, dynamic>>(
+                        future: _ds.searchNearestStations(
+                            location.data.latitude, location.data.longitude),
+                        builder: (context2, station) {
+                          if (station.hasData) {
+                            return PartenzeLoad(
+                                fetchPartenze(
+                                    toSearch: station.data['id'] +
+                                        '/' +
+                                        formatDate(DateTime.now(), [
+                                          D,
+                                          ' ',
+                                          M,
+                                          ' ',
+                                          d,
+                                          ' ',
+                                          yyyy,
+                                          ' ',
+                                          HH,
+                                          ':',
+                                          nn,
+                                          ':',
+                                          ss,
+                                          ' ',
+                                          z
+                                        ])),
+                                station.data['id']);
+                          } else if (station.hasError) {
+                            return Text("${station.error}");
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        });
+                  } else if (location.hasError) {
+                    return Text("${location.error}");
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
           ],
         ),
       ),
     );
-  }
-
-  /// returns a RaisedButton with the nearest station if it has been found
-  /// otherwise returns a CircularProgressIndicator widget
-  Widget _getStation() {
-    if (_nearestStation != null) {
-      //print("scrivo: $_nearestStation['name']");
-      return Text(_nearestStation['name'],
-          style: TextStyle(
-            fontSize: 20.0,
-            //fontWeight: FontWeight.w500,
-          ));
-    }
-    return Center(child: CircularProgressIndicator(value: null));
-  }
-
-  Widget _getPartenze() {
-    if (_nearestStation != null) {
-      print(formatDate(DateTime.now(),
-          [D, ' ', M, ' ', d, ' ', yyyy, ' ', HH, ':', nn, ':', ss, ' ', z]));
-      return PartenzeLoad(
-          fetchPartenze(
-              toSearch: "S01700" + //_nearestStation['id'] +
-                  '/' +
-                  formatDate(DateTime.now(), [
-                    D,
-                    ' ',
-                    M,
-                    ' ',
-                    d,
-                    ' ',
-                    yyyy,
-                    ' ',
-                    HH,
-                    ':',
-                    nn,
-                    ':',
-                    ss,
-                    ' ',
-                    z
-                  ])),
-          _nearestStation['id']);
-    }
-    return Center(child: CircularProgressIndicator(value: null));
   }
 }

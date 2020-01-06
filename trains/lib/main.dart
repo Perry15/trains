@@ -18,10 +18,7 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User>.value(
       //tutto quello racchiuso nello stream può ottenere info sullo stream
       value: AuthService().user,
-      child: MaterialApp(
-        home:
-            Home(), //ottiene info sullo user se loggato mostra home altrimenti authenticate
-      ),
+      child: MaterialApp(home: Home()),
     );
   }
 }
