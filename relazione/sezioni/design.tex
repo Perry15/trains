@@ -1,9 +1,9 @@
 \chapter{Design dell'applicazione\label{sec:design}}
 
 \section{Interfaccia\label{sec:interfaccia}}
-Prendendo spunto dagli argomenti affrontati a lezione, abbiamo cercato di costruire un'interfaccia che rispettasse il più possibile la confort zone di uno smartphone di medie dimensioni.
+Prendendo spunto dagli argomenti affrontati a lezione, abbiamo cercato di costruire un'interfaccia che rispettasse il più possibile la comfort zone di uno smartphone di medie dimensioni.
 È possibile accedere a un menù laterale che mette a disposizione alcune opzioni per accedere a diverse schermate dell'applicazione, tra cui le opzioni del proprio account.
-Dalla schermata iniziale è possibile vedere la stazione dei treni più vicina, localizzata attraverso il gps.
+Dalla schermata iniziale è possibile vedere la stazione dei treni più vicina, localizzata attraverso il GPS.
 Vi è una lista delle possibili destinazioni dei treni, da cui è possibile accedere a una lista con più dettagli relativa al singolo treno, dove si vedono il voto medio degli utenti, una lista delle fermate del treno con gli orari di partenza previsti per le diverse fermate e un pulsante per votare il treno.
 Si tratta di un'interfaccia just-in-time, che fornisce maggiori dettagli man mano che l'utente procede con l'interazione.
 
@@ -12,9 +12,9 @@ Si tratta di un'interfaccia just-in-time, che fornisce maggiori dettagli man man
 \section{i-OS\label{sec:i-os}}
 
 \section{Gesture\label{sec:gesture}}
-Il voto del treno è stato realizzato attraverso un menù circolare, da cui è possibile fornire $4$ voti.
+Il voto del treno è stato realizzato attraverso un menù circolare, da cui è possibile fornire quattro voti.
 Malgrado non sia possibile modificare la disposizione né il numero delle opzioni del menù in futuro, perché si andrebbero a rompere le convenzioni che si creano con l'utente, si tratta di una scelta voluta, in modo da evitare eccessive opzioni di valutazione per l'utente.
-Avendo a disposizione solamente $4$ scelte diventa inoltre più difficile che l'utente non sia propenso verso una scelta (treno vuoto) o l'altra opposta (treno pieno), ma pur avendo voti concentrati nelle altre due scelte, non si potrà avere un voto neutrale da parte dell'utente.
-Viene fornito un tutorial jit per fornire poche semplici istruzioni su come votare il treno su cui si è saliti.
+Avendo a disposizione solamente quattro scelte diventa inoltre più difficile che l'utente non sia propenso verso una scelta (treno vuoto) o l'altra opposta (treno pieno), ma pur avendo voti concentrati nelle altre due scelte, non si potrà avere un voto neutrale da parte dell'utente.
+Viene fornito un tutorial JIT per fornire poche semplici istruzioni su come votare il treno su cui si è saliti.
 Questo tutorial viene mostrato per i primi tre voti espressi dall'utente.
 Dopo i tre voti il tutorial sparisce, pur restando raggiungibile dal menù laterale.
