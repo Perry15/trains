@@ -38,7 +38,26 @@ class Ranking extends StatelessWidget {
                                     ),
                                   );
                                 }
-                                return Text('no img');
+                                else if(snapshot.hasError){
+                                return ClipOval(
+                                    child: new SizedBox(
+                                      width: 160.0,
+                                      height: 160.0,
+                                      child: Image(image: AssetImage("assets/default.png"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return ClipOval(
+                                    child: new SizedBox(
+                                      width: 160.0,
+                                      height: 160.0,
+                                      child: Image(image: AssetImage("assets/default.png"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
                               }),
                         ),
                       ),

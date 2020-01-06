@@ -112,8 +112,23 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       );
-                    } else if (snapshot.hasError) {
-                      return Text("ERROR: ${snapshot.error}");
+                    } 
+                    else if(snapshot.hasError){
+                      return Positioned(
+                        top: 15,
+                        child: CircleAvatar(
+                          radius: 90,
+                          backgroundColor: Colors.brown[50],
+                          child: ClipOval(
+                              child: new SizedBox(
+                                width: 160.0,
+                                height: 160.0,
+                                child: Image(image: AssetImage("assets/default.png"),
+                                  fit: BoxFit.cover,),
+                              ),
+                          ),
+                        ),
+                       );          
                     } else {
                       return Positioned(
                         top: 15,
@@ -242,21 +257,26 @@ class _ProfileState extends State<Profile> {
                           ),
                           Positioned(
                             top: 540,
-                            child: RaisedButton(
-                              color: Color(0xff9b0014),
-                              child: Text(
-                                'Classifica utenti',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
+                            child: ButtonTheme(
+                              minWidth: MediaQuery.of(context).size.width - 50,
+                              height: 70.0,
+                              child: RaisedButton(
+                                color: Color(0xff9b0014),
+              
+                                child: Text(
+                                  'Classifica utenti',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
                                 ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Ranking()));
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Ranking()));
-                              },
                             ),
                           ),
                         ],
@@ -265,12 +285,8 @@ class _ProfileState extends State<Profile> {
                       return Text("ERROR: ${snapshot.error}");
                     } else {
                       return Positioned(
-                        top: 15,
-                        child: SizedBox(
-                          width: 160.0,
-                          height: 160.0,
-                          child: CircularProgressIndicator(),
-                        ),
+                        top: 540,
+                        child: CircularProgressIndicator(),
                       );
                     }
                   }),

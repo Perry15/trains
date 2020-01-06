@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trains/screens/partenze_load.dart';
+import 'package:trains/screens/login.dart';
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trains/services/location_provider.dart';
@@ -12,6 +14,10 @@ class Home extends StatelessWidget {
   final Location provider = new Location();
   final DatabaseService _ds = DatabaseService();
   final Future<LocationData> _location = LocationProvider().fetchLocation();
+  final List<String> choices = const <String>[
+    "profile",
+    "tutorial",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +28,35 @@ class Home extends StatelessWidget {
         title: Text('Home'),
         backgroundColor: Color(0xff9b0014),
         elevation: 0.0,
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            icon: Icon(Icons.menu),
+            onSelected: (choice) {
+              switch (choice) {
+                case "profile":
+                  {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Login(false)));
+                  }
+                  break;
+                case "tutorial":
+                  {
+                    print("tutorial");
+                    //Navigator.push(context,MaterialPageRoute(builder: (context) => Settings(s:"nickname")));
+                  }
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return choices.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -140,4 +175,6 @@ class Home extends StatelessWidget {
       ),
     );
   }
+
+  void _select(String choice) {}
 }
