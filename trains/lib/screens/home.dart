@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                   fontSize: 20.0,
                   //fontWeight: FontWeight.w500,
                 )),
-
+            SizedBox(height: 20),
             //lista partenze stazione più vicina
             _getPartenze(),
           ],
@@ -126,7 +126,7 @@ class _HomeState extends State<Home> {
           [D, ' ', M, ' ', d, ' ', yyyy, ' ', HH, ':', nn, ':', ss, ' ', z]));
       return PartenzeLoad(
           fetchPartenze(
-              toSearch: _nearestStation['id'] +
+              toSearch: "S01700" + //_nearestStation['id'] +
                   '/' +
                   formatDate(DateTime.now(), [
                     D,

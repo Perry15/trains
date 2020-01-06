@@ -16,59 +16,68 @@ class TrenoDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> results = ["Vuoto","Quasi vuoto","Quasi pieno","Pieno"];
-    List<Color> color = [Colors.green, Colors.yellow, Colors.orange, Colors.red];
+    List<String> results = ["Vuoto", "Quasi vuoto", "Quasi pieno", "Pieno"];
+    List<Color> color = [
+      Colors.green,
+      Colors.yellow,
+      Colors.orange,
+      Colors.red
+    ];
     return FutureBuilder<int>(
-      future: _dbService.getTrainEvaluation(codTreno),
-      builder: (context, snapshot) {
-        if(snapshot.hasData){
-          return Column(children: <Widget>[
-          CircleAvatar(
-            radius: 150,
-            backgroundColor: color[snapshot.data],
-            child: Text('TRENO ${results[snapshot.data]}'),//qui bisognerà interrogare db
-          ),
-          //bottone valutazione
-          //Text(cod.toString()),
-          RaisedButton (
-            color: Color(0xff9b0014),
-            child: Text(
-              'Valuta il treno',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
+        future: _dbService.getTrainEvaluation(codTreno),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(children: <Widget>[
+              CircleAvatar(
+                radius: 150,
+                backgroundColor: color[snapshot.data],
+                child: Text(
+                    'TRENO ${results[snapshot.data]}'), //qui bisognerà interrogare db
               ),
-            ),
-            onPressed: () {
-              Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno(stazPartenza,codTreno,SharedPreferences.getInstance())));
-            },
-          ),
-          Expanded(
-              child: ListView(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            children: <Widget>[
-              ...(treno.fermate).map((fermata) {
-                return ListTile(
-                  title: Text(fermata.stazione),
-                  subtitle: Text('Arriva alle ' +
-                      formatDate(
-                          DateTime.fromMillisecondsSinceEpoch(fermata.programmata),
-                          [
-                            HH,
-                            ':',
-                            nn,
-                          ])),
-                  onTap: null,
-                );
-              }).toList()
-            ],
-          ))
-        ]);
-      }
-      else if (snapshot.hasError) {
-        return Text("${snapshot.error}");
-      }
-      return CircularProgressIndicator();
-    });
+              //bottone valutazione
+              //Text(cod.toString()),
+              RaisedButton(
+                color: Color(0xff9b0014),
+                child: Text(
+                  'Valuta il treno',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ValutazioneTreno(stazPartenza,
+                              codTreno, SharedPreferences.getInstance())));
+                },
+              ),
+              Expanded(
+                  child: ListView.builder(
+                itemCount: treno.fermate.length,
+                itemBuilder: (context, index) {
+                  Fermata fermata = treno.fermate[index];
+                  return ListTile(
+                    title: Text(fermata.stazione),
+                    subtitle: Text('Arriva alle ' +
+                        formatDate(
+                            DateTime.fromMillisecondsSinceEpoch(
+                                fermata.programmata),
+                            [
+                              HH,
+                              ':',
+                              nn,
+                            ])),
+                    onTap: null,
+                  );
+                },
+              ))
+            ]);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return CircularProgressIndicator();
+        });
   }
 }
