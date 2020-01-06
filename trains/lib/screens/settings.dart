@@ -5,6 +5,7 @@ import 'package:trains/models/user.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 import 'package:simple_image_crop/simple_image_crop.dart';
+import 'package:trains/services/database.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -12,8 +13,10 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  final DatabaseService _dbService = DatabaseService();
   Image _image;
-  Future checkImage(BuildContext context) async {
+
+  /*Future checkImage(BuildContext context) async {
     final user = Provider.of<User>(context);
     try {
       final String url = await FirebaseStorage.instance
@@ -38,7 +41,7 @@ class _SettingsState extends State<Settings> {
         });
       }
     }
-  }
+  }*/
 
   Future getImage(BuildContext context) async {
     File image = await FilePicker.getFile(type: FileType.IMAGE);
@@ -66,7 +69,8 @@ class _SettingsState extends State<Settings> {
   final imgCropKey = GlobalKey<ImgCropState>();
   @override
   Widget build(BuildContext context) {
-    checkImage(context);
+    final user = Provider.of<User>(context);
+    //checkImage(context);
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -86,26 +90,62 @@ class _SettingsState extends State<Settings> {
               chipShape: 'circle', // crop type "circle" or "rect"
               image: Image.file(_image),
             ),*/
-            Positioned(
-              top: 20,
-              child: CircleAvatar(
-                radius: 100,
-                backgroundColor: Color(0xff9b0014),
-                child: ClipOval(
-                  child: new SizedBox(
-                    width: 180.0,
-                    height: 180.0,
-                    child: (_image != null)
-                        ? _image
-                        : CircularProgressIndicator(
-                            strokeWidth: 7,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+            FutureBuilder<Image>(
+                  future: _dbService.checkUserImageById(user.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Positioned(
+                        top: 15,
+                        child: CircleAvatar(
+                          radius: 90,
+                          backgroundColor: Colors.brown[50],
+                          child: ClipOval(
+                            child: new SizedBox(
+                              width: 160.0,
+                              height: 160.0,
+                              child: snapshot.data,
+                            ),
                           ),
-                  ),
-                ),
-              ),
-            ),
+                        ),
+                      );
+                    } 
+                    else if(snapshot.hasError){
+                      return Positioned(
+                        top: 15,
+                        child: CircleAvatar(
+                          radius: 90,
+                          backgroundColor: Colors.brown[50],
+                          child: ClipOval(
+                              child: new SizedBox(
+                                width: 160.0,
+                                height: 160.0,
+                                child: Image(image: AssetImage("assets/default.png"),
+                                  fit: BoxFit.cover,),
+                              ),
+                          ),
+                        ),
+                       );          
+                    } else {
+                      return Positioned(
+                        top: 15,
+                        child: CircleAvatar(
+                          radius: 90,
+                          backgroundColor: Colors.brown[50],
+                          child: ClipOval(
+                            child: new SizedBox(
+                              width: 160.0,
+                              height: 160.0,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 7,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }),
             Positioned(
               top: 180,
               left: 230,

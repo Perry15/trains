@@ -25,42 +25,58 @@ class Ranking extends StatelessWidget {
                     return ListTile(
                       leading: ExcludeSemantics(
                         child: CircleAvatar(
-                          child: FutureBuilder<Image>(
-                              future:
-                                  _dbService.checkUserImageById(user['uid']),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return ClipOval(
-                                    child: new SizedBox(
-                                      width: 160.0,
-                                      height: 160.0,
-                                      child: snapshot.data,
-                                    ),
-                                  );
-                                }
-                                else if(snapshot.hasError){
-                                return ClipOval(
-                                    child: new SizedBox(
-                                      width: 160.0,
-                                      height: 160.0,
-                                      child: Image(image: AssetImage("assets/default.png"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                                }
-                                return ClipOval(
-                                    child: new SizedBox(
-                                      width: 160.0,
-                                      height: 160.0,
-                                      child: Image(image: AssetImage("assets/default.png"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                              }),
+                          backgroundColor: Color(0xff9b0014),
+                          foregroundColor: Colors.white,
+                          child: ClipOval(
+                            child: SizedBox(
+                              child: Text(
+                                user['position'].toString(),
+                                style: TextStyle(fontSize: 22.0,
+                                  fontWeight: FontWeight.w600
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
+                      trailing: ExcludeSemantics(
+                          child: CircleAvatar(
+                            child: FutureBuilder<Image>(
+                                future:
+                                    _dbService.checkUserImageById(user['uid']),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ClipOval(
+                                      child: new SizedBox(
+                                        width: 160.0,
+                                        height: 160.0,
+                                        child: snapshot.data,
+                                      ),
+                                    );
+                                  }
+                                  else if(snapshot.hasError){
+                                  return ClipOval(
+                                      child: new SizedBox(
+                                        width: 160.0,
+                                        height: 160.0,
+                                        child: Image(image: AssetImage("assets/default.png"),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return ClipOval(
+                                      child: new SizedBox(
+                                        width: 160.0,
+                                        height: 160.0,
+                                        child: Image(image: AssetImage("assets/default.png"),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                }),
+                          ),
+                        ),
                       title: Text(user['displayName']),
                       subtitle: Text("Livello ${user['level'].toInt()}"),
                     );

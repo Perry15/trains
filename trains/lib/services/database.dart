@@ -11,6 +11,8 @@ import 'package:trains/models/evaluation.dart';
 import 'package:trains/models/location.dart';
 import 'package:trains/models/train.dart';
 import 'package:trains/services/local_database.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 
 class DatabaseService {
   //collection reference
@@ -162,18 +164,19 @@ class DatabaseService {
 
   ///calcola la valutazione di un treno
   Future<List<Map<String, dynamic>>> getLevelRankingList() async {
-    QuerySnapshot querySnapshot = await db.collection("users").getDocuments();
+    QuerySnapshot querySnapshot = await db.collection("users").orderBy("level").getDocuments();
     List<Map<String, dynamic>> rankingData = [];
-
+    int c=1;
     for (DocumentSnapshot doc in querySnapshot.documents) {
       //print("data: ${doc.documentID} ${doc.data['displayName']}");
       rankingData.add({
+        "position":c,
         "uid": doc.documentID,
         "level": doc.data['level'],
         "displayName": doc.data['displayName']
       });
-    }
-
+      c++;
+    }  
     return rankingData;
   }
 
@@ -213,6 +216,16 @@ class DatabaseService {
     });
   }
 
+  Future<File> getImageFileFromAssets(String path) async {
+  final byteData = await rootBundle.load('assets/$path');
+
+  final file = File('${(await getTemporaryDirectory()).path}/$path');
+  await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+  return file;
+}
+
+
   //inserisce un utente nel db se questo non è ancora presente
   //"S02570/11121","S02581/5820"
   Future insertUser(user) async {
@@ -220,6 +233,8 @@ class DatabaseService {
     DocumentSnapshot doc = await docRef.get();
     if (!doc.exists) {
       //every user has his own profile image
+      File file = await getImageFileFromAssets("default.png");
+      FirebaseStorage.instance.ref().child('profileImages/${user.uid}').putFile(file);
       return await db.collection('users').document(user.uid).setData({
         'displayName': user.displayName,
         'email': user.email,
@@ -248,16 +263,12 @@ class DatabaseService {
 
   ///returns the profile Image of a User
   Future<Image> checkUserImageById(String uid) async {
-    /*final String url = await FirebaseStorage.instance
+    final String url = await FirebaseStorage.instance
         .ref()
         .child('profileImages/$uid')
         .getDownloadURL();
     return Image.network(
         url,
-        fit: BoxFit.cover,
-      );*/
-      return Image(
-        image:AssetImage("assets/default.png"),
         fit: BoxFit.cover,
       );
   }
