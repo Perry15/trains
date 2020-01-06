@@ -35,9 +35,7 @@ class _ProfileState extends State<Profile> {
   Future<Map<String, dynamic>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString('uid') ?? "";
-    if (uid != "")
-      //_dbService.updateUserPoints(user.uid,20,10,20);
-      return await _dbService.getUserById(uid);
+    if (uid != "") return await _dbService.getUserById(uid);
     Map<String, dynamic> user = new Map();
     user['evaluationsPoints'] = prefs.getInt('evaluationsPoints');
     user['trainsPoints'] = prefs.getInt('trainsPoints');

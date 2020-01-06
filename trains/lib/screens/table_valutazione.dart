@@ -45,7 +45,11 @@ class _TableValutazioneState extends State<TableValutazione> {
         TableRow(children: [
           SizedBox.shrink(),
           TableCell(
-            child: _getTutorial('Vuoto', Colors.green, _one,
+            child: _getTutorial(
+                'Vuoto',
+                Colors.green,
+                Icons.sentiment_very_satisfied,
+                _one,
                 'Trascinalo al centro se il treno è vuoto...'),
           ),
           SizedBox.shrink(),
@@ -55,6 +59,7 @@ class _TableValutazioneState extends State<TableValutazione> {
             child: _getTutorial(
               "Quasi vuoto",
               Colors.yellow,
+              Icons.sentiment_satisfied,
               _two,
               '...trascina questo se ci sono posti liberi...',
             ),
@@ -83,6 +88,7 @@ class _TableValutazioneState extends State<TableValutazione> {
               child: _getTutorial(
             "Quasi pieno",
             Colors.orange,
+            Icons.sentiment_dissatisfied,
             _three,
             '...questo se il treno è affollato...',
           ))
@@ -93,6 +99,7 @@ class _TableValutazioneState extends State<TableValutazione> {
               child: _getTutorial(
             "Pieno",
             Colors.red,
+            Icons.sentiment_very_dissatisfied,
             _four,
             '...o questo se non ci si può sedere.',
           )),
@@ -137,15 +144,15 @@ class _TableValutazioneState extends State<TableValutazione> {
     print("LOCALDB trains: ${trains.map((f) => {f.code + '\n'})}");
   }
 
-  Widget _getTutorial(
-      String value, MaterialColor color, GlobalKey key, String description) {
+  Widget _getTutorial(String value, MaterialColor color, IconData icon,
+      GlobalKey key, String description) {
     if (widget._tutorial) {
       return Showcase(
         key: key,
         description: description,
-        child: Valutatore(value, color),
+        child: Valutatore(value, color, icon),
       );
     }
-    return Valutatore(value, color);
+    return Valutatore(value, color, icon);
   }
 }

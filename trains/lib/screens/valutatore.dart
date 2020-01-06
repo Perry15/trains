@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Valutatore extends StatelessWidget {
   static String assetName = 'assets/fingerprint.svg';
-  final Widget fingerprint = SvgPicture.asset(
-    assetName,
-    semanticsLabel: 'Fingerprint',
-    fit: BoxFit.contain,
-    height: 40,
-  );
   final String voto;
   final MaterialColor color;
+  final IconData icon;
 
-  Valutatore(this.voto, this.color);
+  Valutatore(this.voto, this.color, this.icon);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +19,12 @@ class Valutatore extends StatelessWidget {
               radius: 40,
               backgroundColor: Colors.white,
               child: Column(children: [
-                fingerprint,
+                Icon(
+                  icon,
+                  color: color,
+                  size: 40.0,
+                  semanticLabel: 'Text to announce in accessibility modes',
+                ),
                 Text(voto, textAlign: TextAlign.center)
               ])),
         ),
@@ -36,7 +35,12 @@ class Valutatore extends StatelessWidget {
                 radius: 40,
                 backgroundColor: Colors.white,
                 child: Column(children: [
-                  fingerprint,
+                  Icon(
+                    icon,
+                    color: color,
+                    size: 40.0,
+                    semanticLabel: 'Text to announce in accessibility modes',
+                  ),
                   Text(voto, textAlign: TextAlign.center)
                 ]))));
   }
