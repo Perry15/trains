@@ -15,8 +15,8 @@ class Home extends StatelessWidget {
   final DatabaseService _ds = DatabaseService();
   final Future<LocationData> _location = LocationProvider().fetchLocation();
   final List<String> choices = const <String>[
-    "profile",
-    "tutorial",
+    "Il tuo profilo",
+    "Tutorial",
   ];
 
   @override
@@ -33,16 +33,17 @@ class Home extends StatelessWidget {
             icon: Icon(Icons.menu),
             onSelected: (choice) {
               switch (choice) {
-                case "profile":
+                case "Il tuo profilo":
                   {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Login(false)));
                   }
                   break;
-                case "tutorial":
+                case "Tutorial":
                   {
-                    print("tutorial");
-                    //Navigator.push(context,MaterialPageRoute(builder: (context) => Settings(s:"nickname")));
+                    print("Tutorial");
+                    //TableValutazione(true, this._trainCode, this._leavingStationCode);
+                    //bisognerà modificare un attimo tutorial
                   }
                   break;
               }
