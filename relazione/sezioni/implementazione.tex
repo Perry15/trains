@@ -1,7 +1,6 @@
 \chapter{Implementazione\label{sec:implementazione}}
 In questa sezione verranno descritte tutte le tecnologie utilizzate per lo sviluppo dell'applicazione.
 \section{Ambiente di sviluppo\label{sec:ambiente}}
-%TODO aggiungere info relative a pc e strumenti usati, sistemi operativi, dispositivi, eccetera
 Per lo sviluppo dell'applicazione è stato utilizzato il sistema di controllo di versione Git,  la realizzazione del progetto è stata eseguita da i seguenti calcolatori:
 \begin{itemize}
 	\item OS: Windows 10 Home 64bit , Ubuntu 18.04, MacOS Catalina
@@ -12,6 +11,16 @@ I dispositivi usati per sviluppo e test sono i seguenti:
 \begin{itemize}
     \item Acer T04 con Android 6.0 Marshmallow
 \end{itemize}
+
+\section{Tecnologie usate\label{sec:tecnologie}}
+Le tecnologie alle quali ci siamo appoggiati per lo sviluppo dell'applicazione sono:
+\begin{description}
+    \item[framework Flutter] è un framework cross platform di Google, lo descriviamo meglio in seguito;
+    \item[Firebase] platform as a service gestita da Google, fornisce funzionalità di analisi del comportamento degli utenti, memorizzazione di dati, gestione dei login e altro;
+    \item[SQLite] dbms molto leggero per la gestione di basi di dati relazionali.   
+\end{description}
+
+
 \section{Il framework Flutter\label{sec:flutter}}
 \subsection{Descrizione\label{sec:flutter-descrizione}}
 Flutter è un framework cross-platform cross-compiled realizzato da Google, permette di realizzare applicazioni native eseguibili sia su Android che su iOS realizzando un singolo progetto in linguaggio Dart. La principale caratteristica di Flutter è che la User Interface è composta unicamente da componenti Widget immutabili. I widget possono definire elementi strutturali (barre, pulsanti, menù), stilistici (font, colori) o di layout (padding), e così via; in pratica "tutto è un Widget". Possono essere StatefulWidget, ovvero possedere uno stato ed essere quindi in grado di rispondere alle interazioni dell'utente, oppure StatelessWidget ovvero elementi statici.
@@ -33,11 +42,29 @@ I principali vantaggi che il framework Flutter possiede sono:
 	\item \textbf{Documentazione}: Flutter è ben documentato e possiede una community di utilizzatori attiva, inoltre è facilmente integrabile con Google Firebase il quale fornisce una rapida implementazione per l'archiviazione dei dati dell'applicazione e delle funzionalità di autenticazione degli utenti;
 	\item \textbf{Facilmente integrabile in diversi ambienti di sviluppo}: sono disponibili vari plugin per il supporto in diversi IDE.
 \end{itemize}
+
+\subsection{Problemi riscontrati e soluzioni apportate}
+Durante lo sviluppo dell'applicazione abbiamo riscontrato alcuni problemi legati alle performance dell'applicazione, che non ci soddisfacevano specie dal punto di vista delle animazioni.
+Un punto cruciale è la gestione dello stato nella gerarchia dei Widget: per fare in modo che l'applicazione abbia una resa grafica fluida è bene evitare il più possibile l'uso dei Widget stateful.
+
+Inizialmente abbiamo cercato di applicare design pattern noti per esperienze pregresse che non erano adatti al contesto, ad esempio la dependency injection.
+Nelle app realizzate con Flutter è sbagliato realizzare le classi alte della gerarchia dei widget con uno stato e fare dependency injection sui widget figli, perché nel momento in cui lo stato di un widget genitore viene modificato, tutti i widget discendenti vengono ridisegnati, in particolar modo viene rieseguito il metodo build.
+Nel nostro caso avevamo implementato la schermata principale con uno stato formato da poche variabili che servivano per capire se un utente avesse mai eseguito l'accesso tramite il proprio account Google all'applicazione in precedenza oppure no e per conservarne alcuni dati di utilità.
+Queste variabili venivano in seguito iniettate nei widget discendenti per fornire le informazioni necessarie e renderli stateless.
+
+Per risolvere il problema abbiamo deciso di sfruttare pesantemente l'architettura asincrona di Flutter e di eliminare completamente lo stato dove possibile.
+Usando in modo opportuno i FutureBuilder, oggetti appositi per gestire l'asincronia nel metodo build (che viene invocato per costruire l'interfaccia), abbiamo ottenuto una resa molto più fluida.
+
+Nei widget in cui non è stato possibile eliminare lo stato, abbiamo comunque fatto in modo di spostarlo il più in basso possibile nella gerarchia, di modo da mantenere delle buone performance.
+
+Un altro problema è stata la gestione dei dati relativi ai voti degli utenti.
+Inizialmente abbiamo salvato direttamente i dati collegandoci a Firestore, un servizio offerto da firebase per la gestione di database con una struttura dinamica orientata ai documenti.
+In questo caso però l'utente era costretto a eseguire il login con il proprio account Google per conoscere e salvare i punti guadagnati e il livello di esperienza raggiunto.
+
+La soluzione in questo caso è stata quella di implementare un database con una struttura che rispecchia quella del documento con i dati relativi al singolo utente in una struttura relazionale, memorizzata in locale attraverso l'uso di sqlite.
+
 \subsection{Comparazione con altri framework\label{sec:flutter-comparazione}}
 \lettrine[findent=1.5em]{T}odo.
 
 \section{Strumenti di test usati}
 %TODO parlare degli fantastici strumenti di Flutter se riusciremo a usarli
-
-\section{Performance}
-%TODO verificare quante risorse usiamo e quanta batteria mangiamo
