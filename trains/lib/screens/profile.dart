@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/ranking.dart';
+import 'package:trains/screens/login.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/models/user.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:trains/screens/settings.dart';
 
 class Profile extends StatefulWidget {
+
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -45,9 +47,11 @@ class _ProfileState extends State<Profile> {
     return user;
   }
 
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+
     //getUserData(context);
     //checkImage(context);
     return Scaffold(
@@ -258,8 +262,8 @@ class _ProfileState extends State<Profile> {
                           Positioned(
                             top: 540,
                             child: ButtonTheme(
-                              minWidth: MediaQuery.of(context).size.width - 50,
-                              height: 70.0,
+                              minWidth: MediaQuery.of(context).size.width - 100,
+                              height: 60.0,
                               child: RaisedButton(
                                 color: Color(0xff9b0014),
               

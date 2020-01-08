@@ -57,8 +57,8 @@ class Login extends StatelessWidget {
 
   Widget _goToGameButton(BuildContext context) {
     return ButtonTheme(
-      minWidth: MediaQuery.of(context).size.width - 50,
-      height: 70.0,
+      minWidth: MediaQuery.of(context).size.width - 100,
+      height: 60.0,
       child: RaisedButton(
         color: Color(0xff9b0014),
         child: Text(

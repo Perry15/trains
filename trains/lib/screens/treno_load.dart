@@ -12,14 +12,14 @@ class TrenoLoad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fetch Data Example',
+      title: 'Stato del treno',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         backgroundColor: Colors.brown[50],
         appBar: AppBar(
-          title: Text('Fetch Data Example'),
+          title: Text('Stato del treno'),
           backgroundColor: Color(0xff9b0014),
         ),
         body: Center(

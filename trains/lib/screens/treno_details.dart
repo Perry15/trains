@@ -28,30 +28,38 @@ class TrenoDetails extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(children: <Widget>[
+              SizedBox(height: 20,),
               CircleAvatar(
-                radius: 150,
+                radius: 130,
                 backgroundColor: color[snapshot.data],
                 child: Text(
-                    'TRENO ${results[snapshot.data]}'), //qui bisognerà interrogare db
+                  'Il treno è ${results[snapshot.data]}',
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25.0)
+                ), //qui bisognerà interrogare db
               ),
               //bottone valutazione
               //Text(cod.toString()),
-              RaisedButton(
-                color: Color(0xff9b0014),
-                child: Text(
-                  'Valuta il treno',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
+              SizedBox(height: 20,),
+              ButtonTheme(
+                minWidth: MediaQuery.of(context).size.width - 100,
+                height: 60.0,
+                child:RaisedButton(
+                  color: Color(0xff9b0014),
+                  child: Text(
+                    'Valuta il treno',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
                   ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ValutazioneTreno(stazPartenza,
+                                codTreno, SharedPreferences.getInstance())));
+                  },
                 ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ValutazioneTreno(stazPartenza,
-                              codTreno, SharedPreferences.getInstance())));
-                },
               ),
               Expanded(
                   child: ListView.builder(

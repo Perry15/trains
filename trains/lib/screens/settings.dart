@@ -71,6 +71,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     //checkImage(context);
+    print("width: ${MediaQuery.of(context).size.width}height:${MediaQuery.of(context).size.height}");
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -95,14 +96,14 @@ class _SettingsState extends State<Settings> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Positioned(
-                        top: 15,
+                        top: MediaQuery.of(context).size.height/2,
                         child: CircleAvatar(
-                          radius: 90,
+                          radius: MediaQuery.of(context).size.width/3,
                           backgroundColor: Colors.brown[50],
                           child: ClipOval(
                             child: new SizedBox(
-                              width: 160.0,
-                              height: 160.0,
+                              width: MediaQuery.of(context).size.width/1.5,
+                              height: MediaQuery.of(context).size.width/1.5,
                               child: snapshot.data,
                             ),
                           ),
@@ -111,14 +112,14 @@ class _SettingsState extends State<Settings> {
                     } 
                     else if(snapshot.hasError){
                       return Positioned(
-                        top: 15,
+                        top: MediaQuery.of(context).size.height/2,
                         child: CircleAvatar(
-                          radius: 90,
+                          radius: MediaQuery.of(context).size.width/3,
                           backgroundColor: Colors.brown[50],
                           child: ClipOval(
                               child: new SizedBox(
-                                width: 160.0,
-                                height: 160.0,
+                                width: MediaQuery.of(context).size.width/1.5,
+                                height: MediaQuery.of(context).size.width/1.5,
                                 child: Image(image: AssetImage("assets/default.png"),
                                   fit: BoxFit.cover,),
                               ),
@@ -127,14 +128,14 @@ class _SettingsState extends State<Settings> {
                        );          
                     } else {
                       return Positioned(
-                        top: 15,
+                        top: MediaQuery.of(context).size.height/2,
                         child: CircleAvatar(
-                          radius: 90,
+                          radius: MediaQuery.of(context).size.width/3,
                           backgroundColor: Colors.brown[50],
                           child: ClipOval(
                             child: new SizedBox(
-                              width: 160.0,
-                              height: 160.0,
+                              width: MediaQuery.of(context).size.width/1.5,
+                              height: MediaQuery.of(context).size.width/1.5,
                               child: CircularProgressIndicator(
                                 strokeWidth: 7,
                                 valueColor:
@@ -147,8 +148,8 @@ class _SettingsState extends State<Settings> {
                     }
                   }),
             Positioned(
-              top: 180,
-              left: 230,
+              top: MediaQuery.of(context).size.height/1.33,
+              left: MediaQuery.of(context).size.width/1.6,
               child: FloatingActionButton(
                 backgroundColor: Colors.black,
                 onPressed: () {

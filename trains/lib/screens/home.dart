@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trains/screens/partenze_load.dart';
 import 'package:trains/screens/login.dart';
+
+import 'package:trains/screens/valutazione_treno.dart';
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trains/services/location_provider.dart';
@@ -42,7 +44,7 @@ class Home extends StatelessWidget {
                 case "Tutorial":
                   {
                     print("Tutorial");
-                    //TableValutazione(true, this._trainCode, this._leavingStationCode);
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno()));
                     //bisognerà modificare un attimo tutorial
                   }
                   break;
