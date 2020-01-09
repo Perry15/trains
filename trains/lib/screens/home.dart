@@ -1,28 +1,36 @@
 import 'dart:async';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:trains/screens/partenze_load.dart';
 import 'package:trains/screens/login.dart';
-
+import 'package:trains/services/auth.dart';
+import 'package:trains/screens/profile.dart';
 import 'package:trains/screens/valutazione_treno.dart';
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trains/services/location_provider.dart';
 import 'package:trains/services/viaggiatreno.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
+import 'package:trains/models/user.dart';
 
 class Home extends StatelessWidget {
   final Location provider = new Location();
   final DatabaseService _ds = DatabaseService();
+  final AuthService _authService = AuthService();
   final Future<LocationData> _location = LocationProvider().fetchLocation();
   final List<String> choices = const <String>[
     "Il tuo profilo",
     "Tutorial",
+    "Logout"
   ];
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    print("user: $user.displayName");
+    _authService.getCurrentUser().then((onValue)=>{print("currentUser: $onValue")});
     //_ds.deleteAllEvaluations();//to delete all evaluations
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -31,31 +39,51 @@ class Home extends StatelessWidget {
         backgroundColor: Color(0xff9b0014),
         elevation: 0.0,
         actions: <Widget>[
+          /*user != null
+              ? FlatButton.icon(
+                  icon: Icon(Icons.person),
+                  label: Text('Logout'),
+                  onPressed: () {
+                    _authService.signOut();
+                  },
+                )
+              : SizedBox(),*/
           PopupMenuButton<String>(
             icon: Icon(Icons.menu),
             onSelected: (choice) {
               switch (choice) {
                 case "Il tuo profilo":
                   {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Login(false)));
+                    if(user!=null)
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => Profile()));
+                    else
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => Login(false)));
                   }
                   break;
                 case "Tutorial":
                   {
                     print("Tutorial");
                     Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno()));
-                    //bisognerà modificare un attimo tutorial
+                  }
+                  break;
+                case "Logout":
+                  {
+                    print("Tutorial");
+                    _authService.signOut();
                   }
                   break;
               }
             },
+            
             itemBuilder: (BuildContext context) {
               return choices.map((String choice) {
+                if(user==null && choice=="Logout") return null;
                 return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
+                    value: choice,
+                    child: Text(choice),
+                ); 
+                
+                
               }).toList();
             },
           ),

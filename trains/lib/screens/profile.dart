@@ -8,16 +8,17 @@ import 'package:provider/provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:trains/screens/settings.dart';
 
-class Profile extends StatefulWidget {
-
+class Profile extends StatelessWidget {
+  
+/*
   @override
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile> {*/
   final DatabaseService _dbService = DatabaseService();
 
-  void _select(String choice) {
+  void _select(BuildContext context,String choice) {
     switch (choice) {
       case "settings":
         {
@@ -47,7 +48,6 @@ class _ProfileState extends State<Profile> {
     return user;
   }
 
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              _select("settings");
+              _select(context,"settings");
             },
           ),
           /*PopupMenuButton<String>(
@@ -247,7 +247,7 @@ class _ProfileState extends State<Profile> {
                               animation: true,
                               animationDuration: 1200,
                               lineWidth: 13.0,
-                              percent: data['level'] - data['level'].toInt(),
+                              percent: (data['level']-data['level'].round()).toDouble(),
                               center: new Text(
                                 "Livello ${data['level'].toInt()}",
                                 style: new TextStyle(
@@ -262,7 +262,7 @@ class _ProfileState extends State<Profile> {
                           Positioned(
                             top: 540,
                             child: ButtonTheme(
-                              minWidth: MediaQuery.of(context).size.width - 100,
+                              minWidth: MediaQuery.of(context).size.width / 1.4,
                               height: 60.0,
                               child: RaisedButton(
                                 color: Color(0xff9b0014),

@@ -138,6 +138,10 @@ class LocalDatabaseService {
     else
       level = 2 + sqrt(((x - 40) / 5));
     prefs.setDouble('level', level);
+    if(level.isNaN){
+      print("LEVEL: $level");
+      level=2;
+    }
     return level;
   }
 

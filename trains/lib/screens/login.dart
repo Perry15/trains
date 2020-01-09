@@ -7,8 +7,7 @@ import 'package:trains/screens/profile.dart';
 import 'package:trains/services/database.dart';
 
 class Login extends StatelessWidget {
-  final bool
-      _didHeVote; // boolean value per sapere se arriva da una votazione o no
+  final bool _didHeVote; // boolean value per sapere se arriva da una votazione o no
   final AuthService _authService = AuthService();
   final DatabaseService _dbService = DatabaseService();
 
@@ -22,10 +21,10 @@ class Login extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text('Hai valutato'),
+        title: Text('Accedi'),
         backgroundColor: Color(0xff9b0014),
         elevation: 0.0,
-        actions: <Widget>[
+        /*actions: <Widget>[
           user != null
               ? FlatButton.icon(
                   icon: Icon(Icons.person),
@@ -35,7 +34,7 @@ class Login extends StatelessWidget {
                   },
                 )
               : SizedBox()
-        ],
+        ],*/
       ),
       body: Center(
         //padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0), //4 side symmetric padding
@@ -48,8 +47,8 @@ class Login extends StatelessWidget {
                     //fontWeight: FontWeight.w500,
                   ))
               : SizedBox(), //SizedBox vuota per mettere un Widget vuoto
-          SizedBox(height: 350),
-          user != null ? _goToGameButton(context) : _signInButtons(context)
+          SizedBox(height: MediaQuery.of(context).size.height / 2.5),
+          user != null ?  Center(child: CircularProgressIndicator()) : _signInButtons(context)
         ]),
       ),
     );
@@ -84,13 +83,16 @@ class Login extends StatelessWidget {
           dynamic result = await _authService.signInWithGoogle();
           if (result == null) {
             print('Errore di accesso');
-          } else {
+          } 
+          else {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('uid', result.uid);
             prefs.setBool('firstLogin', true);
-            _dbService.updateUserFromLocal(result.uid);
+            await _dbService.updateUserFromLocal(result.uid);
             print('Accesso effettuato');
             print(result.uid);
+            Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Profile()));
           }
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
