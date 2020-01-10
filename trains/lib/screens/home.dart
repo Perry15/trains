@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:trains/screens/partenze_load.dart';
 import 'package:trains/screens/login.dart';
+import 'package:trains/screens/ranking.dart';
 import 'package:trains/services/auth.dart';
 import 'package:trains/screens/profile.dart';
 import 'package:trains/screens/valutazione_treno.dart';
@@ -22,6 +23,7 @@ class Home extends StatelessWidget {
   final Future<LocationData> _location = LocationProvider().fetchLocation();
   final List<String> choices = const <String>[
     "Il tuo profilo",
+    "Classifica",
     "Tutorial",
     "Logout"
   ];
@@ -30,7 +32,9 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     print("user: $user.displayName");
-    _authService.getCurrentUser().then((onValue)=>{print("currentUser: $onValue")});
+    _authService
+        .getCurrentUser()
+        .then((onValue) => {print("currentUser: $onValue")});
     //_ds.deleteAllEvaluations();//to delete all evaluations
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -52,18 +56,31 @@ class Home extends StatelessWidget {
             icon: Icon(Icons.menu),
             onSelected: (choice) {
               switch (choice) {
+                case "Classifica":
+                  {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Ranking()));
+                  }
+                  break;
                 case "Il tuo profilo":
                   {
-                    if(user!=null)
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => Profile()));
+                    if (user != null)
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Profile()));
                     else
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => Login(false)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Login(false)));
                   }
                   break;
                 case "Tutorial":
                   {
                     print("Tutorial");
-                    Navigator.push(context,MaterialPageRoute(builder: (context) => ValutazioneTreno()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ValutazioneTreno()));
                   }
                   break;
                 case "Logout":
@@ -74,16 +91,13 @@ class Home extends StatelessWidget {
                   break;
               }
             },
-            
             itemBuilder: (BuildContext context) {
               return choices.map((String choice) {
-                if(user==null && choice=="Logout") return null;
+                if (user == null && choice == "Logout") return null;
                 return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                ); 
-                
-                
+                  value: choice,
+                  child: Text(choice),
+                );
               }).toList();
             },
           ),
@@ -206,6 +220,4 @@ class Home extends StatelessWidget {
       ),
     );
   }
-
-  void _select(String choice) {}
 }

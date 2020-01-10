@@ -6,13 +6,12 @@ import 'dart:convert';
 import "package:latlong/latlong.dart";
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/models/evaluation.dart';
 import 'package:trains/models/location.dart';
 import 'package:trains/models/train.dart';
 import 'package:trains/services/local_database.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
+import 'package:trains/services/points.dart';
 
 class DatabaseService {
   //collection reference
@@ -126,6 +125,21 @@ class DatabaseService {
     });
   }
 
+  Future<List<dynamic>> getUserLocations(uid) async {
+    dynamic result = await db.collection('users').document(uid).get();
+    return result.data["locationsEvaluated"];
+  }
+
+  Future<List<dynamic>> getUserEvaluations(uid) async {
+    dynamic result = await db.collection('users').document(uid).get();
+    return result.data["evaluations"];
+  }
+
+  Future<List<dynamic>> getUserTrains(uid) async {
+    dynamic result = await db.collection('users').document(uid).get();
+    return result.data["trainsEvaluated"];
+  }
+
   ///calcola la valutazione di un treno
   Future<int> getTrainEvaluation(String trainCode) async {
     QuerySnapshot querySnapshot =
@@ -164,23 +178,27 @@ class DatabaseService {
 
   ///calcola la valutazione di un treno
   Future<List<Map<String, dynamic>>> getLevelRankingList() async {
-    QuerySnapshot querySnapshot = await db.collection("users").orderBy("level").getDocuments();
+    QuerySnapshot querySnapshot = await db
+        .collection("users")
+        .orderBy("level", descending: true)
+        .getDocuments();
     List<Map<String, dynamic>> rankingData = [];
-    int c=1;
+    int c = 1;
     for (DocumentSnapshot doc in querySnapshot.documents) {
       //print("data: ${doc.documentID} ${doc.data['displayName']}");
       rankingData.add({
-        "position":c,
+        "position": c,
         "uid": doc.documentID,
         "level": doc.data['level'],
         "displayName": doc.data['displayName']
       });
       c++;
-    }  
+    }
     return rankingData;
   }
 
   void updateUserFromLocal(uid) async {
+    Points points = new Points();
     for (Train train in await _localDbService.getTrains()) {
       insertUserTrain(uid, train.code);
     }
@@ -190,41 +208,24 @@ class DatabaseService {
     for (Evaluation evaluation in await _localDbService.getEvaluations()) {
       insertUserEvaluation(uid, evaluation.id);
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int evaluationsPoints = prefs.getInt('evaluationsPoints') ?? 0;
-    int locationsPoints = prefs.getInt('locationsPoints') ?? 0;
-    int trainsPoints = prefs.getInt('trainsPoints') ?? 0;
-    double level = prefs.getDouble('level') ?? 0;
-    if (prefs.getBool('firstLogin')) {
-      Map<String, dynamic> user = await getUserById(uid);
-      evaluationsPoints += user['evaluationsPoints'];
-      locationsPoints += user['locationsPoints'];
-      trainsPoints += user['trainsPoints'];
-      prefs.setDouble('level', user['level'].toDouble());
-      prefs.setInt('evaluationsPoints', evaluationsPoints);
-      prefs.setInt('locationsPoints', locationsPoints);
-      prefs.setInt('trainsPoints', trainsPoints);
-      level = await _localDbService.updateLevel();
-      prefs.setBool('firstLogin', false);
-    }
 
     await db.collection('users').document(uid).updateData({
-      'evaluationsPoints': evaluationsPoints,
-      'locationsPoints': locationsPoints,
-      'trainsPoints': trainsPoints,
-      'level': level
+      'evaluationsPoints': await points.getEvaluationsPoints(),
+      'locationsPoints': await points.getLocationsPoints(),
+      'trainsPoints': await points.getTrainsPoints(),
+      'level': await points.getLevel()
     });
   }
 
   Future<File> getImageFileFromAssets(String path) async {
-  final byteData = await rootBundle.load('assets/$path');
+    final byteData = await rootBundle.load('assets/$path');
 
-  final file = File('${(await getTemporaryDirectory()).path}/$path');
-  await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    final file = File('${(await getTemporaryDirectory()).path}/$path');
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 
-  return file;
-}
-
+    return file;
+  }
 
   //inserisce un utente nel db se questo non è ancora presente
   //"S02570/11121","S02581/5820"
@@ -234,7 +235,10 @@ class DatabaseService {
     if (!doc.exists) {
       //every user has his own profile image
       File file = await getImageFileFromAssets("default.png");
-      FirebaseStorage.instance.ref().child('profileImages/${user.uid}').putFile(file);
+      FirebaseStorage.instance
+          .ref()
+          .child('profileImages/${user.uid}')
+          .putFile(file);
       return await db.collection('users').document(user.uid).setData({
         'displayName': user.displayName,
         'email': user.email,
@@ -268,10 +272,8 @@ class DatabaseService {
         .child('profileImages/$uid')
         .getDownloadURL();
     return Image.network(
-        url,
-        fit: BoxFit.cover,
-      );
+      url,
+      fit: BoxFit.cover,
+    );
   }
-    
-    
 }

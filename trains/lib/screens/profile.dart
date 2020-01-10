@@ -1,57 +1,65 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/ranking.dart';
-import 'package:trains/screens/login.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:trains/screens/settings.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
-class Profile extends StatelessWidget {
-  
-/*
-  @override
-  _ProfileState createState() => _ProfileState();
-}
+import 'package:trains/services/points.dart';
 
-class _ProfileState extends State<Profile> {*/
+class Profile extends StatefulWidget {
   final DatabaseService _dbService = DatabaseService();
-
-  void _select(BuildContext context,String choice) {
-    switch (choice) {
-      case "settings":
-        {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Settings()));
-        }
-        break;
-      /*
-       case "Nickname":{
-        Navigator.push(context,MaterialPageRoute(builder: (context) => Settings(s:"nickname")));
-       }
-       break;
-       */
-    }
-  }
-
+  final Points points = Points();
   Future<Map<String, dynamic>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString('uid') ?? "";
     if (uid != "") return await _dbService.getUserById(uid);
     Map<String, dynamic> user = new Map();
-    user['evaluationsPoints'] = prefs.getInt('evaluationsPoints');
-    user['trainsPoints'] = prefs.getInt('trainsPoints');
-    user['locationsPoints'] = prefs.getInt('locationsPoints');
-    user['level'] = prefs.getDouble('level');
+    user['evaluationsPoints'] = await points.getEvaluationsPoints();
+    user['trainsPoints'] = await points.getTrainsPoints();
+    user['locationsPoints'] = await points.getLocationsPoints();
+    user['level'] = await points.getLevel();
     user['displayName'] = 'Utente locale';
     return user;
   }
 
+  Future _setImage(BuildContext context) async {
+    File image = await FilePicker.getFile(type: FileType.IMAGE);
+    //upload
+    final user = Provider.of<User>(context);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('profileImages/${user.uid}');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
+    await uploadTask.onComplete;
+  }
+
+  @override
+  _ProfileState createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  Image _image;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<Image> _getImage(BuildContext context) async {
+    dynamic user = Provider.of<User>(context);
+    Image temp = await widget._dbService.checkUserImageById(user.uid);
+    setState(() {
+      _image = temp;
+    });
+    return _image;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-
     //getUserData(context);
     //checkImage(context);
     return Scaffold(
@@ -60,26 +68,6 @@ class _ProfileState extends State<Profile> {*/
         backgroundColor: Color(0xff9b0014),
         title: Text('Il tuo profilo'),
         elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              _select(context,"settings");
-            },
-          ),
-          /*PopupMenuButton<String>(
-                onSelected: _select,
-                itemBuilder: (BuildContext context) {
-                  return choices.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }
-                ).toList();
-              },
-            ),*/
-        ],
       ),
       body: Center(
         child: Stack(
@@ -99,7 +87,7 @@ class _ProfileState extends State<Profile> {*/
                 ),
               ),
               FutureBuilder<Image>(
-                  future: _dbService.checkUserImageById(user.uid),
+                  future: _getImage(context),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Positioned(
@@ -116,46 +104,26 @@ class _ProfileState extends State<Profile> {*/
                           ),
                         ),
                       );
-                    } 
-                    else if(snapshot.hasError){
-                      return Positioned(
-                        top: 15,
-                        child: CircleAvatar(
-                          radius: 90,
-                          backgroundColor: Colors.brown[50],
-                          child: ClipOval(
-                              child: new SizedBox(
-                                width: 160.0,
-                                height: 160.0,
-                                child: Image(image: AssetImage("assets/default.png"),
-                                  fit: BoxFit.cover,),
-                              ),
-                          ),
-                        ),
-                       );          
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
                     } else {
-                      return Positioned(
-                        top: 15,
-                        child: CircleAvatar(
-                          radius: 90,
-                          backgroundColor: Colors.brown[50],
-                          child: ClipOval(
-                            child: new SizedBox(
-                              width: 160.0,
-                              height: 160.0,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 7,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
+                      return Container();
                     }
                   }),
+              Positioned(
+                top: MediaQuery.of(context).size.height / 6,
+                left: MediaQuery.of(context).size.width / 1.7,
+                child: FloatingActionButton(
+                  backgroundColor: Colors.black,
+                  onPressed: () {
+                    widget._setImage(context);
+                  },
+                  tooltip: 'Modifica immagine',
+                  child: Icon(Icons.add_a_photo),
+                ),
+              ),
               FutureBuilder<Map<String, dynamic>>(
-                  future: getUserData(),
+                  future: widget.getUserData(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       var data = snapshot.data;
@@ -164,7 +132,7 @@ class _ProfileState extends State<Profile> {*/
                         overflow: Overflow.visible,
                         children: <Widget>[
                           Positioned(
-                            top: 195,
+                            top: 210,
                             child: Text(data['displayName'],
                                 style: TextStyle(
                                   fontSize: 25.0,
@@ -247,7 +215,9 @@ class _ProfileState extends State<Profile> {*/
                               animation: true,
                               animationDuration: 1200,
                               lineWidth: 13.0,
-                              percent: (data['level']-data['level'].round()).toDouble(),
+                              percent:
+                                  (data['level'] - data['level'].truncate())
+                                      .toDouble(),
                               center: new Text(
                                 "Livello ${data['level'].toInt()}",
                                 style: new TextStyle(
@@ -266,7 +236,6 @@ class _ProfileState extends State<Profile> {*/
                               height: 60.0,
                               child: RaisedButton(
                                 color: Color(0xff9b0014),
-              
                                 child: Text(
                                   'Classifica utenti',
                                   style: TextStyle(
@@ -299,8 +268,3 @@ class _ProfileState extends State<Profile> {*/
     );
   }
 }
-
-/*const List<String> choices = const <String>[
-  "settings",
-  //'Nickname',
-];*/

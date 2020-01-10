@@ -37,35 +37,34 @@ class AuthService {
 
   //sign in with google
   Future signInWithGoogle() async {
-      try{
-        GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
-        if (googleSignInAccount != null) {
-          GoogleSignInAuthentication googleSignInAuthentication =
-              await googleSignInAccount.authentication;
-          AuthCredential credential = GoogleAuthProvider.getCredential(
-            accessToken: googleSignInAuthentication.accessToken,
-            idToken: googleSignInAuthentication.idToken,
-          );
+    try {
+      GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        AuthCredential credential = GoogleAuthProvider.getCredential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
 
-          AuthResult result = await _auth.signInWithCredential(credential);
-          FirebaseUser user = result.user;
-          print("FirebaseUser $user");
-          assert(!user.isAnonymous);
-          assert(await user.getIdToken() != null);
+        AuthResult result = await _auth.signInWithCredential(credential);
+        FirebaseUser user = result.user;
+        print("FirebaseUser $user");
+        assert(!user.isAnonymous);
+        assert(await user.getIdToken() != null);
 
-          final FirebaseUser currentUser = await _auth.currentUser();
-          assert(user.uid == currentUser.uid);
-          await _dbService.insertUser(
-              currentUser); // insert the user in the db if it is not already in
+        final FirebaseUser currentUser = await _auth.currentUser();
+        assert(user.uid == currentUser.uid);
+        await _dbService.insertUser(
+            currentUser); // insert the user in the db if it is not already in
 
-          return _userFromFirebaseUser(currentUser); //ritorna User obj
-        }
-        return null;
+        return _userFromFirebaseUser(currentUser); //ritorna User obj
       }
-      catch(err){
-        print("$err");
-        return null;
-      }
+      return null;
+    } catch (err) {
+      print("$err");
+      return null;
+    }
   }
   //register with email & password
 

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:trains/models/evaluation.dart';
 import 'package:trains/models/location.dart';
 import 'package:trains/models/train.dart';
+import 'package:trains/models/user.dart';
+import 'package:trains/screens/profile.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/screens/login.dart';
 import 'package:trains/services/local_database.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 //come chiamare valutatore Treno
 class Tutorial extends StatefulWidget {
@@ -28,93 +30,94 @@ class TutorialState extends State<Tutorial> {
   void initState() {
     super.initState();
     if (widget._tutorial) {
-      WidgetsBinding.instance.addPostFrameCallback((_) =>
-          ShowCaseWidget.of(context).startShowCase([_one]));
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => ShowCaseWidget.of(context).startShowCase([_one]));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
     Widget toReturn = Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: [
         TableRow(children: [
           SizedBox.shrink(),
           TableCell(
-            child: Draggable(
-              data: "Vuoto",
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.green,
-                child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white,
-                    child: Column(children: [
-                      Icon(
-                        Icons.sentiment_very_satisfied,
-                        color: Colors.green,
-                        size: 40.0,
-                        semanticLabel: 'Text to announce in accessibility modes',
-                      ),
-                      Text("Vuoto", textAlign: TextAlign.center)
-                    ])),
-              ),
-              feedback: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.green,
+              child: Draggable(
+                  data: "Vuoto",
                   child: CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.white,
-                      child: Column(children: [
-                        Icon(
-                          Icons.sentiment_very_satisfied,
-                          color: Colors.green,
-                          size: 40.0,
-                          semanticLabel: 'Text to announce in accessibility modes',
-                        ),
-                        Text("Vuoto", textAlign: TextAlign.center)
-                      ]))))
-            
-          ),
+                    radius: 50,
+                    backgroundColor: Colors.green,
+                    child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.white,
+                        child: Column(children: [
+                          Icon(
+                            Icons.sentiment_very_satisfied,
+                            color: Colors.green,
+                            size: 40.0,
+                            semanticLabel:
+                                'Text to announce in accessibility modes',
+                          ),
+                          Text("Vuoto", textAlign: TextAlign.center)
+                        ])),
+                  ),
+                  feedback: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.green,
+                      child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          child: Column(children: [
+                            Icon(
+                              Icons.sentiment_very_satisfied,
+                              color: Colors.green,
+                              size: 40.0,
+                              semanticLabel:
+                                  'Text to announce in accessibility modes',
+                            ),
+                            Text("Vuoto", textAlign: TextAlign.center)
+                          ]))))),
           SizedBox.shrink(),
         ]),
         TableRow(children: [
           TableCell(
-            child:Draggable(
-              data: "Quasi vuoto",
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.yellow,
-                child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white,
-                    child: Column(children: [
-                      Icon(
-                        Icons.sentiment_satisfied,
-                        color: Colors.yellow,
-                        size: 40.0,
-                        semanticLabel: 'Text to announce in accessibility modes',
-                      ),
-                      Text("Quasi vuoto", textAlign: TextAlign.center)
-                    ])),
-              ),
-              feedback: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.yellow,
+              child: Draggable(
+                  data: "Quasi vuoto",
                   child: CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.white,
-                      child: Column(children: [
-                        Icon(
-                          Icons.sentiment_satisfied,
-                          color: Colors.yellow,
-                          size: 40.0,
-                          semanticLabel: 'Text to announce in accessibility modes',
-                        ),
-                        Text("Quasi vuoto", textAlign: TextAlign.center)
-                      ])))) 
-            
-          ),
+                    radius: 50,
+                    backgroundColor: Colors.yellow,
+                    child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.white,
+                        child: Column(children: [
+                          Icon(
+                            Icons.sentiment_satisfied,
+                            color: Colors.yellow,
+                            size: 40.0,
+                            semanticLabel:
+                                'Text to announce in accessibility modes',
+                          ),
+                          Text("Quasi vuoto", textAlign: TextAlign.center)
+                        ])),
+                  ),
+                  feedback: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.yellow,
+                      child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          child: Column(children: [
+                            Icon(
+                              Icons.sentiment_satisfied,
+                              color: Colors.yellow,
+                              size: 40.0,
+                              semanticLabel:
+                                  'Text to announce in accessibility modes',
+                            ),
+                            Text("Quasi vuoto", textAlign: TextAlign.center)
+                          ]))))),
           TableCell(
               child: DragTarget(
                   builder: (context, List<String> candidateData, rejectedData) {
@@ -127,74 +130,69 @@ class TutorialState extends State<Tutorial> {
             return true;
           }, onAccept: (data) {
             //votazione effettuata
-            if(widget._trainCode!=null && widget._leavingStationCode!=null){
+            if (widget._trainCode != null &&
+                widget._leavingStationCode != null) {
               save(data);
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => Login(true)),
-                (Route<dynamic> route) => false,
-              );
-            } else{
+              if (user == null) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login(false)),
+                  (Route<dynamic> route) => false,
+                );
+              } else {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profile()),
+                  (Route<dynamic> route) => false,
+                );
+              }
+            } else {
               Navigator.pop(context);
             }
           })),
           TableCell(
-              child:Draggable(
-              data: "Quasi pieno",
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.orange,
-                child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white,
-                    child: Column(children: [
-                      Icon(
-                        Icons.sentiment_dissatisfied,
-                        color: Colors.orange,
-                        size: 40.0,
-                        semanticLabel: 'Text to announce in accessibility modes',
-                      ),
-                      Text("Quasi pieno", textAlign: TextAlign.center)
-                    ])),
-              ),
-              feedback: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.orange,
+              child: Draggable(
+                  data: "Quasi pieno",
                   child: CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.white,
-                      child: Column(children: [
-                        Icon(
-                          Icons.sentiment_dissatisfied,
-                          color: Colors.orange,
-                          size: 40.0,
-                          semanticLabel: 'Text to announce in accessibility modes',
-                        ),
-                        Text("Quasi pieno", textAlign: TextAlign.center)
-                      ]))))) 
+                    radius: 50,
+                    backgroundColor: Colors.orange,
+                    child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.white,
+                        child: Column(children: [
+                          Icon(
+                            Icons.sentiment_dissatisfied,
+                            color: Colors.orange,
+                            size: 40.0,
+                            semanticLabel:
+                                'Text to announce in accessibility modes',
+                          ),
+                          Text("Quasi pieno", textAlign: TextAlign.center)
+                        ])),
+                  ),
+                  feedback: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.orange,
+                      child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          child: Column(children: [
+                            Icon(
+                              Icons.sentiment_dissatisfied,
+                              color: Colors.orange,
+                              size: 40.0,
+                              semanticLabel:
+                                  'Text to announce in accessibility modes',
+                            ),
+                            Text("Quasi pieno", textAlign: TextAlign.center)
+                          ])))))
         ]),
         TableRow(children: [
           SizedBox.shrink(),
           TableCell(
-              child:Draggable(
-              data: "Pieno",
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.red,
+            child: Draggable(
+                data: "Pieno",
                 child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white,
-                    child: Column(children: [
-                      Icon(
-                        Icons.sentiment_very_dissatisfied,
-                        color: Colors.red,
-                        size: 40.0,
-                        semanticLabel: 'Text to announce in accessibility modes',
-                      ),
-                      Text("Pieno", textAlign: TextAlign.center)
-                    ])),
-              ),
-              feedback: CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.red,
                   child: CircleAvatar(
@@ -205,16 +203,34 @@ class TutorialState extends State<Tutorial> {
                           Icons.sentiment_very_dissatisfied,
                           color: Colors.red,
                           size: 40.0,
-                          semanticLabel: 'Text to announce in accessibility modes',
+                          semanticLabel:
+                              'Text to announce in accessibility modes',
                         ),
                         Text("Pieno", textAlign: TextAlign.center)
-                      ])))),
-                        ),
+                      ])),
+                ),
+                feedback: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.red,
+                    child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.white,
+                        child: Column(children: [
+                          Icon(
+                            Icons.sentiment_very_dissatisfied,
+                            color: Colors.red,
+                            size: 40.0,
+                            semanticLabel:
+                                'Text to announce in accessibility modes',
+                          ),
+                          Text("Pieno", textAlign: TextAlign.center)
+                        ])))),
+          ),
           SizedBox.shrink(),
         ])
       ],
     );
-    if(widget._tutorial){
+    if (widget._tutorial) {
       return Showcase(
         key: _one,
         description: "trascina un cerchio al centro per votare",
@@ -226,7 +242,6 @@ class TutorialState extends State<Tutorial> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [*/
-                
   }
 
   void save(data) async {
@@ -244,7 +259,6 @@ class TutorialState extends State<Tutorial> {
     Map<String, dynamic> location = new Map();
     location['code'] = widget._leavingStationCode;
     widget._localDbService.insertLocation(Location.fromMap(location));
-    widget._localDbService.updateLevel();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString('uid') ?? "";
     if (uid != "") {
@@ -263,8 +277,6 @@ class TutorialState extends State<Tutorial> {
     List<Train> trains = await widget._localDbService.getTrains();
     print("LOCALDB trains: ${trains.map((f) => {f.code + '\n'})}");
   }
-
-
 
   /*@override
   Widget build(BuildContext context) {

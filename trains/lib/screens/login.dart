@@ -7,7 +7,8 @@ import 'package:trains/screens/profile.dart';
 import 'package:trains/services/database.dart';
 
 class Login extends StatelessWidget {
-  final bool _didHeVote; // boolean value per sapere se arriva da una votazione o no
+  final bool
+      _didHeVote; // boolean value per sapere se arriva da una votazione o no
   final AuthService _authService = AuthService();
   final DatabaseService _dbService = DatabaseService();
 
@@ -48,7 +49,9 @@ class Login extends StatelessWidget {
                   ))
               : SizedBox(), //SizedBox vuota per mettere un Widget vuoto
           SizedBox(height: MediaQuery.of(context).size.height / 2.5),
-          user != null ?  Center(child: CircularProgressIndicator()) : _signInButtons(context)
+          user != null
+              ? Center(child: CircularProgressIndicator())
+              : _signInButtons(context)
         ]),
       ),
     );
@@ -83,16 +86,14 @@ class Login extends StatelessWidget {
           dynamic result = await _authService.signInWithGoogle();
           if (result == null) {
             print('Errore di accesso');
-          } 
-          else {
+          } else {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('uid', result.uid);
-            prefs.setBool('firstLogin', true);
-            await _dbService.updateUserFromLocal(result.uid);
+            _dbService.updateUserFromLocal(result.uid);
             print('Accesso effettuato');
             print(result.uid);
             Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Profile()));
+                context, MaterialPageRoute(builder: (context) => Profile()));
           }
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
