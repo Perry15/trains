@@ -1,8 +1,8 @@
 \chapter{Design dell'applicazione\label{sec:design}}
 
 \section{Interfaccia\label{sec:interfaccia}}
-L'interfaccia dell'applicazione è stata implementata, tenendo in considerazione gli argomenti trattati nel corso, percui abbiamo cercato di rispettare il più possibile:
-\begin{itemize}
+L'interfaccia dell'applicazione è stata implementata, tenendo in considerazione gli argomenti trattati nel corso, per cui abbiamo cercato di rispettare il più possibile:
+\begin{itemize}[noitemsep,topsep=0pt]
 \item le differenti dimensioni dei dispositivi mobile;
 \item la comfort zone (regola del pollice);
 \item la regola del content always on top;
@@ -11,11 +11,12 @@ L'interfaccia dell'applicazione è stata implementata, tenendo in considerazione
 \item inserimento di contenuti just-in-time;
 \item dimensioni corrette degli elementi di interazione e degli spazi tra essi;
 \item l'utilizzo del progressive disclosure evitando il sovraffollamento dell'interfaccia;
-\item la scelta di colori corretti.
+\item la scelta dei colori e delle dimensioni del testo corrette per garantire un buon livello di accessibilità.
 \end{itemize}
 %TODOspiegare evitati i tablet causa tempo
 \section{Schermate dell'applicazione\label{sec:schermate}}
 \subsection{Home}
+\vspace{-\parskip}
 \begin{minipage}{0.45\textwidth}
 \begin{figure}[H]
 	\centering
@@ -31,15 +32,14 @@ L'interfaccia dell'applicazione è stata implementata, tenendo in considerazione
 	\caption{Schermata iOS Home}
 \end{figure}
 \end{minipage}
-
-Dalla schermata iniziale è possibile vedere la stazione ferroviaria più vicina, localizzata attraverso il GPS.
+\vspace{1cm}
+\\Dalla schermata iniziale è possibile vedere la stazione ferroviaria più vicina, localizzata attraverso il GPS.
 Viene presentata una lista delle destinazioni raggiungibili tramite i treni in partenza dalla stazione più vicina identificata. Da questa lista di treni è possibile accedere ad una pagina con più dettagli relativi al singolo treno.
 Ciò è un esempio di interfaccia just-in-time che applica il progressive disclosure, perchè vengono fornite le informazioni principali relative ai treni in partenza, mentre i dettagli per ognuno di essi possono essere visualizzati attraverso un'ulteriore interazione.\\
 %TODO controllare che sia stata implementata gesture menù laterale e opzione vedi classifica in tale menù
 In questa schermata è possibile visualizzare un menù laterale, tramite una gesture di swipe a destra, la quale viene illustrata al capitolo \ref{sec:gesture}. Grazie a questo menù l'utente può raggiungere la pagina relativa al suo profilo, la classifica generale degli utenti, una pagina per rivedere il tutorial per la valutazione di un treno.
 \subsection{Stato del treno}
-In questa schermata l'utente può visualizzare i dettagli del treno selezionato, ovvero la valutazione media assegnata dagli utenti, una lista delle fermate del treno con gli orari di partenza previsti per le diverse fermate e un pulsante per proseguire alla schermata di valutazione del treno.
-
+\vspace{-\parskip}
 \begin{minipage}{0.45\textwidth}
 	\begin{figure}[H]
 		\centering
@@ -55,9 +55,12 @@ In questa schermata l'utente può visualizzare i dettagli del treno selezionato,
 		\caption{Schermata iOS Stato del treno}
 	\end{figure}
 \end{minipage}
+\vspace{1cm}
+\\
+In questa schermata l'utente può visualizzare i dettagli del treno selezionato, ovvero la valutazione media assegnata dagli utenti, una lista delle fermate del treno con gli orari di partenza previsti per le diverse fermate e un pulsante per proseguire alla schermata di valutazione del treno.
 
 \subsection{Valuta il treno}
-
+\vspace{-\parskip}
 \begin{minipage}{0.45\textwidth}
 	\begin{figure}[H]
 		\centering
@@ -73,11 +76,13 @@ In questa schermata l'utente può visualizzare i dettagli del treno selezionato,
 		\caption{Schermata iOS Valuta il treno}
 	\end{figure}
 \end{minipage}
-
+\vspace{1cm}
+\\
 In questa schermata è presente un menù circolare che l'utente dovrà utilizzare per assegnare una votazione al treno, tra le quattro possibili.
 Per le prime tre valutazioni all'utente verrà proposto un tutorial veloce per spiegare la gesture di tipo press and drag da utilizzare per la valutazione, essa viene illustrata nel capitolo \ref{sec:gesture}. Una volta eseguita la valutazione l'utente verrà indirizzato alla pagina del profilo per poter visualizzare i suoi punteggi.
 
 \subsection{Hai valutato}
+\vspace{-\parskip}
 \begin{minipage}{0.45\textwidth}
 	\begin{figure}[H]
 		\centering
@@ -93,8 +98,11 @@ Per le prime tre valutazioni all'utente verrà proposto un tutorial veloce per s
 		\caption{Schermata iOS Hai valutato}
 	\end{figure}
 \end{minipage}
+\vspace{1cm}
+\\
 È stata inserita questa schermata raggiungibile dall'utente solo in seguito ad una votazione. L'aggiunta di tale schermata è stata effettuata per includere all'interno dell'app un elemento di emotional design che potesse per suscitare nell'utente un sentimento di gioia e soddisfazione nel vedere la simpatica mascotte dell'applicazione sorridere per il fatto di aver eseguito una valutazione.
 \subsection{Il tuo Profilo}
+\vspace{-\parskip}
 \begin{minipage}{0.45\textwidth}
 	\begin{figure}[H]
 		\centering
@@ -110,7 +118,8 @@ Per le prime tre valutazioni all'utente verrà proposto un tutorial veloce per s
 		\caption{Schermata iOS Il tuo Profilo}
 	\end{figure}
 \end{minipage}
-
+\vspace{1cm}
+\\
 Nella schermata relativa al profilo l'utente può visualizzare i suoi dati e i suoi punteggi. Nella parte alta dello schermo è presente l'immagine del profilo modificabile tramite un pulsante posto a lato di essa. immediatamente sotto al nome del proprio account l'utente pu+ visualizzare i punteggi relativi alle valutazioni eseguite, il numero di treni differenti valutati, e il numero di valutazioni eseguite da stazioni differenti. È presente inoltre un pulsante per poter accedere alla classifica generale.
 
 \section{Gesture utilizzate\label{sec:gesture}}
