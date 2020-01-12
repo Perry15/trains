@@ -42,6 +42,7 @@ dependencies:
   path_provider: ^1.5.1
   sqflite:
   flutter_launcher_icons: "^0.7.3"
+  confetti: ^0.3.0
 
 flutter_icons:
   android: true

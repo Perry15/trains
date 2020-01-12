@@ -44,7 +44,7 @@ class Info extends StatelessWidget {
                 //fontWeight: FontWeight.w500,
               )
             ),
-            SizedBox(height:20,),
+            SizedBox(height:10,),
             Column(
               children: <Widget>[
                 ListTile(
@@ -70,7 +70,7 @@ class Info extends StatelessWidget {
                     ),  
                   ),
                 ),
-                SizedBox(height:15,),
+                SizedBox(height:10,),
                 ListTile(
                   leading: Icon(Icons.train, size: 40, color:Colors.black),
                   title: RichText(
@@ -94,7 +94,7 @@ class Info extends StatelessWidget {
                     ),  
                   ),
                 ),
-                SizedBox(height:15,),
+                SizedBox(height:10,),
                 ListTile(
                   leading: Icon(Icons.location_on, size: 40, color:Colors.black),
                   title: RichText(

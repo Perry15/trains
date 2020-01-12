@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trains/screens/tutorial.dart';
+import 'package:trains/screens/evaluation_table.dart';
 
 class ValutazioneTreno extends StatelessWidget {
   final String trainCode;
@@ -38,10 +38,10 @@ class ValutazioneTreno extends StatelessWidget {
                           prefs.setInt('tutorial', tutorial);
                           return ShowCaseWidget(
                               builder: Builder(
-                                  builder: (context) => Tutorial(
+                                  builder: (context) => EvaluationTable(
                                       true, trainCode, leavingStationCode)));
                         }
-                        return Tutorial(
+                        return EvaluationTable(
                             false, trainCode, leavingStationCode);
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
@@ -65,7 +65,7 @@ class ValutazioneTreno extends StatelessWidget {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height/4.2),
            ShowCaseWidget(
-              builder: Builder(builder: (context) =>Tutorial(true))
+              builder: Builder(builder: (context) =>EvaluationTable(true))
             ),
             SizedBox(height: MediaQuery.of(context).size.height/8),
               Text("Vota per continuare",style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0))

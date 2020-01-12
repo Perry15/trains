@@ -68,7 +68,7 @@ class Home extends StatelessWidget {
                   {
                     if (user != null)
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Profile()));
+                          MaterialPageRoute(builder: (context) => Profile(false)));
                     else
                       Navigator.push(
                           context,

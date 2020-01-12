@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trains/screens/congratulations.dart';
 import 'package:trains/screens/ranking.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/models/user.dart';
@@ -12,6 +14,8 @@ import 'dart:io';
 import 'package:trains/services/points.dart';
 
 class Profile extends StatefulWidget {
+  bool _didHeVote;
+  Profile(this._didHeVote);
   final DatabaseService _dbService = DatabaseService();
   final Points points = Points();
   Future<Map<String, dynamic>> getUserData() async {
@@ -47,14 +51,21 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
+    if(widget._didHeVote){
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Congratulations(false)));
+      });
+    }
   }
 
   Future<Image> _getImage(BuildContext context) async {
     dynamic user = Provider.of<User>(context);
     Image temp = await widget._dbService.checkUserImageById(user.uid);
-    setState(() {
-      _image = temp;
-    });
+    if(this.mounted){
+      setState(() {
+        _image = temp;
+      });
+    }
     return _image;
   }
 

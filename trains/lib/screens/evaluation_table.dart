@@ -12,18 +12,18 @@ import 'package:trains/screens/login.dart';
 import 'package:trains/services/local_database.dart';
 
 //come chiamare valutatore Treno
-class Tutorial extends StatefulWidget {
+class EvaluationTable extends StatefulWidget {
   final bool _tutorial;
   final String _trainCode;
   final String _leavingStationCode;
   final DatabaseService _dbService = DatabaseService();
   final LocalDatabaseService _localDbService = LocalDatabaseService();
-  Tutorial(this._tutorial, [this._trainCode, this._leavingStationCode]);
+  EvaluationTable(this._tutorial, [this._trainCode, this._leavingStationCode]);
   @override
-  TutorialState createState() => TutorialState();
+  EvaluationTableState createState() => EvaluationTableState();
 }
 
-class TutorialState extends State<Tutorial> {
+class EvaluationTableState extends State<EvaluationTable> {
   GlobalKey _one = GlobalKey();
 
   @override
@@ -136,13 +136,13 @@ class TutorialState extends State<Tutorial> {
               if (user == null) {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Login(false)),
+                  MaterialPageRoute(builder: (context) => Login(true)),
                   (Route<dynamic> route) => false,
                 );
               } else {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile()),
+                  MaterialPageRoute(builder: (context) => Profile(true)),
                   (Route<dynamic> route) => false,
                 );
               }

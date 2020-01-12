@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trains/screens/congratulations.dart';
 import 'package:trains/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
 import 'package:trains/screens/profile.dart';
 import 'package:trains/services/database.dart';
+import 'package:flutter/scheduler.dart';
 
 class Login extends StatelessWidget {
   final bool
@@ -17,7 +19,10 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-
+    if(_didHeVote)
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Congratulations(true)));
+      });
     //print("button: $_button logout: $_logout");
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -41,14 +46,14 @@ class Login extends StatelessWidget {
         //padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0), //4 side symmetric padding
         child: Column(children: <Widget>[
           SizedBox(height: 20),
-          (_didHeVote)
+          /*(_didHeVote)
               ? Text('Congratulazioni hai valutato il treno!!!',
                   style: TextStyle(
                     fontSize: 20.0,
                     //fontWeight: FontWeight.w500,
                   ))
               : SizedBox(), //SizedBox vuota per mettere un Widget vuoto
-          SizedBox(height: MediaQuery.of(context).size.height / 2.5),
+          SizedBox(height: MediaQuery.of(context).size.height / 2.5),*/
           user != null
               ? Center(child: CircularProgressIndicator())
               : _signInButtons(context)
@@ -72,7 +77,7 @@ class Login extends StatelessWidget {
         ),
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Profile()));
+              context, MaterialPageRoute(builder: (context) => Profile(false)));
         },
       ),
     );
@@ -93,7 +98,7 @@ class Login extends StatelessWidget {
             print('Accesso effettuato');
             print(result.uid);
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Profile()));
+                context, MaterialPageRoute(builder: (context) => Profile(false)));
           }
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),

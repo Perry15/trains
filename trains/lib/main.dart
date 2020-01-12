@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trains/screens/congratulations.dart';
 import 'package:trains/screens/home.dart';
 import 'package:trains/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,11 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User>.value(
       //tutto quello racchiuso nello stream può ottenere info sullo stream
       value: AuthService().user,
-      child: MaterialApp(home: Home()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        //showPerformanceOverlay: true,//cpu
+        home: Home(),
+      ),
     );
   }
 }
