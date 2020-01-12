@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:trains/screens/info.dart';
 
 import 'package:trains/screens/partenze_load.dart';
 import 'package:trains/screens/login.dart';
@@ -25,7 +26,8 @@ class Home extends StatelessWidget {
     "Il tuo profilo",
     "Classifica",
     "Tutorial",
-    "Logout"
+    "Informazioni",
+    "Logout",
   ];
 
   @override
@@ -83,9 +85,16 @@ class Home extends StatelessWidget {
                             builder: (context) => ValutazioneTreno()));
                   }
                   break;
+                case "Informazioni":
+                  {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Info()));
+                  }
+                  break;
                 case "Logout":
                   {
-                    print("Tutorial");
                     _authService.signOut();
                   }
                   break;

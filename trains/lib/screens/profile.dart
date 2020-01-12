@@ -191,7 +191,7 @@ class _ProfileState extends State<Profile> {
                             child: Column(
                               children: <Widget>[
                                 Icon(
-                                  Icons.access_time,
+                                  Icons.location_on,
                                   color: Colors.black,
                                   size: 50.0,
                                   semanticLabel:
