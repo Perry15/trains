@@ -1,14 +1,8 @@
 import 'dart:async';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:trains/screens/info.dart';
-
 import 'package:trains/screens/partenze_load.dart';
-import 'package:trains/screens/login.dart';
-import 'package:trains/screens/ranking.dart';
 import 'package:trains/services/auth.dart';
-import 'package:trains/screens/profile.dart';
-import 'package:trains/screens/valutazione_treno.dart';
 import 'package:trains/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trains/services/location_provider.dart';
@@ -16,19 +10,14 @@ import 'package:trains/services/viaggiatreno.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
+import 'package:trains/screens/sidebar.dart';
 
 class Home extends StatelessWidget {
   final Location provider = new Location();
   final DatabaseService _ds = DatabaseService();
   final AuthService _authService = AuthService();
   final Future<LocationData> _location = LocationProvider().fetchLocation();
-  final List<String> choices = const <String>[
-    "Il tuo profilo",
-    "Classifica",
-    "Tutorial",
-    "Informazioni",
-    "Logout",
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,79 +28,13 @@ class Home extends StatelessWidget {
         .then((onValue) => {print("currentUser: $onValue")});
     //_ds.deleteAllEvaluations();//to delete all evaluations
     return Scaffold(
+      drawerEdgeDragWidth: MediaQuery.of(context).size.width/2.6,
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         title: Text('Home'),
         backgroundColor: Color(0xff9b0014),
-        elevation: 0.0,
-        actions: <Widget>[
-          /*user != null
-              ? FlatButton.icon(
-                  icon: Icon(Icons.person),
-                  label: Text('Logout'),
-                  onPressed: () {
-                    _authService.signOut();
-                  },
-                )
-              : SizedBox(),*/
-          PopupMenuButton<String>(
-            icon: Icon(Icons.menu),
-            onSelected: (choice) {
-              switch (choice) {
-                case "Classifica":
-                  {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Ranking()));
-                  }
-                  break;
-                case "Il tuo profilo":
-                  {
-                    if (user != null)
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Profile(false)));
-                    else
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Login(false)));
-                  }
-                  break;
-                case "Tutorial":
-                  {
-                    print("Tutorial");
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ValutazioneTreno()));
-                  }
-                  break;
-                case "Informazioni":
-                  {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Info()));
-                  }
-                  break;
-                case "Logout":
-                  {
-                    _authService.signOut();
-                  }
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return choices.map((String choice) {
-                if (user == null && choice == "Logout") return null;
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          ),
-        ],
       ),
+      drawer: SideBar(),
       body: Center(
         child: Column(
           children: [

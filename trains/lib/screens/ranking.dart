@@ -17,10 +17,12 @@ class Ranking extends StatelessWidget {
           future: _dbService.getLevelRankingList(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              
               return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     Map<String, dynamic> user = snapshot.data[index];
+                    print("data: ${user}");
                     return ListTile(
                       leading: ExcludeSemantics(
                         child: CircleAvatar(

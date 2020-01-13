@@ -267,7 +267,8 @@ class DatabaseService {
 
   ///returns the profile Image of a User
   Future<Image> checkUserImageById(String uid) async {
-    final String url = await FirebaseStorage.instance
+    print("data: ${uid}");
+    try{final String url = await FirebaseStorage.instance
         .ref()
         .child('profileImages/$uid')
         .getDownloadURL();
@@ -275,5 +276,13 @@ class DatabaseService {
       url,
       fit: BoxFit.cover,
     );
+    }
+    catch(e){
+      return Image.asset(
+        "assets/default.png",
+        fit: BoxFit.cover,
+      );
+    }
   }
 }
+
