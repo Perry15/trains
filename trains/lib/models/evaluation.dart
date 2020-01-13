@@ -1,8 +1,7 @@
 class Evaluation {
-  String id, traincode, vote, location;
-  DateTime timestamp;
+  String id, traincode, vote, location, timestamp;
 
-  Evaluation(this.id,this.location,this.timestamp,this.traincode,this.vote);
+  Evaluation(this.id, this.location, this.timestamp, this.traincode, this.vote);
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{

@@ -18,7 +18,6 @@ class Home extends StatelessWidget {
   final AuthService _authService = AuthService();
   final Future<LocationData> _location = LocationProvider().fetchLocation();
 
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -28,7 +27,7 @@ class Home extends StatelessWidget {
         .then((onValue) => {print("currentUser: $onValue")});
     //_ds.deleteAllEvaluations();//to delete all evaluations
     return Scaffold(
-      drawerEdgeDragWidth: MediaQuery.of(context).size.width/2.6,
+      drawerEdgeDragWidth: MediaQuery.of(context).size.width / 2.6,
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         title: Text('Home'),

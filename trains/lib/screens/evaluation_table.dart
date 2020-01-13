@@ -8,7 +8,6 @@ import 'package:trains/models/train.dart';
 import 'package:trains/models/user.dart';
 import 'package:trains/screens/profile.dart';
 import 'package:trains/services/database.dart';
-import 'package:trains/screens/login.dart';
 import 'package:trains/services/local_database.dart';
 
 //come chiamare valutatore Treno
@@ -136,13 +135,16 @@ class EvaluationTableState extends State<EvaluationTable> {
               if (user == null) {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(true,false)),//Login(true)
+                  MaterialPageRoute(
+                      builder: (context) => Profile(true, false)), //Login(true)
                   (Route<dynamic> route) => false,
                 );
               } else {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(true,true)),//Profile(true)
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          Profile(true, true)), //Profile(true)
                   (Route<dynamic> route) => false,
                 );
               }

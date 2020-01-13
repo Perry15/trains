@@ -21,7 +21,7 @@ class LocalDatabaseService {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE evaluations (id STRING PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, traincode STRING, vote STRING, location STRING)');
+        'CREATE TABLE evaluations (id STRING PRIMARY KEY, timestamp STRING DEFAULT CURRENT_TIMESTAMP, traincode STRING, vote STRING, location STRING)');
     await db.execute('CREATE TABLE locations (code STRING PRIMARY KEY)');
     await db.execute('CREATE TABLE trains (code STRING PRIMARY KEY)');
   }

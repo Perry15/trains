@@ -84,10 +84,20 @@ class AuthService {
           .toList());
       List<dynamic> remoteEvaluations =
           await _dbService.getUserEvaluations(uid);
-      remoteEvaluations.forEach((evaluationId) => {
-            if (!localEvaluations.contains(evaluationId))
-              {_insertEvaluation(evaluationId)}
-          });
+      remoteEvaluations.forEach((evaluationId) async {
+        if (!localEvaluations.contains(evaluationId)) {
+          DocumentSnapshot evaluation =
+              await _dbService.getEvaluationDetails(evaluationId);
+          local.insertEvaluation(new Evaluation(
+              evaluation.documentID,
+              evaluation.data['location'],
+              evaluation.data['timestamp'].toString(),
+              evaluation.data['traincode'],
+              evaluation.data['vote']));
+          local.insertLocation(new Location(evaluation.data['location']));
+          local.insertTrain(new Train(evaluation.data['traincode']));
+        }
+      });
       prefs.remove("uid");
       await _auth.signOut();
       await _googleSignIn.signOut();
@@ -95,21 +105,6 @@ class AuthService {
       print(e.toString());
       return null;
     }
-  }
-
-  void _insertEvaluation(String evaluationId) async {
-    DocumentSnapshot evaluation =
-        await _dbService.getEvaluationDetails(evaluationId);
-    print('ciao');
-    print(evaluation.data['timestamp']);
-    local.insertEvaluation(new Evaluation(
-        evaluation.documentID,
-        evaluation.data['location'],
-        DateTime.fromMillisecondsSinceEpoch(evaluation.data['timestamp'].getSeconds()*1000),
-        evaluation.data['traincode'],
-        evaluation.data['vote']));
-    local.insertLocation(new Location(evaluation.data['location']));
-    local.insertTrain(new Train(evaluation.data['traincode']));
   }
 
   Future getCurrentUser() async {

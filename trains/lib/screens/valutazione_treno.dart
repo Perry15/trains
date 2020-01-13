@@ -12,8 +12,9 @@ class ValutazioneTreno extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(this.leavingStationCode!=null && this.trainCode!=null && this.sharedPrefs!=null){
-      print("valuto");
+    if (this.leavingStationCode != null &&
+        this.trainCode != null &&
+        this.sharedPrefs != null) {
       return Scaffold(
           backgroundColor: Colors.brown[50],
           appBar: AppBar(
@@ -50,8 +51,7 @@ class ValutazioneTreno extends StatelessWidget {
                       return CircularProgressIndicator();
                     })
               ]));
-    }
-    else{
+    } else {
       return Scaffold(
         backgroundColor: Colors.brown[50],
         appBar: AppBar(
@@ -59,20 +59,19 @@ class ValutazioneTreno extends StatelessWidget {
           backgroundColor: Color(0xff9b0014),
           elevation: 0.0,
         ),
-        body:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height/4.2),
-           ShowCaseWidget(
-              builder: Builder(builder: (context) =>EvaluationTable(true))
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height/8),
-              Text("Vota per continuare",style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0))
-          ]
-        ),
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height / 16),
+              ShowCaseWidget(
+                  builder:
+                      Builder(builder: (context) => EvaluationTable(true))),
+              SizedBox(height: MediaQuery.of(context).size.height / 16),
+              Text("Vota per continuare",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0))
+            ]),
       );
-
     }
   }
 }

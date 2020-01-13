@@ -10,6 +10,7 @@ import 'package:trains/services/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
+
 class SideBar extends StatelessWidget {
   final DatabaseService _dbService = DatabaseService();
   final AuthService _authService = AuthService();
@@ -19,94 +20,94 @@ class SideBar extends StatelessWidget {
     String uid = prefs.getString('uid') ?? "";
     if (uid != "") return await _dbService.getUserById(uid);
     Map<String, dynamic> user = new Map();
-    /*user['evaluationsPoints'] = await points.getEvaluationsPoints();
-    user['trainsPoints'] = await points.getTrainsPoints();
-    user['locationsPoints'] = await points.getLocationsPoints();
-    user['level'] = await points.getLevel();*/
     user['displayName'] = 'Utente locale';
     return user;
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context); 
+    final user = Provider.of<User>(context);
     return Drawer(
-        child: ListView(
-          children: <Widget>[
-            /*FutureBuilder<Map<String, dynamic>>(
-                  future: getUserData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var data = snapshot.data;
-                      return UserAccountsDrawerHeader(
-                        decoration: BoxDecoration(
-                          color: Color(0xff9b0014),
-                        ),
-                        accountName: Text(data['displayName']),
-                        /*currentAccountPicture: CircleAvatar(
-                          //backgroundImage: ,
-                        ),*/
-                      );
-                    }
-                    return CircularProgressIndicator();
-                  }
-            ),*/
-            ListTile(
-              title: new Text('Vai al tuo profilo'),
-              onTap: () {
-                if (user != null)
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Profile(false,true)));//Profile(false)
-                    else
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Profile(false,false)));//Login(false)
-              },
-            ),
-            ListTile(
-              title: new Text('Classifica'),
-              onTap: () {
-                Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Ranking()));
-              },
-            ),
-            ListTile(
-              title: new Text('Tutorial'),
-              onTap: () {
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            title: new Text('Vai al tuo profilo',
+                style: TextStyle(
+                  fontSize: 18.0,
+                )),
+            onTap: () {
+              if (user != null) {
                 Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ValutazioneTreno()));
-              },
-            ),
-            ListTile(
-              title: new Text('Informazioni'),
-              onTap: () {
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Profile(false, true)));
+                //Navigator.of(context).pop();
+              } else {
                 Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Info()));
-              },
-            ),
-            (user!=null)?ListTile(
-              title: new Text('Logout'),
-              onTap: () {
-                _authService.signOut();
-              },
-            ):ListTile(
-              title: new Text('Accedi'),
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Login()),//Profile(true)
-                  (Route<dynamic> route) => false,
-                );
-              },
-            )
-
-          ],
-        ),
-      );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Profile(false, false)));
+                //Navigator.of(context).pop();
+              }
+            },
+          ),
+          ListTile(
+            title: new Text('Classifica',
+                style: TextStyle(
+                  fontSize: 18.0,
+                )),
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Ranking()));
+              //Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            title: new Text('Tutorial',
+                style: TextStyle(
+                  fontSize: 18.0,
+                )),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ValutazioneTreno()));
+              //Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            title: new Text('Informazioni',
+                style: TextStyle(
+                  fontSize: 18.0,
+                )),
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Info()));
+              //Navigator.of(context).pop();
+            },
+          ),
+          (user != null)
+              ? ListTile(
+                  title: new Text('Logout',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
+                  onTap: () {
+                    _authService.signOut();
+                  },
+                )
+              : ListTile(
+                  title: new Text('Accedi',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
+                  },
+                )
+        ],
+      ),
+    );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trains/screens/congratulations.dart';
 import 'package:trains/screens/home.dart';
 import 'package:trains/services/auth.dart';
 import 'package:provider/provider.dart';

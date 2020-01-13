@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:trains/screens/profile.dart';
-import 'package:trains/screens/login.dart';
 import 'package:confetti/confetti.dart';
 import 'dart:math';
 
 class Congratulations extends StatefulWidget {
-  bool _login;
+  final bool _login;
   Congratulations(this._login);
   @override
   State<StatefulWidget> createState() {
@@ -22,8 +21,8 @@ class CongratulationsState extends State<Congratulations> {
     _controllerTopCenter = ConfettiController(duration: Duration(seconds: 4));
     _controllerTopCenter.play();
     loadData();
-    
   }
+
   @override
   void dispose() {
     _controllerTopCenter.dispose();
@@ -35,28 +34,32 @@ class CongratulationsState extends State<Congratulations> {
   }
 
   onDoneLoading() async {
-    if(widget._login)
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Profile(false,false)));//Login(false)
+    if (widget._login)
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => Profile(false, false))); //Login(false)
     else
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Profile(false,true)));//Profile(false)
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => Profile(false, true))); //Profile(false)
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff9b0014),
-      body: Center(child:Stack(
+      body: Center(
+        child: Stack(
           alignment: AlignmentDirectional.bottomCenter,
-            overflow: Overflow.visible,
+          overflow: Overflow.visible,
           children: <Widget>[
             Positioned.fill(
-              top:MediaQuery.of(context).size.height/3.5,
+              top: MediaQuery.of(context).size.height / 3.5,
               child: Image.asset(
                 "assets/iconTrains.png",
                 fit: BoxFit.fitWidth,
                 alignment: Alignment.center,
               ),
-            ),Align(
+            ),
+            Align(
               alignment: Alignment.topCenter,
               child: ConfettiWidget(
                 confettiController: _controllerTopCenter,
@@ -65,27 +68,30 @@ class CongratulationsState extends State<Congratulations> {
                 minBlastForce: 5,
                 emissionFrequency: 0.05,
                 numberOfParticles: 25,
-                colors: [Colors.blue, Colors.red, Colors.green, Colors.yellow, Colors.orange, Colors.purple],
+                colors: [
+                  Colors.blue,
+                  Colors.red,
+                  Colors.green,
+                  Colors.yellow,
+                  Colors.orange,
+                  Colors.purple
+                ],
               ),
             ),
             Positioned(
-              top:MediaQuery.of(context).size.height/4,
+              top: MediaQuery.of(context).size.height / 4,
               child: Text(
                 "CONGRATULAZIONI!!!\n\nHai valutato!!!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width/12,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white
-                ),
-                ),
+                    fontSize: MediaQuery.of(context).size.width / 12,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white),
+              ),
             ),
-            
-            
           ],
         ),
-        ),
+      ),
     );
   }
-  
 }

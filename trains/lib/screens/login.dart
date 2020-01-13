@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trains/screens/congratulations.dart';
 import 'package:trains/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
 import 'package:trains/screens/profile.dart';
 import 'package:trains/services/database.dart';
-import 'package:flutter/scheduler.dart';
 
 class Login extends StatelessWidget {
   //final bool_didHeVote; // boolean value per sapere se arriva da una votazione o no
@@ -27,10 +25,9 @@ class Login extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text('Accedi'),
-        backgroundColor: Color(0xff9b0014),
-        elevation: 0.0
-      ),
+          title: Text('Accedi'),
+          backgroundColor: Color(0xff9b0014),
+          elevation: 0.0),
       body: Center(
         //padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0), //4 side symmetric padding
         child: Column(children: <Widget>[
@@ -66,7 +63,10 @@ class Login extends StatelessWidget {
             print('Accesso effettuato');
             print(result.uid);
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Profile(false,true)));//Profile(false)
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        Profile(false, true))); //Profile(false)
           }
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),

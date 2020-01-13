@@ -71,28 +71,22 @@ class DatabaseService {
   }
 
   Future<Map<String, dynamic>> searchNearestStations(lat, long) async {
-    //print("Arrivati lat: $lat long: $long ");
-    QuerySnapshot querySnapshot =
-        await db.collection("stations").getDocuments();
+    Map<String, dynamic> stations =
+        jsonDecode(await rootBundle.loadString('assets/stations.json'));
     var minDistance = 13000000.0;
     var minId = "0";
     final Distance distance = new Distance();
-    for (DocumentSnapshot doc in querySnapshot.documents) {
-      //print("id: ${doc.documentID} data: ${doc.data}");
-      var data = doc.data;
-      //print("double ${double.parse(data["lat"].toString().replaceAll(',', '.'))}");
-      var lat2 = double.parse((data["lat"]).toString().replaceAll(',', '.'));
-      var long2 = double.parse((data["lon"]).toString().replaceAll(',', '.'));
+    stations.forEach((key, value) {
+      var lat2 = double.parse(value['lat'].toString().replaceAll(',', '.'));
+      var long2 = double.parse(value['lon'].toString().replaceAll(',', '.'));
 
       final double meter =
           distance(new LatLng(lat, long), new LatLng(lat2, long2));
-      //update minimum distance
-      //print("${doc.documentID} distance: $meter");
       if (meter < minDistance) {
         minDistance = meter;
-        minId = doc.documentID;
+        minId = key;
       }
-    }
+    });
     return await _getStationById(minId);
   }
 
@@ -102,7 +96,7 @@ class DatabaseService {
       'vote': vote,
       'traincode': trainCode,
       'location': location,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'timestamp': DateTime.now(),
     });
   }
 
@@ -272,16 +266,16 @@ class DatabaseService {
   ///returns the profile Image of a User
   Future<Image> checkUserImageById(String uid) async {
     print("data: $uid");
-    try{final String url = await FirebaseStorage.instance
-        .ref()
-        .child('profileImages/$uid')
-        .getDownloadURL();
-    return Image.network(
-      url,
-      fit: BoxFit.cover,
-    );
-    }
-    catch(e){
+    try {
+      final String url = await FirebaseStorage.instance
+          .ref()
+          .child('profileImages/$uid')
+          .getDownloadURL();
+      return Image.network(
+        url,
+        fit: BoxFit.cover,
+      );
+    } catch (e) {
       return Image.asset(
         "assets/default.png",
         fit: BoxFit.cover,
@@ -289,4 +283,3 @@ class DatabaseService {
     }
   }
 }
-
