@@ -1,14 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trains/models/evaluation.dart';
+import 'package:trains/models/location.dart';
+import 'package:trains/models/train.dart';
 import 'package:trains/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:trains/services/database.dart';
+import 'package:trains/services/local_database.dart';
 
 class AuthService {
   //_ before meanbs private
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final DatabaseService _dbService = DatabaseService();
+  final LocalDatabaseService local = LocalDatabaseService();
   //ritorna lo user se loggato null se sloggato
   User _userFromFirebaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid) : null;
@@ -71,12 +77,41 @@ class AuthService {
   //sign out anon
   void signOut() async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String uid = prefs.getString("uid") ?? "";
+      List<String> localEvaluations = ((await local.getEvaluations())
+          .map((evaluation) => evaluation.id)
+          .toList());
+      List<dynamic> remoteEvaluations =
+          await _dbService.getUserEvaluations(uid);
+      remoteEvaluations.forEach((evaluationId) => {
+            if (!localEvaluations.contains(evaluationId))
+              {_insertEvaluation(evaluationId)}
+          });
+      prefs.remove("uid");
       await _auth.signOut();
       await _googleSignIn.signOut();
     } catch (e) {
       print(e.toString());
       return null;
     }
+  }
+
+  void _insertEvaluation(String evaluationId) async {
+    
+    DocumentSnapshot evaluation =
+        await _dbService.getEvaluationDetails(evaluationId);
+        print('ciao');
+    print(evaluation.data['timestamp']);
+    local.insertEvaluation(new Evaluation(
+        evaluation.documentID,
+        evaluation.data['location'],
+        evaluation.data['timestamp'],
+        evaluation.data['traincode'],
+        evaluation.data['vote']));
+      local.insertLocation(new Location(evaluation.data['location']));
+      local.insertTrain(new Train(evaluation.data['traincode']));
+
   }
 
   Future getCurrentUser() async {

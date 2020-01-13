@@ -130,6 +130,10 @@ class DatabaseService {
     return result.data["locationsEvaluated"];
   }
 
+  Future<DocumentSnapshot> getEvaluationDetails(eid) async {
+    return await db.collection('evaluations').document(eid).get();
+  }
+
   Future<List<dynamic>> getUserEvaluations(uid) async {
     dynamic result = await db.collection('users').document(uid).get();
     return result.data["evaluations"];
@@ -267,7 +271,7 @@ class DatabaseService {
 
   ///returns the profile Image of a User
   Future<Image> checkUserImageById(String uid) async {
-    print("data: ${uid}");
+    print("data: $uid");
     try{final String url = await FirebaseStorage.instance
         .ref()
         .child('profileImages/$uid')

@@ -9,38 +9,27 @@ import 'package:trains/services/database.dart';
 import 'package:flutter/scheduler.dart';
 
 class Login extends StatelessWidget {
-  final bool
-      _didHeVote; // boolean value per sapere se arriva da una votazione o no
+  //final bool_didHeVote; // boolean value per sapere se arriva da una votazione o no
   final AuthService _authService = AuthService();
   final DatabaseService _dbService = DatabaseService();
 
-  Login(this._didHeVote);
+  //Login(this._didHeVote);
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    if(_didHeVote)
+    /*if(_didHeVote)
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Congratulations(true)));
       });
-    //print("button: $_button logout: $_logout");
+      */
+
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         title: Text('Accedi'),
         backgroundColor: Color(0xff9b0014),
-        elevation: 0.0,
-        /*actions: <Widget>[
-          user != null
-              ? FlatButton.icon(
-                  icon: Icon(Icons.person),
-                  label: Text('logout'),
-                  onPressed: () {
-                    _authService.signOut();
-                  },
-                )
-              : SizedBox()
-        ],*/
+        elevation: 0.0
       ),
       body: Center(
         //padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0), //4 side symmetric padding

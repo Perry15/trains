@@ -19,6 +19,7 @@ class Profile extends StatefulWidget {
   Profile(this._didHeVote,this._isLoggedIn);
   final DatabaseService _dbService = DatabaseService();
   final Points points = Points();
+
   Future<Map<String, dynamic>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString('uid') ?? "";
@@ -53,9 +54,16 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     if(widget._didHeVote){
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Congratulations(false)));
-      });
+      if(widget._isLoggedIn){
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Congratulations(false)));
+        });
+      }
+      else{
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Congratulations(true)));
+        });
+      }
     }
   }
 
@@ -72,8 +80,87 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    Widget image, button;
     if(widget._isLoggedIn){
-      return Scaffold(
+      /*Scaffold(
+        backgroundColor: Colors.brown[50],
+        appBar: AppBar(
+          backgroundColor: Color(0xff9b0014),
+          title: Text('Il tuo profilo'),
+          elevation: 0.0,
+        ),
+        body: Center(
+          child: Stack(
+              alignment: AlignmentDirectional.bottomCenter,
+              overflow: Overflow.visible,
+              children: <Widget>[
+                Positioned(
+                  top: 0,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 6,
+                    child: const DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color(0xff9b0014),
+                      ),
+                    ),
+                  ),
+                ),*/
+                image=FutureBuilder<Image>(
+                    future: _getImage(context),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Positioned(
+                          top: 15,
+                          child: CircleAvatar(
+                            radius: 90,
+                            backgroundColor: Colors.brown[50],
+                            child: ClipOval(
+                              child: new SizedBox(
+                                width: 160.0,
+                                height: 160.0,
+                                child: snapshot.data,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      } else {
+                        return Container();
+                      }
+                    });
+                button=Positioned(
+                  top: MediaQuery.of(context).size.height / 6,
+                  left: MediaQuery.of(context).size.width / 1.7,
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.black,
+                    onPressed: () {
+                      widget._setImage(context);
+                    },
+                    tooltip: 'Modifica immagine',
+                    child: Icon(Icons.add_a_photo),
+                  ),
+                );
+    }
+    else{
+        image=Positioned(
+          top: 15,
+          child: CircleAvatar(
+            radius: 90,
+            backgroundColor: Colors.brown[50],
+            child: ClipOval(
+              child: new SizedBox(
+                width: 160.0,
+                height: 160.0,
+                child: Image.asset("assets/default.png", fit:BoxFit.cover),
+              ),
+            ),
+          ),
+        );
+        button=null;
+    }
+    return Scaffold(
         backgroundColor: Colors.brown[50],
         appBar: AppBar(
           backgroundColor: Color(0xff9b0014),
@@ -97,42 +184,8 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                FutureBuilder<Image>(
-                    future: _getImage(context),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Positioned(
-                          top: 15,
-                          child: CircleAvatar(
-                            radius: 90,
-                            backgroundColor: Colors.brown[50],
-                            child: ClipOval(
-                              child: new SizedBox(
-                                width: 160.0,
-                                height: 160.0,
-                                child: snapshot.data,
-                              ),
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text("${snapshot.error}");
-                      } else {
-                        return Container();
-                      }
-                    }),
-                Positioned(
-                  top: MediaQuery.of(context).size.height / 6,
-                  left: MediaQuery.of(context).size.width / 1.7,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.black,
-                    onPressed: () {
-                      widget._setImage(context);
-                    },
-                    tooltip: 'Modifica immagine',
-                    child: Icon(Icons.add_a_photo),
-                  ),
-                ),
+                image,
+                (button!=null)?button:SizedBox(),
                 FutureBuilder<Map<String, dynamic>>(
                     future: widget.getUserData(),
                     builder: (context, snapshot) {
@@ -277,8 +330,8 @@ class _ProfileState extends State<Profile> {
               ]),
         ),
       );
-    }
-    return Scaffold(
+    
+    /*return Scaffold(
         backgroundColor: Colors.brown[50],
         appBar: AppBar(
           backgroundColor: Color(0xff9b0014),
@@ -338,7 +391,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 3,
-                        child: Text('evaluationsPoints',
+                        child: Text('${user['evaluationsPoints']}',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -440,6 +493,7 @@ class _ProfileState extends State<Profile> {
               ],
             )
         ),
-      );
+      );*/
   }
 }
+

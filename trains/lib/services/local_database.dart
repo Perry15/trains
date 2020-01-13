@@ -28,7 +28,8 @@ class LocalDatabaseService {
 
   Future<Evaluation> insertEvaluation(Evaluation evaluation) async {
     var dbClient = await db;
-    await dbClient.insert('evaluations', evaluation.toMap());
+    var id = await dbClient.update('evaluations', evaluation.toMap());
+    if (id == 0) await dbClient.insert('evaluations', evaluation.toMap());
     return evaluation;
   }
 

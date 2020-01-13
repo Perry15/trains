@@ -94,7 +94,16 @@ class SideBar extends StatelessWidget {
               onTap: () {
                 _authService.signOut();
               },
-            ):SizedBox()
+            ):ListTile(
+              title: new Text('Accedi'),
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),//Profile(true)
+                  (Route<dynamic> route) => false,
+                );
+              },
+            )
 
           ],
         ),
