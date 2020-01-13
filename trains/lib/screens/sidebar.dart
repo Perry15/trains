@@ -56,12 +56,12 @@ class SideBar extends StatelessWidget {
               onTap: () {
                 if (user != null)
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Profile(false)));
+                          MaterialPageRoute(builder: (context) => Profile(false,true)));//Profile(false)
                     else
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Login(false)));
+                              builder: (context) => Profile(false,false)));//Login(false)
               },
             ),
             ListTile(

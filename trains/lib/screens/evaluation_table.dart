@@ -136,13 +136,13 @@ class EvaluationTableState extends State<EvaluationTable> {
               if (user == null) {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Login(true)),
+                  MaterialPageRoute(builder: (context) => Profile(true,false)),//Login(true)
                   (Route<dynamic> route) => false,
                 );
               } else {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(true)),
+                  MaterialPageRoute(builder: (context) => Profile(true,true)),//Profile(true)
                   (Route<dynamic> route) => false,
                 );
               }

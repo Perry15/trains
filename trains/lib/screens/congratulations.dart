@@ -36,9 +36,9 @@ class CongratulationsState extends State<Congratulations> {
 
   onDoneLoading() async {
     if(widget._login)
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login(false)));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Profile(false,false)));//Login(false)
     else
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Profile(false)));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Profile(false,true)));//Profile(false)
   }
 
   @override

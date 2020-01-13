@@ -62,27 +62,6 @@ class Login extends StatelessWidget {
     );
   }
 
-  Widget _goToGameButton(BuildContext context) {
-    return ButtonTheme(
-      minWidth: MediaQuery.of(context).size.width - 100,
-      height: 60.0,
-      child: RaisedButton(
-        color: Color(0xff9b0014),
-        child: Text(
-          'Vai al profilo',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
-          ),
-        ),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Profile(false)));
-        },
-      ),
-    );
-  }
-
   Widget _signInButtons(BuildContext context) {
     return Column(children: <Widget>[
       OutlineButton(
@@ -98,7 +77,7 @@ class Login extends StatelessWidget {
             print('Accesso effettuato');
             print(result.uid);
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Profile(false)));
+                context, MaterialPageRoute(builder: (context) => Profile(false,true)));//Profile(false)
           }
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),

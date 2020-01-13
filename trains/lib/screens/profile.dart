@@ -15,7 +15,8 @@ import 'package:trains/services/points.dart';
 
 class Profile extends StatefulWidget {
   bool _didHeVote;
-  Profile(this._didHeVote);
+  bool _isLoggedIn;
+  Profile(this._didHeVote,this._isLoggedIn);
   final DatabaseService _dbService = DatabaseService();
   final Points points = Points();
   Future<Map<String, dynamic>> getUserData() async {
@@ -71,211 +72,374 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    //getUserData(context);
-    //checkImage(context);
-    return Scaffold(
-      backgroundColor: Colors.brown[50],
-      appBar: AppBar(
-        backgroundColor: Color(0xff9b0014),
-        title: Text('Il tuo profilo'),
-        elevation: 0.0,
-      ),
-      body: Center(
-        child: Stack(
-            alignment: AlignmentDirectional.bottomCenter,
-            overflow: Overflow.visible,
-            children: <Widget>[
-              Positioned(
-                top: 0,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 6,
-                  child: const DecoratedBox(
-                    decoration: const BoxDecoration(
-                      color: Color(0xff9b0014),
+    if(widget._isLoggedIn){
+      return Scaffold(
+        backgroundColor: Colors.brown[50],
+        appBar: AppBar(
+          backgroundColor: Color(0xff9b0014),
+          title: Text('Il tuo profilo'),
+          elevation: 0.0,
+        ),
+        body: Center(
+          child: Stack(
+              alignment: AlignmentDirectional.bottomCenter,
+              overflow: Overflow.visible,
+              children: <Widget>[
+                Positioned(
+                  top: 0,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 6,
+                    child: const DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color(0xff9b0014),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              FutureBuilder<Image>(
-                  future: _getImage(context),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Positioned(
-                        top: 15,
-                        child: CircleAvatar(
-                          radius: 90,
-                          backgroundColor: Colors.brown[50],
-                          child: ClipOval(
-                            child: new SizedBox(
-                              width: 160.0,
-                              height: 160.0,
-                              child: snapshot.data,
+                FutureBuilder<Image>(
+                    future: _getImage(context),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Positioned(
+                          top: 15,
+                          child: CircleAvatar(
+                            radius: 90,
+                            backgroundColor: Colors.brown[50],
+                            child: ClipOval(
+                              child: new SizedBox(
+                                width: 160.0,
+                                height: 160.0,
+                                child: snapshot.data,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    } else {
-                      return Container();
-                    }
-                  }),
-              Positioned(
-                top: MediaQuery.of(context).size.height / 6,
-                left: MediaQuery.of(context).size.width / 1.7,
-                child: FloatingActionButton(
-                  backgroundColor: Colors.black,
-                  onPressed: () {
-                    widget._setImage(context);
-                  },
-                  tooltip: 'Modifica immagine',
-                  child: Icon(Icons.add_a_photo),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      } else {
+                        return Container();
+                      }
+                    }),
+                Positioned(
+                  top: MediaQuery.of(context).size.height / 6,
+                  left: MediaQuery.of(context).size.width / 1.7,
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.black,
+                    onPressed: () {
+                      widget._setImage(context);
+                    },
+                    tooltip: 'Modifica immagine',
+                    child: Icon(Icons.add_a_photo),
+                  ),
                 ),
-              ),
-              FutureBuilder<Map<String, dynamic>>(
-                  future: widget.getUserData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var data = snapshot.data;
-                      return Stack(
-                        alignment: AlignmentDirectional.bottomCenter,
-                        overflow: Overflow.visible,
-                        children: <Widget>[
-                          Positioned(
-                            top: 210,
-                            child: Text(data['displayName'],
-                                style: TextStyle(
-                                  fontSize: 25.0,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                          ),
-                          Positioned(
-                            top: 260,
-                            left: 0,
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.assignment_turned_in,
-                                  color: Colors.black,
-                                  size: 50.0,
-                                  semanticLabel:
-                                      'Text to announce in accessibility modes',
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 3,
-                                  child: Text('${data['evaluationsPoints']}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25.0)),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 260,
-                            left: MediaQuery.of(context).size.width / 3,
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.train,
-                                  color: Colors.black,
-                                  size: 50.0,
-                                  semanticLabel:
-                                      'Text to announce in accessibility modes',
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 3,
-                                  child: Text('${data['trainsPoints']}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25.0)),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 260,
-                            left: MediaQuery.of(context).size.width / 3 * 2,
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.location_on,
-                                  color: Colors.black,
-                                  size: 50.0,
-                                  semanticLabel:
-                                      'Text to announce in accessibility modes',
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 3,
-                                  child: Text('${data['locationsPoints']}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25.0)),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 350,
-                            child: new CircularPercentIndicator(
-                              radius: 150.0,
-                              animation: true,
-                              animationDuration: 1200,
-                              lineWidth: 13.0,
-                              percent:
-                                  (data['level'] - data['level'].truncate())
-                                      .toDouble(),
-                              center: new Text(
-                                "Livello ${data['level'].toInt()}",
-                                style: new TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0),
-                              ),
-                              circularStrokeCap: CircularStrokeCap.butt,
-                              backgroundColor: Colors.yellow,
-                              progressColor: Colors.red,
-                            ),
-                          ),
-                          Positioned(
-                            top: 540,
-                            child: ButtonTheme(
-                              minWidth: MediaQuery.of(context).size.width / 1.4,
-                              height: 60.0,
-                              child: RaisedButton(
-                                color: Color(0xff9b0014),
-                                child: Text(
-                                  'Classifica utenti',
+                FutureBuilder<Map<String, dynamic>>(
+                    future: widget.getUserData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        var data = snapshot.data;
+                        return Stack(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          overflow: Overflow.visible,
+                          children: <Widget>[
+                            Positioned(
+                              top: 210,
+                              child: Text(data['displayName'],
                                   style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                            ),
+                            Positioned(
+                              top: 260,
+                              left: 0,
+                              child: Column(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.assignment_turned_in,
+                                    color: Colors.black,
+                                    size: 50.0,
+                                    semanticLabel:
+                                        'Text to announce in accessibility modes',
                                   ),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Ranking()));
-                                },
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width / 3,
+                                    child: Text('${data['evaluationsPoints']}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 25.0)),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("ERROR: ${snapshot.error}");
-                    } else {
-                      return Positioned(
-                        top: 540,
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
-            ]),
-      ),
-    );
+                            Positioned(
+                              top: 260,
+                              left: MediaQuery.of(context).size.width / 3,
+                              child: Column(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.train,
+                                    color: Colors.black,
+                                    size: 50.0,
+                                    semanticLabel:
+                                        'Text to announce in accessibility modes',
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width / 3,
+                                    child: Text('${data['trainsPoints']}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 25.0)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              top: 260,
+                              left: MediaQuery.of(context).size.width / 3 * 2,
+                              child: Column(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.black,
+                                    size: 50.0,
+                                    semanticLabel:
+                                        'Text to announce in accessibility modes',
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width / 3,
+                                    child: Text('${data['locationsPoints']}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 25.0)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              top: 350,
+                              child: new CircularPercentIndicator(
+                                radius: 150.0,
+                                animation: true,
+                                animationDuration: 1200,
+                                lineWidth: 13.0,
+                                percent:
+                                    (data['level'] - data['level'].truncate())
+                                        .toDouble(),
+                                center: new Text(
+                                  "Livello ${data['level'].toInt()}",
+                                  style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20.0),
+                                ),
+                                circularStrokeCap: CircularStrokeCap.butt,
+                                backgroundColor: Colors.yellow,
+                                progressColor: Colors.red,
+                              ),
+                            ),
+                            Positioned(
+                              top: 540,
+                              child: ButtonTheme(
+                                minWidth: MediaQuery.of(context).size.width / 1.4,
+                                height: 60.0,
+                                child: RaisedButton(
+                                  color: Color(0xff9b0014),
+                                  child: Text(
+                                    'Classifica utenti',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Ranking()));
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("ERROR: ${snapshot.error}");
+                      } else {
+                        return Positioned(
+                          top: 540,
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }),
+              ]),
+        ),
+      );
+    }
+    return Scaffold(
+        backgroundColor: Colors.brown[50],
+        appBar: AppBar(
+          backgroundColor: Color(0xff9b0014),
+          title: Text('Il tuo profilo'),
+          elevation: 0.0,
+        ),
+        body: Center(
+          child: Stack(
+              alignment: AlignmentDirectional.bottomCenter,
+              overflow: Overflow.visible,
+              children: <Widget>[
+                Positioned(
+                  top: 0,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 6,
+                    child: const DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color(0xff9b0014),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 15,
+                  child: CircleAvatar(
+                    radius: 90,
+                    backgroundColor: Colors.brown[50],
+                    child: ClipOval(
+                      child: new SizedBox(
+                        width: 160.0,
+                        height: 160.0,
+                        child: Image.asset("assets/default.png", fit:BoxFit.cover),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 210,
+                  child: Text("utente locale",
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.w600,
+                      )),
+                ),
+                Positioned(
+                  top: 260,
+                  left: 0,
+                  child: Column(
+                    children: <Widget>[
+                      Icon(
+                        Icons.assignment_turned_in,
+                        color: Colors.black,
+                        size: 50.0,
+                        semanticLabel:
+                            'Text to announce in accessibility modes',
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: Text('evaluationsPoints',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25.0)),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 260,
+                  left: MediaQuery.of(context).size.width / 3,
+                  child: Column(
+                    children: <Widget>[
+                      Icon(
+                        Icons.train,
+                        color: Colors.black,
+                        size: 50.0,
+                        semanticLabel:
+                            'Text to announce in accessibility modes',
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: Text('trainsPoints',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25.0)),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 260,
+                  left: MediaQuery.of(context).size.width / 3 * 2,
+                  child: Column(
+                    children: <Widget>[
+                      Icon(
+                        Icons.location_on,
+                        color: Colors.black,
+                        size: 50.0,
+                        semanticLabel:
+                            'Text to announce in accessibility modes',
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: Text('locationsPoints',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25.0)),
+                      ),
+                    ],
+                  ),
+                ),
+                /*Positioned(
+                  top: 350,
+                  child: new CircularPercentIndicator(
+                    radius: 150.0,
+                    animation: true,
+                    animationDuration: 1200,
+                    lineWidth: 13.0,
+                    percent:
+                        (data['level'] - data['level'].truncate())
+                            .toDouble(),
+                    center: new Text(
+                      "Livello ${data['level'].toInt()}",
+                      style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0),
+                    ),
+                    circularStrokeCap: CircularStrokeCap.butt,
+                    backgroundColor: Colors.yellow,
+                    progressColor: Colors.red,
+                  ),
+                ),*/
+                Positioned(
+                  top: 540,
+                  child: ButtonTheme(
+                    minWidth: MediaQuery.of(context).size.width / 1.4,
+                    height: 60.0,
+                    child: RaisedButton(
+                      color: Color(0xff9b0014),
+                      child: Text(
+                        'Classifica utenti',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Ranking()));
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            )
+        ),
+      );
   }
 }
