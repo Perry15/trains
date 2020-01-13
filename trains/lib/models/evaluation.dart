@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Evaluation {
   String id, traincode, vote, location;
-  Timestamp timestamp;
+  DateTime timestamp;
 
   Evaluation(this.id,this.location,this.timestamp,this.traincode,this.vote);
 

@@ -102,7 +102,7 @@ class DatabaseService {
       'vote': vote,
       'traincode': trainCode,
       'location': location,
-      'timestamp': Timestamp.now(),
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
   }
 
