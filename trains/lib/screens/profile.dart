@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/congratulations.dart';
 import 'package:trains/screens/ranking.dart';
+import 'package:trains/screens/sidebar.dart';
 import 'package:trains/services/database.dart';
 import 'package:trains/models/user.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +50,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  Image _image;
+  var _image;
 
   @override
   void initState() {
@@ -71,7 +72,7 @@ class _ProfileState extends State<Profile> {
 
   Future<Image> _getImage(BuildContext context) async {
     dynamic user = Provider.of<User>(context);
-    Image temp = await widget._dbService.checkUserImageById(user.uid);
+    var temp = await widget._dbService.checkUserImageById(user.uid);
     if (this.mounted) {
       setState(() {
         _image = temp;
@@ -130,7 +131,10 @@ class _ProfileState extends State<Profile> {
             child: new SizedBox(
               width: 160.0,
               height: 160.0,
-              child: Image.asset("assets/default.png", fit: BoxFit.cover),
+              child: Image(
+                image: AssetImage("assets/default.png"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
@@ -144,6 +148,7 @@ class _ProfileState extends State<Profile> {
         title: Text('Il tuo profilo'),
         elevation: 0.0,
       ),
+      drawer: SideBar("profilo"),
       body: Center(
         child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
@@ -189,8 +194,6 @@ class _ProfileState extends State<Profile> {
                                   Icons.assignment_turned_in,
                                   color: Colors.black,
                                   size: 50.0,
-                                  semanticLabel:
-                                      'Text to announce in accessibility modes',
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,
@@ -212,8 +215,6 @@ class _ProfileState extends State<Profile> {
                                   Icons.train,
                                   color: Colors.black,
                                   size: 50.0,
-                                  semanticLabel:
-                                      'Text to announce in accessibility modes',
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,
@@ -235,8 +236,6 @@ class _ProfileState extends State<Profile> {
                                   Icons.location_on,
                                   color: Colors.black,
                                   size: 50.0,
-                                  semanticLabel:
-                                      'Text to announce in accessibility modes',
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 3,

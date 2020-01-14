@@ -35,7 +35,7 @@ class LocalDatabaseService {
 
   Future<Location> insertLocation(Location location) async {
     var dbClient = await db;
-    var id = await dbClient.update('locations', location.toMap());
+    int id = await dbClient.update('locations', location.toMap());
     if (id == 0) await dbClient.insert('locations', location.toMap());
     return location;
   }

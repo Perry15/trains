@@ -264,7 +264,7 @@ class DatabaseService {
   }
 
   ///returns the profile Image of a User
-  Future<Image> checkUserImageById(String uid) async {
+  Future<dynamic> checkUserImageById(String uid) async {
     print("data: $uid");
     try {
       final String url = await FirebaseStorage.instance
@@ -276,8 +276,8 @@ class DatabaseService {
         fit: BoxFit.cover,
       );
     } catch (e) {
-      return Image.asset(
-        "assets/default.png",
+      return Image(
+        image: AssetImage("assets/default.png"),
         fit: BoxFit.cover,
       );
     }

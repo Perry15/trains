@@ -56,8 +56,6 @@ class EvaluationTableState extends State<EvaluationTable> {
                             Icons.sentiment_very_satisfied,
                             color: Colors.green,
                             size: 40.0,
-                            semanticLabel:
-                                'Text to announce in accessibility modes',
                           ),
                           Text("Vuoto", textAlign: TextAlign.center)
                         ])),
@@ -73,8 +71,6 @@ class EvaluationTableState extends State<EvaluationTable> {
                               Icons.sentiment_very_satisfied,
                               color: Colors.green,
                               size: 40.0,
-                              semanticLabel:
-                                  'Text to announce in accessibility modes',
                             ),
                             Text("Vuoto", textAlign: TextAlign.center)
                           ]))))),
@@ -95,8 +91,6 @@ class EvaluationTableState extends State<EvaluationTable> {
                             Icons.sentiment_satisfied,
                             color: Colors.yellow,
                             size: 40.0,
-                            semanticLabel:
-                                'Text to announce in accessibility modes',
                           ),
                           Text("Quasi vuoto", textAlign: TextAlign.center)
                         ])),
@@ -112,8 +106,6 @@ class EvaluationTableState extends State<EvaluationTable> {
                               Icons.sentiment_satisfied,
                               color: Colors.yellow,
                               size: 40.0,
-                              semanticLabel:
-                                  'Text to announce in accessibility modes',
                             ),
                             Text("Quasi vuoto", textAlign: TextAlign.center)
                           ]))))),
@@ -166,8 +158,6 @@ class EvaluationTableState extends State<EvaluationTable> {
                             Icons.sentiment_dissatisfied,
                             color: Colors.orange,
                             size: 40.0,
-                            semanticLabel:
-                                'Text to announce in accessibility modes',
                           ),
                           Text("Quasi pieno", textAlign: TextAlign.center)
                         ])),
@@ -183,8 +173,7 @@ class EvaluationTableState extends State<EvaluationTable> {
                               Icons.sentiment_dissatisfied,
                               color: Colors.orange,
                               size: 40.0,
-                              semanticLabel:
-                                  'Text to announce in accessibility modes',
+                              
                             ),
                             Text("Quasi pieno", textAlign: TextAlign.center)
                           ])))))
@@ -205,8 +194,7 @@ class EvaluationTableState extends State<EvaluationTable> {
                           Icons.sentiment_very_dissatisfied,
                           color: Colors.red,
                           size: 40.0,
-                          semanticLabel:
-                              'Text to announce in accessibility modes',
+                          
                         ),
                         Text("Pieno", textAlign: TextAlign.center)
                       ])),
@@ -222,8 +210,6 @@ class EvaluationTableState extends State<EvaluationTable> {
                             Icons.sentiment_very_dissatisfied,
                             color: Colors.red,
                             size: 40.0,
-                            semanticLabel:
-                                'Text to announce in accessibility modes',
                           ),
                           Text("Pieno", textAlign: TextAlign.center)
                         ])))),

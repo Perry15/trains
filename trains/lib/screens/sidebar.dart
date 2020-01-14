@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:trains/screens/home.dart';
 import 'package:trains/screens/info.dart';
 import 'package:trains/screens/login.dart';
 import 'package:trains/screens/ranking.dart';
@@ -14,6 +15,9 @@ import 'package:trains/models/user.dart';
 class SideBar extends StatelessWidget {
   final DatabaseService _dbService = DatabaseService();
   final AuthService _authService = AuthService();
+  final String page;
+
+  SideBar(this.page);
 
   Future<Map<String, dynamic>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -30,60 +34,83 @@ class SideBar extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          ListTile(
-            title: new Text('Vai al tuo profilo',
-                style: TextStyle(
-                  fontSize: 18.0,
-                )),
-            onTap: () {
-              if (user != null) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Profile(false, true)));
-                //Navigator.of(context).pop();
-              } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Profile(false, false)));
-                //Navigator.of(context).pop();
-              }
-            },
-          ),
-          ListTile(
-            title: new Text('Classifica',
-                style: TextStyle(
-                  fontSize: 18.0,
-                )),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Ranking()));
-              //Navigator.of(context).pop();
-            },
-          ),
-          ListTile(
-            title: new Text('Tutorial',
-                style: TextStyle(
-                  fontSize: 18.0,
-                )),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ValutazioneTreno()));
-              //Navigator.of(context).pop();
-            },
-          ),
-          ListTile(
-            title: new Text('Informazioni',
-                style: TextStyle(
-                  fontSize: 18.0,
-                )),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Info()));
-              //Navigator.of(context).pop();
-            },
-          ),
+          (page != "home")
+              ? ListTile(
+                  title: new Text('Vai alla home',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Home()));
+                  },
+                )
+              : Container(),
+          (page != "profilo")
+              ? ListTile(
+                  title: new Text('Vai al tuo profilo',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
+                  onTap: () {
+                    if (user != null) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Profile(false, true)));
+                    } else {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Profile(false, false)));
+                    }
+                  },
+                )
+              : Container(),
+          (page != "classifica")
+              ? ListTile(
+                  title: new Text('Classifica',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Ranking()));
+                  },
+                )
+              : Container(),
+          (page != "tutorial")
+              ? ListTile(
+                  title: new Text('Tutorial',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ValutazioneTreno()));
+                  },
+                )
+              : Container(),
+          (page != "informazioni")
+              ? ListTile(
+                  title: new Text('Informazioni',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Info()));
+                  },
+                )
+              : Container(),
           (user != null)
               ? ListTile(
                   title: new Text('Logout',
@@ -100,6 +127,7 @@ class SideBar extends StatelessWidget {
                         fontSize: 18.0,
                       )),
                   onTap: () {
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Login()),

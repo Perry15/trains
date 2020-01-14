@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
         title: Text('Home'),
         backgroundColor: Color(0xff9b0014),
       ),
-      drawer: SideBar(),
+      drawer: SideBar("home"),
       body: Center(
         child: Column(
           children: [

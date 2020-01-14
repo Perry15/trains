@@ -18,7 +18,10 @@ class PartenzeList extends StatelessWidget {
         return ListTile(
           leading: ExcludeSemantics(
             child: CircleAvatar(
-              child: Text(partenza.compOrarioPartenza),
+              child: Text(
+                partenza.compOrarioPartenza,
+                softWrap: false,
+              ),
             ),
           ),
           title: Text(partenza.destinazione),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trains/screens/sidebar.dart';
 import 'package:trains/services/database.dart';
 
 class Ranking extends StatelessWidget {
@@ -12,6 +13,7 @@ class Ranking extends StatelessWidget {
         backgroundColor: Color(0xff9b0014),
         title: Text('Classifica'),
       ),
+      drawer: SideBar("classifica"),
       body: Center(
         child: FutureBuilder<List<Map<String, dynamic>>>(
           future: _dbService.getLevelRankingList(),
