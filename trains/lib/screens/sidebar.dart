@@ -54,19 +54,7 @@ class SideBar extends StatelessWidget {
                         fontSize: 18.0,
                       )),
                   onTap: () {
-                    if (user != null) {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Profile(false, true)));
-                    } else {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Profile(false, false)));
-                    }
+                    _goToProfile(context, user);
                   },
                 )
               : Container(),
@@ -119,6 +107,9 @@ class SideBar extends StatelessWidget {
                       )),
                   onTap: () {
                     _authService.signOut();
+                    if (page == "profilo") {
+                      _goToProfile(context, null);
+                    }
                   },
                 )
               : ListTile(
@@ -137,5 +128,17 @@ class SideBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _goToProfile(context, user) {
+    if (user != null) {
+      Navigator.pop(context);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => Profile(false, true)));
+    } else {
+      Navigator.pop(context);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => Profile(false, false)));
+    }
   }
 }

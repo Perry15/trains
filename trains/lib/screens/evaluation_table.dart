@@ -173,7 +173,6 @@ class EvaluationTableState extends State<EvaluationTable> {
                               Icons.sentiment_dissatisfied,
                               color: Colors.orange,
                               size: 40.0,
-                              
                             ),
                             Text("Quasi pieno", textAlign: TextAlign.center)
                           ])))))
@@ -194,7 +193,6 @@ class EvaluationTableState extends State<EvaluationTable> {
                           Icons.sentiment_very_dissatisfied,
                           color: Colors.red,
                           size: 40.0,
-                          
                         ),
                         Text("Pieno", textAlign: TextAlign.center)
                       ])),
@@ -240,6 +238,7 @@ class EvaluationTableState extends State<EvaluationTable> {
     evaluation['traincode'] = widget._trainCode;
     evaluation['location'] = widget._leavingStationCode;
     evaluation['vote'] = data.toString();
+    evaluation['timestamp'] = DateTime.now();
     widget._localDbService.insertEvaluation(Evaluation.fromMap(evaluation));
     Map<String, dynamic> train = new Map();
     train['code'] = widget._trainCode;

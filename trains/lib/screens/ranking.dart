@@ -17,12 +17,12 @@ class Ranking extends StatelessWidget {
       body: Center(
         child: FutureBuilder<List<Map<String, dynamic>>>(
           future: _dbService.getLevelRankingList(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
+          builder: (contextRankingList, rankingList) {
+            if (rankingList.hasData) {
               return ListView.builder(
-                  itemCount: snapshot.data.length,
+                  itemCount: rankingList.data.length,
                   itemBuilder: (context, index) {
-                    Map<String, dynamic> user = snapshot.data[index];
+                    Map<String, dynamic> user = rankingList.data[index];
                     return ListTile(
                       leading: ExcludeSemantics(
                         child: CircleAvatar(
@@ -45,37 +45,20 @@ class Ranking extends StatelessWidget {
                           child: FutureBuilder<Image>(
                               future:
                                   _dbService.checkUserImageById(user['uid']),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
+                              builder: (contextImage, image) {
+                                if (image.hasData) {
                                   return ClipOval(
                                     child: new SizedBox(
                                       width: 160.0,
                                       height: 160.0,
-                                      child: snapshot.data,
+                                      child: image.data,
                                     ),
                                   );
-                                } else if (snapshot.hasError) {
-                                  return ClipOval(
-                                    child: new SizedBox(
-                                      width: 160.0,
-                                      height: 160.0,
-                                      child: Image(
-                                        image: AssetImage("assets/default.png"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
+                                } else if (image.hasError) {
+                                  return Text("${image.error}");
+                                } else {
+                                  return CircularProgressIndicator();
                                 }
-                                return ClipOval(
-                                  child: new SizedBox(
-                                    width: 160.0,
-                                    height: 160.0,
-                                    child: Image(
-                                      image: AssetImage("assets/default.png"),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                );
                               }),
                         ),
                       ),
@@ -83,8 +66,8 @@ class Ranking extends StatelessWidget {
                       subtitle: Text("Livello ${user['level'].toInt()}"),
                     );
                   });
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+            } else if (rankingList.hasError) {
+              return Text("${rankingList.error}");
             }
             return CircularProgressIndicator();
           },

@@ -19,5 +19,6 @@ class Evaluation {
     traincode = map['traincode'];
     vote = map['vote'];
     location = map['location'];
+    timestamp = map['timestamp'];
   }
 }

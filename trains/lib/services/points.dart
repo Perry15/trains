@@ -12,9 +12,12 @@ class Points {
     int x = await getLocationsPoints() +
         await getTrainsPoints() +
         await getEvaluationsPoints();
-    if (x - 40 < 0) x = 40;
-    double level = sqrt(((x - 40) / 5));
-    if (level < 2 && level != 0) level = level.truncate().toDouble() + 1;
+    double level;
+    if (x == 0)
+      level = 0;
+    else
+      level = sqrt(((x - 40) / 5));
+    if (level < 2 && level != 0) level = 1;
     if (level.isNaN) {
       print("LEVEL: $level");
       level = 2;
