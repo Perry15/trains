@@ -13,7 +13,6 @@ class Ranking extends StatelessWidget {
         backgroundColor: Color(0xff9b0014),
         title: Text('Classifica'),
       ),
-      drawer: SideBar("classifica"),
       body: Center(
         child: FutureBuilder<List<Map<String, dynamic>>>(
           future: _dbService.getLevelRankingList(),
@@ -38,6 +37,7 @@ class Ranking extends StatelessWidget {
                               ),
                             ),
                           ),
+                          radius: 30,
                         ),
                       ),
                       trailing: ExcludeSemantics(
@@ -60,6 +60,7 @@ class Ranking extends StatelessWidget {
                                   return CircularProgressIndicator();
                                 }
                               }),
+                          radius: 30,
                         ),
                       ),
                       title: Text(user['displayName']),

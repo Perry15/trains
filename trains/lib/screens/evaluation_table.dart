@@ -238,7 +238,7 @@ class EvaluationTableState extends State<EvaluationTable> {
     evaluation['traincode'] = widget._trainCode;
     evaluation['location'] = widget._leavingStationCode;
     evaluation['vote'] = data.toString();
-    evaluation['timestamp'] = DateTime.now();
+    evaluation['timestamp'] = DateTime.now().toString();
     widget._localDbService.insertEvaluation(Evaluation.fromMap(evaluation));
     Map<String, dynamic> train = new Map();
     train['code'] = widget._trainCode;

@@ -28,22 +28,26 @@ class TrenoDetails extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(children: <Widget>[
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               CircleAvatar(
                 radius: 130,
                 backgroundColor: color[snapshot.data],
-                child: Text(
-                  'Il treno è ${results[snapshot.data]}',
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25.0)
-                ), //qui bisognerà interrogare db
+                child: Text('Il treno è ${results[snapshot.data]}',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25.0)), //qui bisognerà interrogare db
               ),
               //bottone valutazione
               //Text(cod.toString()),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               ButtonTheme(
                 minWidth: MediaQuery.of(context).size.width - 100,
                 height: 60.0,
-                child:RaisedButton(
+                child: RaisedButton(
                   color: Color(0xff9b0014),
                   child: Text(
                     'Valuta il treno',

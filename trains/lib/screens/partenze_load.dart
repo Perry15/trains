@@ -11,16 +11,16 @@ class PartenzeLoad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child:FutureBuilder<Partenze>(
-            future: partenze,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return PartenzeList(snapshot.data,stazPartenza);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              return Container();
-            },
-          ));
+        child: FutureBuilder<Partenze>(
+      future: partenze,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return PartenzeList(snapshot.data, stazPartenza);
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        return Container();
+      },
+    ));
   }
 }

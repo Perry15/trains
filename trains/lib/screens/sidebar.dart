@@ -41,8 +41,8 @@ class SideBar extends StatelessWidget {
                         fontSize: 18.0,
                       )),
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(context,
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                    Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => Home()));
                   },
                 )
