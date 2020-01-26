@@ -5,7 +5,7 @@ In questo capitolo descriviamo gli aspetti di design visti a lezione che abbiamo
 \section{Interfaccia\label{sec:interfaccia}}
 L'interfaccia dell'applicazione è stata implementata, tenendo in considerazione gli argomenti trattati nel corso, quindi abbiamo cercato di rispettare il più possibile:
 \begin{itemize}
-    \item le differenti dimensioni dei dispositivi mobile;
+    \item le differenti dimensioni dei dispositivi mobile;%smartphone (perchè non è per tablet)
     \item la comfort zone (regola del pollice);
     \item la regola del content always on top;
     \item il fatto di evitare stack di pulsanti;
@@ -82,7 +82,7 @@ Per le prime tre valutazioni all'utente verrà proposto un tutorial veloce per s
     \label{fig:haiValutato}
 \end{figure}
 
-È stata inserita questa schermata raggiungibile dall'utente solo in seguito a una votazione. L'aggiunta di tale schermata è stata effettuata per includere all'interno dell'app un elemento di emotional design che potesse suscitare nell'utente un sentimento di gioia e soddisfazione nel vedere la simpatica mascotte dell'applicazione sorridere.
+È stata inserita questa schermata raggiungibile dall'utente solo in seguito ad una votazione. L'aggiunta di tale schermata è stata effettuata per includere all'interno dell'app un elemento di emotional design che potesse suscitare nell'utente un sentimento di gioia e soddisfazione nel vedere la simpatica mascotte dell'applicazione sorridere.
 
 \subsection{Il tuo Profilo}
 
@@ -96,24 +96,39 @@ Per le prime tre valutazioni all'utente verrà proposto un tutorial veloce per s
     \label{fig:ilTuoProfilo}
 \end{figure}
 
-Nella schermata relativa al profilo l'utente può visualizzare i suoi dati e i suoi punteggi. Nella parte alta dello schermo è presente l'immagine del profilo modificabile tramite un pulsante posto a lato di essa. immediatamente sotto al nome del proprio account l'utente può visualizzare i punteggi relativi alle valutazioni eseguite, il numero di treni differenti valutati, e il numero di valutazioni eseguite da stazioni differenti. È presente inoltre un pulsante per poter accedere alla classifica generale.
+Nella schermata relativa al profilo, l'utente può visualizzare i suoi dati e i suoi punteggi. Nella parte alta dello schermo è presente l'immagine del profilo modificabile tramite un pulsante posto a lato di essa. Immediatamente sotto al nome del proprio account l'utente può visualizzare i punteggi relativi alle valutazioni eseguite, il numero di treni differenti valutati, e il numero di valutazioni eseguite da stazioni differenti. È presente inoltre un pulsante per poter accedere alla classifica generale.
+
+\subsection{Informazioni}
+
+\begin{figure}[htp]
+	\centering
+	\subfloat[Schermata Android Il tuo Profilo][Schermata Android Il tuo Profilo]
+	{\includegraphics[width=.45\textwidth]{immagini/profile.jpg}} \quad
+	\subfloat[Schermata iOS Il tuo Profilo][Schermata iOS Il tuo Profilo]
+	{\includegraphics[width=0.45\textwidth]{immagini/profile.jpg}} \quad
+	\caption{Schermata Il tuo Profilo}
+	\label{fig:ilTuoProfilo}
+\end{figure}
+
+È stata inclusa una schermata contenente una descrizione dell'applicazione e le informazioni di base che l'utente deve sapere per poterla utilizzare. Sebbene queste informazioni dovrebbero risultare molto intuitive per l'utente è stato comunque pensato di aggiungere questa pagina per venire incontro agli utenti nel caso questi possano avere dubbi o non comprendere appieno il significato di qualche simbolo. In alternativa avremmo potuto utilizzare messaggi just-in-time ma è stata preferita questa soluzione per evitare messaggi troppo lunghi e per non interrompere troppo frequentemente l'esperienza dell'utente.
 
 \section{Gesture utilizzate\label{sec:gesture}}
 
 \subsection{Gesture menù laterale}
-Per accedere al menù laterale evitando di inserire pulsanti è stato scelto di utilizzare una gesture di swipe a destra. Questo tipo di gesture è stata scelta perché consente all'utente di visualizzare il menù laterale tramite un gesto effettuabile dal lato sinistro della comfort zone quindi sicuramente più comodo rispetto a un pulsante che avrebbe potuto prendere posizione nella parte alta dello schermo, e non in quella bassa per non creare uno stack di pulsanti in Android \parencite{gaggi:mobileDesign}.
+Per accedere al menù laterale evitando di inserire pulsanti è stato scelto di utilizzare una gesture di swipe a destra. Questo tipo di gesture è stata scelta perché consente all'utente di visualizzare il menù laterale tramite un gesto effettuabile dal lato sinistro della comfort zone, quindi sicuramente più comodo rispetto a un pulsante che avrebbe potuto prendere posizione nella parte alta dello schermo, e non in quella bassa per non creare uno stack di pulsanti in Android \parencite{gaggi:mobileDesign}.
 
 \subsection{Gesture valutazione treno}
-Il voto del treno è stato realizzato attraverso un menù circolare, da cui è possibile fornire quattro voti. La votazione viene effettuata tramite una gesture press and drag che consente all'utente di scegliere il voto desiderato trascinando il simbolo corrispondente ad esso al centro dello schermo. 
+Lo strumento per la valutazione del treno è stato realizzato attraverso un menù circolare, da cui è possibile fornire quattro voti. La votazione viene effettuata tramite una gesture press and drag che consente all'utente di scegliere il voto desiderato trascinando il simbolo corrispondente ad esso al centro dello schermo. 
 Questa scelta vincola la disposizione e il numero delle opzioni del menù che non saranno più modificabili in futuro, perché si andrebbero a rompere le convenzioni che si creano con l'utente, tuttavia l'utilizzo di una gesture rende molto più veloce ed istantaneo il processo di valutazione del treno che è l'aspetto più importante dato che ipotizziamo che l'utente esegua tale l'azione in un ambiente precipitoso, frettoloso, come una stazione o un treno.   
 
-È stato scelto questo tipo di trascinamento dall'esterno all'interno perché, anche se forse potrebbe risultare meno comune rispetto allo spostamento verso l'esterno dello schermo, è stato pensato che il trascinamento verso l'interno può diminuire la probabilità di commettere errori. Presentare un unico oggetto centrale trascinabile verso l'esterno avrebbe reso la votazione dipendente dalla direzione del gesto data dall'utente (verso l'alto, il basso a destra o a sinistra), mentre il fatto di dover prima scegliere l'oggetto e poi eseguire sempre lo stesso tipo di trascinamento verso il centro dello schermo, consente di prestare più attenzione alla scelta del voto ed elimina la dipendenza dalla direzione della gesture che può essere facilmente sbagliata dall'utente per la fretta del gesto o per poca manualità. 
+È stato scelto questo tipo di trascinamento dall'esterno all'interno perché, anche se forse potrebbe risultare meno comune rispetto allo spostamento verso l'esterno dello schermo, è stato pensato che il trascinamento verso l'interno può diminuire la probabilità di commettere errori. Presentare un unico oggetto centrale trascinabile verso l'esterno avrebbe reso la votazione dipendente dalla direzione del gesto data dall'utente (verso l'alto, il basso, a destra o a sinistra), mentre il fatto di dover prima scegliere l'oggetto e poi eseguire il trascinamento verso il centro dello schermo, consente di prestare più attenzione alla scelta del voto ed elimina la dipendenza dalla direzione della gesture che può essere facilmente sbagliata dall'utente per la fretta del gesto o per poca manualità. 
 
-Sono stati scelte quattro valutazioni possibili, il numero di voti disponibili è volutamente pari per evitare che l'utente possa scegliere sempre un valore neutrale centrale evitando quindi di pensare alla valutazione che sta esprimendo. 
+Sono state scelte quattro valutazioni possibili, il numero di voti disponibili è volutamente pari per evitare che l'utente possa scegliere sempre un valore neutrale centrale, evitando quindi di pensare alla valutazione che sta esprimendo. 
 Per i primi tre voti espressi dall'utente, viene fornito un tutorial just-in-time per fornire poche semplici istruzioni su come votare il treno su cui si è saliti.
 Dopo i tre voti il tutorial sparisce, pur restando raggiungibile dal menù laterale.
 
-\section{Profilo\label{sec:profilo}}
-Nel capitolo seguente abbiamo riassunto i punti significativi che ci sono tornati utili di una tesi fornita per lo studio delle tecniche di Gamification e fornito alcuni dettagli relativi alla nostra app.
-In base a quanto appreso, abbiamo deciso di fornire un profilo con alcune personalizzazioni, ma non troppe, in modo da non disorientare l'utente durante l'uso dell'app.
-Inoltre si vedono i punti esperienza guadagnati per le valutazioni fornite, e i punti abilità guadagnati in base all'orario di valutazione e alla località di destinazione del treno, oltre al livello raggiunto dall'utente.
+%TODO a parte l'italiano da rivedere questa sezione era denominata profilo ma conteneva un descrizione introduttiva del capitolo 3 essendoci già una sintetica descrizione del capitolo 3 commento e evidenzio la questione con un TODO
+%\section{Profilo\label{sec:profilo}}
+%Nel capitolo seguente abbiamo riassunto i punti significativi che ci sono tornati utili di una tesi fornita per lo studio delle tecniche di Gamification e fornito alcuni dettagli relativi alla nostra app.
+%In base a quanto appreso, abbiamo deciso di fornire un profilo con alcune personalizzazioni, ma non troppe, in modo da non disorientare l'utente durante l'uso dell'app.
+%Inoltre si vedono i punti esperienza guadagnati per le valutazioni fornite, e i punti abilità guadagnati in base all'orario di valutazione e alla località di destinazione del treno, oltre al livello raggiunto dall'utente.
