@@ -47,6 +47,7 @@ I principali vantaggi che il framework Flutter possiede sono:
 \end{description}
 
 \subsection{Problemi riscontrati e soluzioni apportate}
+%Qui siamo sicuri che è giusto parlare di gerarchia?
 Durante lo sviluppo dell'applicazione abbiamo riscontrato alcuni problemi legati alle performance dell'applicazione, che non ci soddisfacevano specie dal punto di vista delle animazioni.
 Un punto cruciale è la gestione dello stato nella gerarchia dei Widget: per fare in modo che l'applicazione abbia una resa grafica fluida è bene evitare il più possibile l'uso dei Widget stateful \parencite{flutter:performance}.
 
@@ -67,7 +68,7 @@ In questo caso però l'utente era costretto a eseguire il login con il proprio a
 La soluzione in questo caso è stata quella di implementare un database locale con una struttura che emula quella del database su Firestore, ma in una versione relazionale, memorizzata attraverso l'uso di SQLite.
 
 \subsection{Comparazione con altri framework\label{sec:flutter-comparazione}}
-
+%TODO intravisto?
 Prima di usare Flutter avevamo valutato di usare un framework cross platform intravisto a lezione chiamato Appcelerator Titanium.
 Pur essendo un framework adatto allo sviluppo di un'app come Trains, ci sono stati diversi punti a sfavore che ci hanno portato a scegliere Flutter.
 Appcelerator Titanium è un framework di tipo interpretato, permette di ottenere app cross platform partendo da codice JavaScript \parencite{gaggi:framework}.
@@ -80,4 +81,4 @@ Il problema è che la documentazione di tutte le componenti è suddivisa in più
 
 Un altro punto dolente è la quasi totale assenza di tutorial, che rende molto difficile un primo approccio al framework.
 
-Infine i plugin non sempre completi che hanno sviluppato per il framework, ad esempio per l'integrazione con Firebase, ci hanno portato a scegliere Flutter, che al contrario dispone di una documentazione ben organizzata, di esempi e tutorial e di plugin funzionanti.
+Infine i plugin che sono stati sviluppati per il framework non sempre sono completi, ad esempio quelli per l'integrazione con Firebase non lo erano, per cui è stato scelto Flutter, che al contrario dispone di una documentazione ben organizzata, di esempi e tutorial e di plugin funzionanti.
