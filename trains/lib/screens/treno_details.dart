@@ -34,10 +34,12 @@ class TrenoDetails extends StatelessWidget {
               CircleAvatar(
                 radius: 130,
                 backgroundColor: color[snapshot.data],
-                child: Text('Il treno è ${results[snapshot.data]}',
+                child: Text('Il treno è \n${results[snapshot.data]}',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 25.0)), //qui bisognerà interrogare db
+                        fontSize: 25.0),
+                        textAlign: TextAlign.center,),
+
               ),
               //bottone valutazione
               //Text(cod.toString()),

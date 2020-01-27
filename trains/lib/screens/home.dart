@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:connectivity/connectivity.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:trains/screens/partenze_load.dart';
@@ -35,119 +36,142 @@ class Home extends StatelessWidget {
       ),
       drawer: SideBar("home"),
       body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-                width: MediaQuery.of(context)
-                    .size
-                    .width, // or use fixed size like 200
-                height: 150,
-                child: FutureBuilder<LocationData>(
-                    future: _location,
-                    builder: (context, location) {
-                      if (location.hasData) {
-                        return GoogleMap(
-                          myLocationEnabled: true,
-                          mapType: MapType.normal,
-                          initialCameraPosition: CameraPosition(
-                              target: LatLng(location.data.latitude,
-                                  location.data.longitude),
-                              zoom: 12.0),
-                          zoomGesturesEnabled: true,
-                          compassEnabled: true,
-                        );
-                      } else if (location.hasError) {
-                        return Text("${location.error}");
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    })),
-            SizedBox(height: 20),
-            Text('La stazione più vicina è',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  //fontWeight: FontWeight.w500,
-                )),
-            SizedBox(height: 20),
-            FutureBuilder<LocationData>(
-                future: _location,
-                builder: (context, location) {
-                  if (location.hasData) {
-                    return FutureBuilder<Map<String, dynamic>>(
-                        future: _ds.searchNearestStations(
-                            location.data.latitude, location.data.longitude),
-                        builder: (context2, station) {
-                          if (station.hasData) {
-                            return Text(station.data['name'],
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  //fontWeight: FontWeight.w500,
-                                ));
-                          } else if (station.hasError) {
-                            return Text("${station.error}");
+        child: FutureBuilder<ConnectivityResult>(
+            future: Connectivity().checkConnectivity(),
+            builder: (contextConnectivity, connectivity) {
+              if (connectivity.hasData &&
+                  connectivity.data != ConnectivityResult.none) {
+                return Column(
+                  children: [
+                    SizedBox(
+                        width: MediaQuery.of(context)
+                            .size
+                            .width, // or use fixed size like 200
+                        height: 150,
+                        child: FutureBuilder<LocationData>(
+                            future: _location,
+                            builder: (context, location) {
+                              if (location.hasData) {
+                                return GoogleMap(
+                                  myLocationEnabled: true,
+                                  mapType: MapType.normal,
+                                  initialCameraPosition: CameraPosition(
+                                      target: LatLng(location.data.latitude,
+                                          location.data.longitude),
+                                      zoom: 12.0),
+                                  zoomGesturesEnabled: true,
+                                  compassEnabled: true,
+                                );
+                              } else if (location.hasError) {
+                                return Text("${location.error}");
+                              } else {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              }
+                            })),
+                    SizedBox(height: 20),
+                    Text('La stazione più vicina è',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          //fontWeight: FontWeight.w500,
+                        )),
+                    SizedBox(height: 20),
+                    FutureBuilder<LocationData>(
+                        future: _location,
+                        builder: (context, location) {
+                          if (location.hasData) {
+                            return FutureBuilder<Map<String, dynamic>>(
+                                future: _ds.searchNearestStations(
+                                    location.data.latitude,
+                                    location.data.longitude),
+                                builder: (context2, station) {
+                                  if (station.hasData) {
+                                    return Text(station.data['name'],
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          //fontWeight: FontWeight.w500,
+                                        ));
+                                  } else if (station.hasError) {
+                                    return Text("${station.error}");
+                                  } else {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  }
+                                });
+                          } else if (location.hasError) {
+                            return Text("${location.error}");
                           } else {
                             return Center(child: CircularProgressIndicator());
                           }
-                        });
-                  } else if (location.hasError) {
-                    return Text("${location.error}");
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                }),
-            SizedBox(height: 20),
-            Text('Dove vuoi andare?',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  //fontWeight: FontWeight.w500,
-                )),
-            SizedBox(height: 20),
-            //lista partenze stazione più vicina
-            FutureBuilder<LocationData>(
-                future: _location,
-                builder: (context, location) {
-                  if (location.hasData) {
-                    return FutureBuilder<Map<String, dynamic>>(
-                        future: _ds.searchNearestStations(
-                            location.data.latitude, location.data.longitude),
-                        builder: (context2, station) {
-                          if (station.hasData) {
-                            return PartenzeLoad(
-                                fetchPartenze(
-                                    toSearch: station.data['id'] +
-                                        '/' +
-                                        formatDate(DateTime.now(), [
-                                          D,
-                                          ' ',
-                                          M,
-                                          ' ',
-                                          d,
-                                          ' ',
-                                          yyyy,
-                                          ' ',
-                                          HH,
-                                          ':',
-                                          nn,
-                                          ':',
-                                          ss,
-                                          ' ',
-                                          z
-                                        ])),
-                                station.data['id']);
-                          } else if (station.hasError) {
-                            return Text("${station.error}");
+                        }),
+                    SizedBox(height: 20),
+                    Text('Dove vuoi andare?',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          //fontWeight: FontWeight.w500,
+                        )),
+                    SizedBox(height: 20),
+                    //lista partenze stazione più vicina
+                    FutureBuilder<LocationData>(
+                        future: _location,
+                        builder: (context, location) {
+                          if (location.hasData) {
+                            return FutureBuilder<Map<String, dynamic>>(
+                                future: _ds.searchNearestStations(
+                                    location.data.latitude,
+                                    location.data.longitude),
+                                builder: (context2, station) {
+                                  if (station.hasData) {
+                                    return PartenzeLoad(
+                                        fetchPartenze(
+                                            toSearch: station.data['id'] +
+                                                '/' +
+                                                formatDate(DateTime.now(), [
+                                                  D,
+                                                  ' ',
+                                                  M,
+                                                  ' ',
+                                                  d,
+                                                  ' ',
+                                                  yyyy,
+                                                  ' ',
+                                                  HH,
+                                                  ':',
+                                                  nn,
+                                                  ':',
+                                                  ss,
+                                                  ' ',
+                                                  z
+                                                ])),
+                                        station.data['id']);
+                                  } else if (station.hasError) {
+                                    return Text("${station.error}");
+                                  } else {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  }
+                                });
+                          } else if (location.hasError) {
+                            return Text("${location.error}");
                           } else {
                             return Center(child: CircularProgressIndicator());
                           }
-                        });
-                  } else if (location.hasError) {
-                    return Text("${location.error}");
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                }),
-          ],
-        ),
+                        }),
+                  ],
+                );
+              } else if (connectivity.hasError) {
+                return Text("${connectivity.error}");
+              } else {
+                return Center(
+                    child: Text(
+                        "Ops...\nNon riusciamo a trovare Rino e gli altri treni.\nRiprova connettendo lo smartphone alla rete.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          //fontWeight: FontWeight.w500,
+                        )));
+              }
+            }),
       ),
     );
   }
