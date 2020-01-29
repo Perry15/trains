@@ -4,6 +4,7 @@ import 'package:trains/screens/treno_load.dart';
 import 'package:trains/models/viaggiatreno.dart';
 import 'package:trains/services/viaggiatreno.dart';
 
+///Widget per visualizzare la lista dei treni in partenza
 class PartenzeList extends StatelessWidget {
   final Partenze partenzeList;
   final String stazPartenza;
@@ -67,6 +68,7 @@ class PartenzeList extends StatelessWidget {
         ));
   }
 
+  ///Metodo per controllare se un treno è in ritardo
   String _isInRitardo(DateTime partenza) {
     DateTime now = DateTime.now();
     if (now.millisecondsSinceEpoch > partenza.millisecondsSinceEpoch) {

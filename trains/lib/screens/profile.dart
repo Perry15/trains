@@ -14,6 +14,7 @@ import 'dart:io';
 
 import 'package:trains/services/points.dart';
 
+///Widget per visualizzare i dettagli del proprio profilo
 class Profile extends StatefulWidget {
   final bool _didHeVote;
   final bool _isLoggedIn;
@@ -22,6 +23,7 @@ class Profile extends StatefulWidget {
 
   Profile(this._didHeVote, this._isLoggedIn);
 
+  ///Metodo per caricare i dati dell'utente
   Future<Map<String, dynamic>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString('uid') ?? "";

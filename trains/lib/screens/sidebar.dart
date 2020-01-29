@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
 
+///Widget per rappresentare un menu laterale
 class SideBar extends StatelessWidget {
   final DatabaseService _dbService = DatabaseService();
   final AuthService _authService = AuthService();
@@ -19,6 +20,7 @@ class SideBar extends StatelessWidget {
 
   SideBar(this.page);
 
+  ///Metodo per caricare i dati dell'utente dal database
   Future<Map<String, dynamic>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString('uid') ?? "";

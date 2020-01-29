@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:trains/models/viaggiatreno.dart';
 import 'package:trains/screens/partenze_list.dart';
 
+///Widget per caricare i dati relativi alle partenze dei treni
 class PartenzeLoad extends StatelessWidget {
   final Future<Partenze> partenze;
   final String stazPartenza;

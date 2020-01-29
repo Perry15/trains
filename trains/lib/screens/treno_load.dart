@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:trains/models/viaggiatreno.dart';
 import 'package:trains/screens/treno_details.dart';
 
+///Widget per caricare i dettagli di un treno
 class TrenoLoad extends StatelessWidget {
   final Future<Treno> _treno;
   final String _codTreno;
