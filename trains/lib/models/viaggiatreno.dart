@@ -1,3 +1,4 @@
+///Classe che rappresenta una risposta di ViaggiaTreno
 class CercaStazione {
   final String nomeLungo;
   final String nomeBreve;
@@ -16,6 +17,7 @@ class CercaStazione {
   }
 }
 
+///Classe che rappresenta una risposta di ViaggiaTreno
 class CercaStazioni {
   final List<CercaStazione> stazioni;
 
@@ -32,6 +34,7 @@ class CercaStazioni {
   }
 }
 
+///Classe che rappresenta una risposta di ViaggiaTreno per una partenza
 class Partenza {
   final String numeroTreno;
   final String codOrigine;
@@ -56,6 +59,7 @@ class Partenza {
   }
 }
 
+///Classe che rappresenta una risposta di ViaggiaTreno per le partenze
 class Partenze {
   final List<Partenza> partenze;
 
@@ -72,6 +76,7 @@ class Partenze {
   }
 }
 
+///Classe che rappresenta una risposta di ViaggiaTreno per una fermata
 class Fermata {
   final String stazione;
   final String id;
@@ -92,6 +97,7 @@ class Fermata {
   }
 }
 
+///Classe che rappresenta una risposta di ViaggiaTreno per le fermate di un treno
 class Treno {
   final List<Fermata> fermate;
 

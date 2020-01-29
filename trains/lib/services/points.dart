@@ -19,7 +19,6 @@ class Points {
       level = sqrt(((x - 40) / 5));
     if (level < 2 && level != 0) level = 1;
     if (level.isNaN) {
-      print("LEVEL: $level");
       level = 2;
     }
     return level;

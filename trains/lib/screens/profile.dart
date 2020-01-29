@@ -37,7 +37,6 @@ class Profile extends StatefulWidget {
 
   Future _setImage(BuildContext context) async {
     File image = await FilePicker.getFile(type: FileType.IMAGE);
-    //upload
     final user = Provider.of<User>(context);
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('profileImages/${user.uid}');

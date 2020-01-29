@@ -64,7 +64,6 @@ class PartenzeList extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 20.0,
-          //fontWeight: FontWeight.w500,
         ));
   }
 

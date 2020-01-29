@@ -1,3 +1,4 @@
+///Classe per rappresentare una localizzazione
 class Location {
   String code;
 

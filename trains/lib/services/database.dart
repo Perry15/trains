@@ -14,11 +14,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:trains/services/points.dart';
 
 class DatabaseService {
-  //collection reference
   final db = Firestore.instance;
   final LocalDatabaseService _localDbService = LocalDatabaseService();
 
-  ///old funtion to load the stations in the db
   Future load() async {
     String jsonString = await _loadA();
     final jsonResponse = json.decode(jsonString);
@@ -35,17 +33,13 @@ class DatabaseService {
       }
       n++;
     }
-    //db.collection("stations").document("nHhas6DsePZTEebJWW5T").delete();
-    //db.collection("stations").document("S00001").setData(jsonResponse["S00001"]);
     return jsonResponse;
   }
 
-  ///old funtion to load the stations in the db
   Future<String> _loadA() async {
     return await rootBundle.loadString('assets/stations.json');
   }
 
-  ///old funtion to load the stations in the db
   Future loadData(String docId, Map<String, dynamic> data) async {
     db.collection("stations").document(docId).setData(data);
   }
@@ -61,7 +55,6 @@ class DatabaseService {
     db.collection("stations").document(docId).delete();
   }
 
-  ///deletes all documents within evaluations collection
   Future deleteAllEvaluations() async {
     QuerySnapshot querySnapshot =
         await db.collection("evaluations").getDocuments();
@@ -114,8 +107,7 @@ class DatabaseService {
 
   void insertUserLocation(uid, String locationCode) async {
     await db.collection('users').document(uid).updateData({
-      'locationsEvaluated':
-          FieldValue.arrayUnion([locationCode]) //level function
+      'locationsEvaluated': FieldValue.arrayUnion([locationCode])
     });
   }
 
@@ -138,12 +130,10 @@ class DatabaseService {
     return result.data["trainsEvaluated"];
   }
 
-  ///calcola la valutazione di un treno
   Future<int> getTrainEvaluation(String trainCode) async {
     QuerySnapshot querySnapshot =
         await db.collection("evaluations").getDocuments();
     List<int> counters = new List<int>.filled(4, 0);
-    //List<String> results = ["Vuoto","Quasi vuoto","Quasi pieno","Pieno"];//to return String
     for (DocumentSnapshot doc in querySnapshot.documents) {
       if (doc.data['traincode'] == trainCode) {
         switch (doc.data['vote']) {
@@ -170,11 +160,9 @@ class DatabaseService {
         }
       }
     }
-    //return results[counters.indexOf(counters.reduce(max))];//to return String
     return counters.indexOf(counters.reduce(max));
   }
 
-  ///calcola la valutazione di un treno
   Future<List<Map<String, dynamic>>> getLevelRankingList() async {
     QuerySnapshot querySnapshot = await db
         .collection("users")
@@ -183,7 +171,6 @@ class DatabaseService {
     List<Map<String, dynamic>> rankingData = [];
     int c = 1;
     for (DocumentSnapshot doc in querySnapshot.documents) {
-      //print("data: ${doc.documentID} ${doc.data['displayName']}");
       rankingData.add({
         "position": c,
         "uid": doc.documentID,
@@ -225,13 +212,10 @@ class DatabaseService {
     return file;
   }
 
-  //inserisce un utente nel db se questo non è ancora presente
-  //"S02570/11121","S02581/5820"
   Future insertUser(user) async {
     DocumentReference docRef = db.collection("users").document(user.uid);
     DocumentSnapshot doc = await docRef.get();
     if (!doc.exists) {
-      //every user has his own profile image
       File file = await getImageFileFromAssets("default.png");
       FirebaseStorage.instance
           .ref()
@@ -248,14 +232,9 @@ class DatabaseService {
         'locationsEvaluated': [],
         'evaluations': []
       });
-    } //se esiste ma certi campi non esistono
-    /*else{
-        db.collection('users').document(user.uid).get()
-    }*/
+    }
   }
 
-  ///Ottiene i dati di un utente tramite l'id
-  ///
   Future<Map<String, dynamic>> getUserById(uid) async {
     DocumentReference docRef = db.collection("users").document(uid);
     DocumentSnapshot doc = await docRef.get();
@@ -263,7 +242,6 @@ class DatabaseService {
     return doc.data;
   }
 
-  ///returns the profile Image of a User
   Future<Image> checkUserImageById(String uid) async {
     try {
       final String url = await FirebaseStorage.instance

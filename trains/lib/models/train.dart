@@ -1,3 +1,4 @@
+///Classe per rappresentare un treno
 class Train {
   String code;
 

@@ -18,14 +18,12 @@ class Info extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            //Center(
             Text('Trains ',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold,
                 )),
-            //),
             SizedBox(
               height: 20,
             ),
@@ -38,7 +36,6 @@ class Info extends StatelessWidget {
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   fontSize: 18.0,
-                  //fontWeight: FontWeight.w500,
                 )),
             SizedBox(
               height: 10,

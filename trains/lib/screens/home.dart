@@ -9,24 +9,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trains/services/location_provider.dart';
 import 'package:trains/services/viaggiatreno.dart';
 import 'package:location/location.dart';
-import 'package:provider/provider.dart';
-import 'package:trains/models/user.dart';
 import 'package:trains/screens/sidebar.dart';
 
 class Home extends StatelessWidget {
-  final Location provider = new Location();
   final DatabaseService _ds = DatabaseService();
   final AuthService _authService = AuthService();
   final Future<LocationData> _location = LocationProvider().fetchLocation();
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-    print("user: $user.displayName");
-    _authService
-        .getCurrentUser()
-        .then((onValue) => {print("currentUser: $onValue")});
-    //_ds.deleteAllEvaluations();//to delete all evaluations
+    _authService.getCurrentUser();
     return Scaffold(
       drawerEdgeDragWidth: MediaQuery.of(context).size.width / 2.6,
       backgroundColor: Colors.brown[50],
@@ -44,9 +36,7 @@ class Home extends StatelessWidget {
                 return Column(
                   children: [
                     SizedBox(
-                        width: MediaQuery.of(context)
-                            .size
-                            .width, // or use fixed size like 200
+                        width: MediaQuery.of(context).size.width,
                         height: 150,
                         child: FutureBuilder<LocationData>(
                             future: _location,
@@ -73,7 +63,6 @@ class Home extends StatelessWidget {
                     Text('La stazione più vicina è',
                         style: TextStyle(
                           fontSize: 20.0,
-                          //fontWeight: FontWeight.w500,
                         )),
                     SizedBox(height: 20),
                     FutureBuilder<LocationData>(
@@ -89,7 +78,6 @@ class Home extends StatelessWidget {
                                     return Text(station.data['name'],
                                         style: TextStyle(
                                           fontSize: 20.0,
-                                          //fontWeight: FontWeight.w500,
                                         ));
                                   } else if (station.hasError) {
                                     return Text("${station.error}");
@@ -108,10 +96,8 @@ class Home extends StatelessWidget {
                     Text('Dove vuoi andare?',
                         style: TextStyle(
                           fontSize: 20.0,
-                          //fontWeight: FontWeight.w500,
                         )),
                     SizedBox(height: 20),
-                    //lista partenze stazione più vicina
                     FutureBuilder<LocationData>(
                         future: _location,
                         builder: (context, location) {
@@ -168,7 +154,6 @@ class Home extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20.0,
-                          //fontWeight: FontWeight.w500,
                         )));
               }
             }),

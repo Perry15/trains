@@ -12,15 +12,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(
-      //tutto quello racchiuso nello stream può ottenere info sullo stream
       value: AuthService().user,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        //showPerformanceOverlay: true,//cpu
         home: Home(),
       ),
     );

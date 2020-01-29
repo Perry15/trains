@@ -1,3 +1,4 @@
+///Classe per rappresentare una stazione
 class Station {
   final String name, region;
   final int regionCode;

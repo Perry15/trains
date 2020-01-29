@@ -1,3 +1,4 @@
+///Classe per rappresentare una valutazione
 class Evaluation {
   String id, traincode, vote, location, timestamp;
 
