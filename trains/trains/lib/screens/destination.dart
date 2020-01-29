@@ -1,48 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
-import 'package:trains/screens/profile.dart';
-import 'package:trains/services/database.dart';
 
-///Widget relativo alla schermata che consente di effettuare il login
-class Login extends StatelessWidget {
+class Destination extends StatelessWidget {
   final AuthService _authService = AuthService();
-  final DatabaseService _dbService = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    Widget _button, _logout;
+    _logout = FlatButton.icon(
+      icon: Icon(Icons.person),
+      label: Text('logout'),
+      onPressed: () {
+        _authService.signOut();
+      },
+    );
+    if (user == null) {
+      print("user $user");
+      _button = _signInButton(context);
+    } else {
+      print("user $user");
+      _button = _goToGameButton();
+    }
+    print("button: $_button logout: $_logout");
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-          title: Text('Accedi'),
-          backgroundColor: Color(0xff9b0014),
-          elevation: 0.0),
+        title: Text('Destination'),
+        backgroundColor: Color(0xff9b0014),
+        elevation: 0.0,
+        actions: <Widget>[_logout],
+      ),
       body: Center(
-        child: user != null
-            ? Center(child: CircularProgressIndicator())
-            : _signInButton(context),
+        //padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0), //4 side symmetric padding
+        child: Column(children: <Widget>[
+          Text(
+            'Cerca destinazione',
+          ),
+          _button,
+        ]),
       ),
     );
   }
-  ///Funzione che restituisce il bottone di login
+
+  Widget _goToGameButton() {
+    return RaisedButton(
+      color: Color(0xff9b0014),
+      child: Text(
+        'Vai al gioco',
+        style: TextStyle(color: Colors.white),
+      ),
+      onPressed: () async {
+        print("already signed in giochiamo");
+      },
+    );
+  }
+
   Widget _signInButton(BuildContext context) {
-    return Center(
-        child: OutlineButton(
+    return OutlineButton(
       splashColor: Colors.grey,
       onPressed: () async {
         dynamic result = await _authService.signInWithGoogle();
         if (result == null) {
-          print('Errore di accesso');
+          print('error signing in');
         } else {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString('uid', result.uid);
-          _dbService.updateUserFromLocal(result.uid);
-          print('Accesso effettuato');
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => Profile(false, true)));
+          print('signed in giochiamo');
+          print(result.uid);
         }
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
@@ -58,7 +83,7 @@ class Login extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                'Accedi con Google',
+                'Sign in with Google',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -68,6 +93,6 @@ class Login extends StatelessWidget {
           ],
         ),
       ),
-    ));
+    );
   }
 }

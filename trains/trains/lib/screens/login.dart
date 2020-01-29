@@ -6,14 +6,22 @@ import 'package:trains/models/user.dart';
 import 'package:trains/screens/profile.dart';
 import 'package:trains/services/database.dart';
 
-///Widget relativo alla schermata che consente di effettuare il login
 class Login extends StatelessWidget {
+  //final bool_didHeVote; // boolean value per sapere se arriva da una votazione o no
   final AuthService _authService = AuthService();
   final DatabaseService _dbService = DatabaseService();
+
+  //Login(this._didHeVote);
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    /*if(_didHeVote)
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Congratulations(true)));
+      });
+      */
+
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -21,13 +29,23 @@ class Login extends StatelessWidget {
           backgroundColor: Color(0xff9b0014),
           elevation: 0.0),
       body: Center(
-        child: user != null
-            ? Center(child: CircularProgressIndicator())
-            : _signInButton(context),
+        //padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0), //4 side symmetric padding
+        child:
+            /*(_didHeVote)
+              ? Text('Congratulazioni hai valutato il treno!!!',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    //fontWeight: FontWeight.w500,
+                  ))
+              : SizedBox(), //SizedBox vuota per mettere un Widget vuoto
+          SizedBox(height: MediaQuery.of(context).size.height / 2.5),*/
+            user != null
+                ? Center(child: CircularProgressIndicator())
+                : _signInButton(context),
       ),
     );
   }
-  ///Funzione che restituisce il bottone di login
+
   Widget _signInButton(BuildContext context) {
     return Center(
         child: OutlineButton(
@@ -41,8 +59,11 @@ class Login extends StatelessWidget {
           prefs.setString('uid', result.uid);
           _dbService.updateUserFromLocal(result.uid);
           print('Accesso effettuato');
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => Profile(false, true)));
+          print(result.uid);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Profile(false, true))); //Profile(false)
         }
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
