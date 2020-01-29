@@ -6,6 +6,7 @@ import 'package:trains/screens/valutazione_treno.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/services/database.dart';
 
+///Widget per visualizzare i dettagli di un treno
 class TrenoDetails extends StatelessWidget {
   final Treno treno;
   final String codTreno;

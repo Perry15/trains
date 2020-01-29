@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trains/screens/sidebar.dart';
 import 'package:trains/services/database.dart';
 
 class Ranking extends StatelessWidget {

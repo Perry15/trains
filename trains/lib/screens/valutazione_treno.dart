@@ -3,6 +3,9 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/evaluation_table.dart';
 
+///Widget per valutare un treno
+///Le prime 3 volte fa vedere un tutorial
+///Il tutorial può essere richiamato dal menu laterale
 class ValutazioneTreno extends StatelessWidget {
   final String trainCode;
   final String leavingStationCode;
