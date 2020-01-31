@@ -28,22 +28,19 @@ class LocalDatabaseService {
 
   Future<Evaluation> insertEvaluation(Evaluation evaluation) async {
     var dbClient = await db;
-    var id = await dbClient.update('evaluations', evaluation.toMap());
-    if (id == 0) await dbClient.insert('evaluations', evaluation.toMap());
+    await dbClient.rawInsert("INSERT OR REPLACE INTO evaluations(id,location,timestamp,traincode,vote) VALUES ('"+evaluation.id+"','"+evaluation.location+"','"+evaluation.timestamp+"','"+evaluation.traincode+"','"+evaluation.vote+"');");
     return evaluation;
   }
 
   Future<Location> insertLocation(Location location) async {
     var dbClient = await db;
-    int id = await dbClient.update('locations', location.toMap());
-    if (id == 0) await dbClient.insert('locations', location.toMap());
+    await dbClient.rawInsert("INSERT OR REPLACE INTO locations(code) VALUES ('"+location.code+"');");
     return location;
   }
 
   Future<Train> insertTrain(Train train) async {
     var dbClient = await db;
-    var id = await dbClient.update('trains', train.toMap());
-    if (id == 0) await dbClient.insert('trains', train.toMap());
+    await dbClient.rawInsert("INSERT OR REPLACE INTO trains(code) VALUES ('"+train.code+"');");
     return train;
   }
 

@@ -57,17 +57,10 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     if (widget._didHeVote) {
-      if (widget._isLoggedIn) {
         SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => Congratulations(false)));
+              MaterialPageRoute(builder: (context) => Congratulations(widget._isLoggedIn)));
         });
-      } else {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => Congratulations(true)));
-        });
-      }
     }
   }
 

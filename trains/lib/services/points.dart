@@ -15,9 +15,9 @@ class Points {
     double level;
     if (x == 0)
       level = 0;
+    else if(x==40)level=1;
     else
       level = sqrt(((x - 40) / 5));
-    if (level < 2 && level != 0) level = 1;
     if (level.isNaN) {
       level = 2;
     }

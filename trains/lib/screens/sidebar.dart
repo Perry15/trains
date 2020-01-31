@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/home.dart';
 import 'package:trains/screens/info.dart';
 import 'package:trains/screens/login.dart';
@@ -8,27 +9,15 @@ import 'package:trains/services/auth.dart';
 import 'package:trains/screens/profile.dart';
 import 'package:trains/screens/valutazione_treno.dart';
 import 'package:trains/services/database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
 
 ///Widget per rappresentare un menu laterale
 class SideBar extends StatelessWidget {
-  final DatabaseService _dbService = DatabaseService();
   final AuthService _authService = AuthService();
   final String page;
 
   SideBar(this.page);
-
-  ///Metodo per caricare i dati dell'utente dal database
-  Future<Map<String, dynamic>> getUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String uid = prefs.getString('uid') ?? "";
-    if (uid != "") return await _dbService.getUserById(uid);
-    Map<String, dynamic> user = new Map();
-    user['displayName'] = 'Utente locale';
-    return user;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,32 +90,44 @@ class SideBar extends StatelessWidget {
                   },
                 )
               : Container(),
-          (user != null)
-              ? ListTile(
-                  title: new Text('Logout',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      )),
-                  onTap: () {
-                    _authService.signOut();
-                    if (page == "profilo") {
-                      _goToProfile(context, null);
-                    }
-                  },
-                )
-              : ListTile(
-                  title: new Text('Accedi',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      )),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
+          FutureBuilder<SharedPreferences>(
+              future: SharedPreferences.getInstance(),
+              builder: (context, preferences) {
+                if (preferences.hasData) {
+                  if (preferences.data.getString('uid') != "") {
+                    return ListTile(
+                      title: new Text('Logout',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          )),
+                      onTap: () {
+                        _authService.signOut();
+                        if (page == "profilo") {
+                          _goToProfile(context, null);
+                        }
+                      },
                     );
-                  },
-                )
+                  } else {
+                    return ListTile(
+                      title: new Text('Accedi',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          )),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Login()),
+                        );
+                      },
+                    );
+                  }
+                } else if (preferences.hasError) {
+                  return Text("${preferences.error}");
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
         ],
       ),
     );

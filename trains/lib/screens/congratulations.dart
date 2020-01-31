@@ -4,7 +4,7 @@ import 'package:trains/screens/profile.dart';
 import 'package:confetti/confetti.dart';
 import 'dart:math';
 
-/// Widget relativo alla schermata di congratulazioni 
+/// Widget relativo alla schermata di congratulazioni
 /// mostrata dopo aver effettuato una valutazione
 class Congratulations extends StatefulWidget {
   final bool _login;
@@ -17,10 +17,13 @@ class Congratulations extends StatefulWidget {
 
 class CongratulationsState extends State<Congratulations> {
   ConfettiController _controllerTopCenter;
+  bool _loaded;
   @override
   void initState() {
     super.initState();
-    _controllerTopCenter = ConfettiController(duration: Duration(seconds: 4));//durata animazione coriandoli
+    _loaded = false;
+    _controllerTopCenter = ConfettiController(
+        duration: Duration(seconds: 4)); //durata animazione coriandoli
     _controllerTopCenter.play();
     loadData();
   }
@@ -30,21 +33,21 @@ class CongratulationsState extends State<Congratulations> {
     _controllerTopCenter.dispose();
     super.dispose();
   }
+
   //funzione che ritona la durata della schermata
   Future<Timer> loadData() async {
     return new Timer(Duration(seconds: 4), onDoneLoading);
   }
 
   ///funzione invocata una volta finita l'animazione,
-  ///esegue il reindirizzamento alla pagina profilo, 
+  ///esegue il reindirizzamento alla pagina profilo,
   ///distinguendo se un utente ha effettuato l'accesso o meno
   onDoneLoading() async {
-    if (widget._login)
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Profile(false, false)));
-    else
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Profile(false, true)));
+    if (!_loaded) {
+      _loaded = true;
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => Profile(false, widget._login)));
+    }
   }
 
   @override
@@ -54,7 +57,7 @@ class CongratulationsState extends State<Congratulations> {
       onTap: () {
         onDoneLoading();
       },
-    // The custom button
+      // The custom button
       child: Container(
         child: Scaffold(
           backgroundColor: Color(0xff9b0014),

@@ -173,6 +173,9 @@ PODS:
     - Firebase/Core
     - Firebase/Firestore (~> 6.0)
     - Flutter
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
   - file_picker (0.0.1):
     - Flutter
   - Firebase/Auth (6.14.0):
@@ -329,6 +332,7 @@ PODS:
   - nanopb/encode (0.3.9011)
   - path_provider (0.0.1):
     - Flutter
+  - Reachability (3.2)
   - shared_preferences (0.0.1):
     - Flutter
   - shared_preferences_macos (0.0.1):
@@ -343,6 +347,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -386,10 +391,13 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - Reachability
 
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   firebase_auth:
@@ -424,6 +432,7 @@ SPEC CHECKSUMS:
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   cloud_firestore: 10fd4a09ebffc33efd64708106e2e7de701fe9ae
+  connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Firebase: 0219bb4782eb1406f1b9b0628a2e625484ce910d
   firebase_auth: d99b993c1405096e66c58211b1cd956c23eed1c5
@@ -456,6 +465,7 @@ SPEC CHECKSUMS:
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
