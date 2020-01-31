@@ -36,25 +36,24 @@ class SideBar extends StatelessWidget {
                 )
               : Container(),
           (page != "profilo")
-              ? ListTile(
-                  title: new Text('Vai al tuo profilo',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      )),
-                  onTap: () {
-                    FutureBuilder<SharedPreferences>(
-                        future: SharedPreferences.getInstance(),
-                        builder: (contextPrefs, prefs) {
-                          if (prefs.hasData) {
+              ? FutureBuilder<SharedPreferences>(
+                  future: SharedPreferences.getInstance(),
+                  builder: (contextPrefs, prefs) {
+                    if (prefs.hasData) {
+                      return ListTile(
+                          title: new Text('Vai al tuo profilo',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              )),
+                          onTap: () {
                             _goToProfile(context, prefs.data.getString("uid"));
-                          } else if (prefs.hasError) {
-                            return Text("${prefs.error}");
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        });
-                  },
-                )
+                          });
+                    } else if (prefs.hasError) {
+                      return Text("${prefs.error}");
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  })
               : Container(),
           (page != "classifica")
               ? ListTile(
