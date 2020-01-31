@@ -110,6 +110,10 @@ class SideBar extends StatelessWidget {
                         _authService.signOut();
                         if (page == "profilo") {
                           _goToProfile(context, null);
+                        } else if (page == "home") {
+                          Navigator.pop(context);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Home()));
                         }
                       },
                     );

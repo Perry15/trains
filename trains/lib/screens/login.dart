@@ -25,7 +25,13 @@ class Login extends StatelessWidget {
               builder: (context, prefs) {
                 if (prefs.hasData && prefs.data.getString("uid") != null) {
                   return Center(child: CircularProgressIndicator());
-                } else if (prefs.hasData) return _signInButton(context);
+                } else if (prefs.hasData)
+                  return _signInButton(context);
+                else if (prefs.hasError) {
+                  return Text("${prefs.error}");
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
               })),
     );
   }

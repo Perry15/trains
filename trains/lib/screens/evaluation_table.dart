@@ -121,30 +121,7 @@ class EvaluationTableState extends State<EvaluationTable> {
           }, onAccept: (data) {
             if (widget._trainCode != null &&
                 widget._leavingStationCode != null) {
-              save(data);
-              FutureBuilder<SharedPreferences>(
-                  future: SharedPreferences.getInstance(),
-                  builder: (contextPreferences, prefs) {
-                    if (prefs.hasData && prefs.data.getString("uid") == null) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Profile(true, false)),
-                        (Route<dynamic> route) => false,
-                      );
-                    } else if (prefs.hasData) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Profile(true, true)),
-                        (Route<dynamic> route) => false,
-                      );
-                    } else if (prefs.hasError) {
-                      return Text("${prefs.error}");
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  });
+              save(data, context);
             } else {
               Navigator.pop(context);
             }
@@ -232,7 +209,7 @@ class EvaluationTableState extends State<EvaluationTable> {
   }
 
   ///funzione che salva i dati relativi alla valutazione eseguita
-  void save(data) async {
+  void save(data, context) async {
     Map<String, dynamic> evaluation = new Map();
     evaluation['id'] = (await widget._dbService.insertEvaluation(
             data.toString(), widget._trainCode, widget._leavingStationCode))
@@ -252,6 +229,19 @@ class EvaluationTableState extends State<EvaluationTable> {
     String uid = prefs.getString('uid') ?? "";
     if (uid != "") {
       widget._dbService.updateUserFromLocal(uid);
+    }
+    if (uid == "") {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Profile(true, false)),
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Profile(true, true)),
+        (Route<dynamic> route) => false,
+      );
     }
   }
 }
