@@ -13,7 +13,6 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -21,12 +20,16 @@ class Login extends StatelessWidget {
           backgroundColor: Color(0xff9b0014),
           elevation: 0.0),
       body: Center(
-        child: user != null
-            ? Center(child: CircularProgressIndicator())
-            : _signInButton(context),
-      ),
+          child: FutureBuilder<SharedPreferences>(
+              future: SharedPreferences.getInstance(),
+              builder: (context, prefs) {
+                if (prefs.hasData && prefs.data.getString("uid") != null) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (prefs.hasData) return _signInButton(context);
+              })),
     );
   }
+
   ///Funzione che restituisce il bottone di login
   Widget _signInButton(BuildContext context) {
     return Center(
@@ -34,13 +37,10 @@ class Login extends StatelessWidget {
       splashColor: Colors.grey,
       onPressed: () async {
         dynamic result = await _authService.signInWithGoogle();
-        if (result == null) {
-          print('Errore di accesso');
-        } else {
+        if (result != null) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString('uid', result.uid);
           _dbService.updateUserFromLocal(result.uid);
-          print('Accesso effettuato');
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => Profile(false, true)));
         }

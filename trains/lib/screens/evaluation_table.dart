@@ -36,7 +36,6 @@ class EvaluationTableState extends State<EvaluationTable> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     Widget toReturn = Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: [
@@ -123,19 +122,29 @@ class EvaluationTableState extends State<EvaluationTable> {
             if (widget._trainCode != null &&
                 widget._leavingStationCode != null) {
               save(data);
-              if (user == null) {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Profile(true, false)),
-                  (Route<dynamic> route) => false,
-                );
-              } else {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Profile(true, true)),
-                  (Route<dynamic> route) => false,
-                );
-              }
+              FutureBuilder<SharedPreferences>(
+                  future: SharedPreferences.getInstance(),
+                  builder: (contextPreferences, prefs) {
+                    if (prefs.hasData && prefs.data.getString("uid") == null) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Profile(true, false)),
+                        (Route<dynamic> route) => false,
+                      );
+                    } else if (prefs.hasData) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Profile(true, true)),
+                        (Route<dynamic> route) => false,
+                      );
+                    } else if (prefs.hasError) {
+                      return Text("${prefs.error}");
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  });
             } else {
               Navigator.pop(context);
             }

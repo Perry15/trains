@@ -39,9 +39,10 @@ class Profile extends StatefulWidget {
 
   Future _setImage(BuildContext context) async {
     File image = await FilePicker.getFile(type: FileType.IMAGE);
-    final user = Provider.of<User>(context);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final uid = prefs.getString("uid") ?? "";
     StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('profileImages/${user.uid}');
+        FirebaseStorage.instance.ref().child('profileImages/$uid');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
     await uploadTask.onComplete;
   }
@@ -65,8 +66,9 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<Image> _getImage(BuildContext context) async {
-    dynamic user = Provider.of<User>(context);
-    var temp = await widget._dbService.checkUserImageById(user.uid);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString("uid") ?? "";
+    var temp = await widget._dbService.checkUserImageById(uid);
     if (this.mounted) {
       setState(() {
         _image = temp;

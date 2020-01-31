@@ -19,7 +19,6 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -43,7 +42,17 @@ class SideBar extends StatelessWidget {
                         fontSize: 18.0,
                       )),
                   onTap: () {
-                    _goToProfile(context, user);
+                    FutureBuilder<SharedPreferences>(
+                        future: SharedPreferences.getInstance(),
+                        builder: (contextPrefs, prefs) {
+                          if (prefs.hasData) {
+                            _goToProfile(context, prefs.data.getString("uid"));
+                          } else if (prefs.hasError) {
+                            return Text("${prefs.error}");
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        });
                   },
                 )
               : Container(),
@@ -93,7 +102,6 @@ class SideBar extends StatelessWidget {
               builder: (context, preferences) {
                 if (preferences.hasData) {
                   if (preferences.data.getString('uid') != null) {
-                    print(preferences.data.getString('uid'));
                     return ListTile(
                       title: new Text('Logout',
                           style: TextStyle(
