@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trains/screens/home.dart';
@@ -8,7 +7,6 @@ import 'package:trains/screens/ranking.dart';
 import 'package:trains/services/auth.dart';
 import 'package:trains/screens/profile.dart';
 import 'package:trains/screens/valutazione_treno.dart';
-import 'package:trains/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:trains/models/user.dart';
 
@@ -94,7 +92,8 @@ class SideBar extends StatelessWidget {
               future: SharedPreferences.getInstance(),
               builder: (context, preferences) {
                 if (preferences.hasData) {
-                  if (preferences.data.getString('uid') != "") {
+                  if (preferences.data.getString('uid') != null) {
+                    print(preferences.data.getString('uid'));
                     return ListTile(
                       title: new Text('Logout',
                           style: TextStyle(
