@@ -37,7 +37,6 @@ Siamo comunque riusciti a ottenere un'interfaccia con pochi pulsanti e di dimens
 Dalla schermata iniziale è possibile vedere la stazione ferroviaria più vicina, localizzata attraverso il GPS.
 Viene presentata una lista delle destinazioni raggiungibili tramite i treni in partenza dalla stazione più vicina identificata. Da questa lista di treni è possibile accedere a una pagina con più dettagli relativi al singolo treno.
 Questo è un esempio di interfaccia just-in-time che applica la progressive disclosure, perché vengono fornite le informazioni principali relative ai treni in partenza, mentre i dettagli per ognuno di essi possono essere visualizzati attraverso un'ulteriore interazione.
-%TODO controllare che sia stata implementata gesture menù laterale e opzione vedi classifica in tale menù
 
 In questa schermata è possibile visualizzare un menù laterale, tramite una gesture di swipe a destra (si veda la sezione~\vref{sec:gesture}). Grazie a questo menù l'utente può raggiungere la pagina relativa al suo profilo, la classifica generale degli utenti, una pagina per rivedere il tutorial per la valutazione di un treno.
 
@@ -84,6 +83,8 @@ Per le prime tre valutazioni all'utente verrà proposto un tutorial veloce per s
 
 È stata inserita questa schermata raggiungibile dall'utente solo in seguito ad una votazione. L'aggiunta di tale schermata è stata effettuata per includere all'interno dell'app un elemento di emotional design che potesse suscitare nell'utente un sentimento di gioia e soddisfazione nel vedere la simpatica mascotte dell'applicazione sorridere.
 
+\pagebreak
+
 \subsection{Il tuo Profilo}
 
 \begin{figure}[htp]
@@ -98,19 +99,23 @@ Per le prime tre valutazioni all'utente verrà proposto un tutorial veloce per s
 
 Nella schermata relativa al profilo, l'utente può visualizzare i suoi dati e i suoi punteggi. Nella parte alta dello schermo è presente l'immagine del profilo modificabile tramite un pulsante posto a lato di essa. Immediatamente sotto al nome del proprio account l'utente può visualizzare i punteggi relativi alle valutazioni eseguite, il numero di treni differenti valutati, e il numero di valutazioni eseguite da stazioni differenti. È presente inoltre un pulsante per poter accedere alla classifica generale.
 
+\pagebreak
+
 \subsection{Informazioni}
 
 \begin{figure}[htp]
 	\centering
-	\subfloat[Schermata Android Il tuo Profilo][Schermata Android Il tuo Profilo]
+	\subfloat[Schermata Android Informazioni][Schermata Android Informazioni]
 	{\includegraphics[width=.45\textwidth]{immagini/android/informazioni.jpg}} \quad
-	\subfloat[Schermata iOS Il tuo Profilo][Schermata iOS Il tuo Profilo]
+	\subfloat[Schermata iOS Informazioni][Schermata iOS Il tuo Informazioni]
 	{\includegraphics[width=0.45\textwidth]{immagini/ios/informazioni.png}} \quad
-	\caption{Schermata Il tuo Profilo}
-	\label{fig:ilTuoProfilo}
+	\caption{Schermata Informazioni}
+	\label{fig:Informazioni}
 \end{figure}
 
 È stata inclusa una schermata contenente una descrizione dell'applicazione e le informazioni di base che l'utente deve sapere per poterla utilizzare. Sebbene queste informazioni dovrebbero risultare molto intuitive per l'utente è stato comunque pensato di aggiungere questa pagina per venire incontro agli utenti nel caso questi possano avere dubbi o non comprendere appieno il significato di qualche simbolo. In alternativa avremmo potuto utilizzare messaggi just-in-time ma è stata preferita questa soluzione per evitare messaggi troppo lunghi e per non interrompere troppo frequentemente l'esperienza dell'utente.
+
+\pagebreak
 
 \section{Gesture utilizzate\label{sec:gesture}}
 
@@ -126,9 +131,3 @@ Questa scelta vincola la disposizione e il numero delle opzioni del menù che no
 Sono state scelte quattro valutazioni possibili, il numero di voti disponibili è volutamente pari per evitare che l'utente possa scegliere sempre un valore neutrale centrale, evitando quindi di pensare alla valutazione che sta esprimendo. 
 Per i primi tre voti espressi dall'utente, viene fornito un tutorial just-in-time per fornire poche semplici istruzioni su come votare il treno su cui si è saliti.
 Dopo i tre voti il tutorial sparisce, pur restando raggiungibile dal menù laterale.
-
-%TODO a parte l'italiano da rivedere questa sezione era denominata profilo ma conteneva un descrizione introduttiva del capitolo 3 essendoci già una sintetica descrizione del capitolo 3 commento e evidenzio la questione con un TODO
-%\section{Profilo\label{sec:profilo}}
-%Nel capitolo seguente abbiamo riassunto i punti significativi che ci sono tornati utili di una tesi fornita per lo studio delle tecniche di Gamification e fornito alcuni dettagli relativi alla nostra app.
-%In base a quanto appreso, abbiamo deciso di fornire un profilo con alcune personalizzazioni, ma non troppe, in modo da non disorientare l'utente durante l'uso dell'app.
-%Inoltre si vedono i punti esperienza guadagnati per le valutazioni fornite, e i punti abilità guadagnati in base all'orario di valutazione e alla località di destinazione del treno, oltre al livello raggiunto dall'utente.

@@ -12,7 +12,7 @@ Una definizione di tecnologie persuasive è la seguente:
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=0.5\textwidth]{immagini/Fogg_behavior_model.png}
+    \includegraphics[width=0.5\textwidth]{immagini/Fogg_behavior_model.pdf}
     \caption{Fogg Behavior Model}
     \label{fig:fogg-behavior-model}
 \end{figure}
@@ -105,13 +105,18 @@ Per poter essere in grado di progettare e valutare la persuasività di un sistem
 Con il termine serious game ci si riferisce a quei giochi il cui scopo principale è educare e motivare gli utenti, attraverso la creazione di un'esperienza piacevole e accattivante. La componente ludica e di intrattenimento tipica dei giochi è quindi secondaria.
 Questi tipi di giochi richiedono all'utente di mantenere la concentrazione per un lungo periodo di tempo, ovvero sono immersive.
 
+\pagebreak
+
 Il termine gamification è stato definito in molti modi diversi. Viene data la seguente definizione:
 \begin{quoting}
-    \omissis the use of game elements and game design techniques in non-game contexts. \omissis
+    \omissis
+    
+    the use of game elements and game design techniques in non-game contexts.
+
+    \noindent\omissis
 \end{quoting}
 
 Un sistema con gamification non è immersive: il gioco viene svolto solo una volta ogni tanto, come gioco casuale, richiedendo quindi solo attenzione parziale da parte dell'utente.
-%TODO se vogliamo tagliare secondo me basta solo una lista di tipologie di utenti
 I tipi di giocatore che sono stati identificati sono i seguenti:
 
 \begin{description}
@@ -125,17 +130,20 @@ I tipi di giocatore che sono stati identificati sono i seguenti:
 \end{description}
 
 Molti giochi e applicazioni utilizzano cooperazione e competizione, il supporto sociale e la pressione dei propri pari come motivatori per favorire il cambiamento di comportamento.
-Nonostante meccanismi basati sui gruppi siano promettenti, studi riportano risultati conflittuali sulla loro efficacia. L'influenza sociale può infatti variare in base alle condizioni e alle caratteristiche degli individui coinvolti. È stato fatto uno studio per valutare le attitudini dei giocatori in un ``health game'' multiplayer e sono stati riscontrati $5$ tipi di giocatori:
+Nonostante meccanismi basati sui gruppi siano promettenti, studi riportano risultati conflittuali sulla loro efficacia. L'influenza sociale può infatti variare in base alle condizioni e alle caratteristiche degli individui coinvolti.
+
+\begin{comment}
+È stato fatto uno studio per valutare le attitudini dei giocatori in un ``health game'' multiplayer e sono stati riscontrati $5$ tipi di giocatori:
 \begin{description}
     \item[achievers]: si focalizzano sul miglioramento personale; a loro non piace essere sottoposti a confronti . Sono motivati dal progresso individuale e dal migliorare le proprie performance. La loro influenza su altri membri del gruppo è limitata;
     \item[active buddies]: gioiscono della compagnia di un piccolo gruppo di amici stretti che creano. Sono motivati dal ``social play'', si ricordano tra loro di essere attivi;
-    %TODO controllare i che
-    \item[social experience seekers]: usano i mezzi di comunicazione del gioco e applicano il role-playing che questi generano come contesto dove interagire con i compagni di gioco;
+    \item[social experience seekers]: usano i mezzi di comunicazione del gioco e applicano il role-playing generato da essi per interagire con i compagni di gioco;
     \item[team players]: i giocatori sono più motivati dai risultati di gruppo e dal ranking e incoraggiano gli altri a migliorare la performance del team; sono motivati dal senso di appartenenza e sono entusiasti di contribuire per una causa più grande;
     \item[freeloaders]: non contribuiscono al risultato di gruppo ma vi restano comunque all'interno, spesso a scapito della performance del gruppo stesso. Questi giocatori spesso perdono l'interesse velocemente, non chiedono di uscire o di essere rimpiazzati ma vi restano all'interno per vedere quale beneficio personale possono ottenere. 
 \end{description}
+\end{comment}
 
-Questa analisi ha portato alla formulazione dei seguenti principi di design e osservazioni specifici per i giochi multiplayer:
+Alcuni principi di design e osservazioni specifici per i giochi multiplayer sono:
 \begin{itemize}
     \item la maggior parte dell'influenza è limitata al più a un piccolo gruppo di amici;
     \item è più semplice per i giocatori coordinarsi all'interno di gruppi piccoli che hanno legami sociali oltre la competizione;
@@ -145,14 +153,13 @@ Questa analisi ha portato alla formulazione dei seguenti principi di design e os
     \item alcune persone possono essere particolarmente sensibili o non disposte a condividere informazioni su di sé. Occorre quindi dare ai giocatori il controllo per decidere quando condividere, quali informazioni e con chi.
 \end{itemize}
 
-\section{Gamification: utenti target\label{sec:gamification-utenti}}
+\section{Gamification: caratteristiche del sistema\label{sec:gamification-utenti}}
 Dopo aver preso in considerazione i diversi tipi di giocatore e le relative caratteristiche, abbiamo deciso in base al target di utenti identificato in precedenza di dotare il sistema delle seguenti caratteristiche:
 \begin{description}
     \item[profilo]: è presente una sezione profilo personalizzabile dall'utente, ma senza troppe opzioni, in modo da restare semplice e non sovraccaricare l'utente con complessità inutile;
     \item[ranking]: c'è una classifica in modo che gli utenti possano confrontare i propri punteggi in base ai voti espressi;
     \item[privacy]: non è obbligatorio registrarsi per votare un treno. È possibile giocare senza condividere i dati relativi al proprio profilo, restando anonimi relativamente alla classifica.  
 \end{description}
-
 
 \section{Meccaniche di gamification\label{sec:gamification-meccaniche}}
 
@@ -172,7 +179,7 @@ Zichermann descrive le principali game mechanics e descrive alcune delle più im
     \item[classifiche]: le classifiche permettono di ordinare le performance degli utenti e di fare paragoni. Ne esistono di due tipi: le ``infinite leader boards'', che comprendono tutti gli utenti del gioco, e le ``no discentive leader boards'', dove il giocatore viene posto al centro, senza badare alla sua posizione nel ranking, così che possa vedere solamente il giocatore prima e dopo di lui. La competizione risulta correlata all'aspirazione di diventare il migliore all'interno del proprio gruppo di amici.
     \item[economia di gioco]: l'adozione di determinati tipi di punti permette la costruzione di vere e proprie economie all'interno del gioco, dove l'utente non può vincere a lungo senza comprare, guadagnare e consumare determinati beni virtuali.
     \item[sfide]: le sfide corrispondono alle ``missioni'' che gli utenti devono compiere all'interno del gioco; danno un motivo al giocatore per continuare a partecipare al gioco, motivandoli a raggiungere risultati attraverso ricompense come trofei, badge da sbloccare. Inoltre, gli obiettivi generano confronto e competizione quando mostrati agli altri giocatori. È importante ricordare che a un giocatore novizio o ai primi livelli non vanno date sfide da livello master: è meglio dare sfide diverse per livelli diversi. Un particolare tipo di sfide sono quelle collaborative. Possono essere inserite nel gioco per creare esperienze di gruppo, dove i giocatori agiscono da soli ma i risultati vengono sommati insieme.
-    \item[onboarding]: con onborading si intende l'atto di introdurre un nuovo utente nel gioco. I primi minuti in cui un utente s'impegna in un gioco sono i più importanti, perché è in questo breve lasso di tempo che prende le sue decisioni. In questi piccoli istanti non bisogna dare spiegazioni o far leggere lunghi testi con regole o istruzioni, ma bisogna fargli provare l'applicazione. Inoltre in questa fase non bisogna chiedere all'utente di registrarsi: non c'è nulla allo stato attuale che lo obblighi a fornire dati personali ad un servizio che ancora non conosce. Il processo di onborading rivela la complessità del gioco lentamente e non può fallire. Nel livello 0 (il tutorial) non ci devono essere scelte. Al giocatore vanno offerte azioni senza rischi, che non possono portare al fallimento, poi va ricompensato per aver completato l'azione con successo.
+    \item[onboarding]: con onboarding si intende l'atto di introdurre un nuovo utente nel gioco. I primi minuti in cui un utente s'impegna in un gioco sono i più importanti, perché è in questo breve lasso di tempo che prende le sue decisioni. In questi piccoli istanti non bisogna dare spiegazioni o far leggere lunghi testi con regole o istruzioni, ma bisogna fargli provare l'applicazione. Inoltre in questa fase non bisogna chiedere all'utente di registrarsi: non c'è nulla allo stato attuale che lo obblighi a fornire dati personali ad un servizio che ancora non conosce. Il processo di onboarding rivela la complessità del gioco lentamente e non può fallire. Nel livello 0 (il tutorial) non ci devono essere scelte. Al giocatore vanno offerte azioni senza rischi, che non possono portare al fallimento, poi va ricompensato per aver completato l'azione con successo.
 \end{description}
 
 Altri due elementi di gamification che si ritrovano nelle applicazioni sono la personalizzazione e i feedback.
@@ -196,8 +203,8 @@ Per quanto riguarda Trains, abbiamo deciso di applicare le seguenti meccaniche d
     \item classifica globale per livello raggiunto (in futuro si potrebbero implementare più classifiche in base ai livelli e ai punti esperienza guadagnati dagli utenti);
     \item on-boarding con tutorial: l'utente viene introdotto al gioco senza troppe spiegazioni, e in modo che riceva immediatamente una gratificazione dopo aver votato un treno. Le istruzioni vengono visualizzate per i primi tre accessi, dopodiché scompaiono e diventano raggiungibili dal menù laterale.
 \end{itemize}
-%TODO FBM per cosa sta?
-\section{Dinamiche di gioco e FBM\label{sec:dinamiche-fbm}}
+
+\section{Dinamiche di gioco e FBM (Fogg Behavior Model)\label{sec:dinamiche-fbm}}
 
 Le dinamiche di gioco create dall'attenta combinazione delle meccaniche sono un elemento molto importante perché permettono di modificare gli elementi chiave del FBM fino ad innescare il comportamento target.
 Le dinamiche offrono un modo per motivare gli utenti attraverso feedback positivi, guadagnando badge, mostrando il proprio status, ecc. Forniscono anche due approcci per aumentare l'abilità dell'utente.
