@@ -38,7 +38,9 @@ class PartenzeList extends StatelessWidget {
                         ? '0' + now.month.toString()
                         : now.month.toString()) +
                     '-' +
-                    now.day.toString() +
+                    (now.day < 10
+                        ? '0' + now.day.toString()
+                        : now.day.toString()) +
                     ' ' +
                     partenza.compOrarioPartenza +
                     ':00'))),
